@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Arni</string>
+    <string name="signIn_title">Авторизация</string>
+    <string name="signIn_instruction">Введи логин и пароль для входа</string>
+    <string name="signIn_login_label">Логин</string>
+    <string name="signIn_login_placeholder">Введи логин</string>
+    <string name="signIn_password_label">Пароль</string>
+    <string name="signIn_password_placeholder">Введи пароль</string>
+    <string name="signIn_action_1">Войти</string>
+    <string name="signIn_action_2">Забыл пароль</string>
+
+    <string name="error_no_connectivity">Нет соединения с интернетом</string>
+    <string name="error_server">Ошибка сервера</string>
+    <string name="error_unauthorized">Ошибка авторизации</string>
+    <string name="error_undefined">Неизвестная ошибка</string>
+</resources>
