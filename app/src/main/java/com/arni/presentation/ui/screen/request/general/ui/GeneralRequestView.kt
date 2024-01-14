@@ -1,4 +1,4 @@
-package com.arni.presentation.ui.screen.general.ui
+package com.arni.presentation.ui.screen.request.general.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -20,9 +20,9 @@ import kotlinx.collections.immutable.persistentListOf
 import pro.midev.mec.presentation.ui.style.ArniTheme
 
 @Composable
-fun GeneralCheckingView(
-    state: GeneralCheckingState,
-    eventConsumer: (GeneralCheckingEvent) -> Unit
+fun GeneralRequestView(
+    state: GeneralRequestState,
+    eventConsumer: (GeneralRequestEvent) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -32,7 +32,7 @@ fun GeneralCheckingView(
             .navigationBarsPadding()
     ) {
         TextTitleToolbar(title = stringResource(R.string.app_name), onBackPressed = {eventConsumer(
-            GeneralCheckingEvent.OnBackBtnClick
+            GeneralRequestEvent.OnBackBtnClick
         )})
         LazyColumn(
             modifier = Modifier
@@ -50,8 +50,8 @@ fun GeneralCheckingView(
 
 @Composable
 @Preview
-private fun GeneralCheckingViewPreview() {
+private fun GeneralRequestViewPreview() {
     ArniTheme {
-        GeneralCheckingView(GeneralCheckingState(persistentListOf(""))){}
+        GeneralRequestView(GeneralRequestState(persistentListOf(""))){}
     }
 }

@@ -4,6 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,14 +16,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.arni.R
 import pro.midev.mec.presentation.ui.style.ArniTheme
 
 @Composable
@@ -67,8 +72,7 @@ fun TextFieldInput(
                         1 -> ArniTheme.colors.neutral_100
                         2 -> ArniTheme.colors.error
                         else -> ArniTheme.colors.neutral_100
-                    }
-                    ,
+                    },
                     shape = RoundedCornerShape(16.dp),
                 )
                 .border(
@@ -192,6 +196,66 @@ private fun TextFieldDecorationBox(
     )
 }
 
+@Composable
+fun TextFieldSelector(
+    modifier: Modifier = Modifier,
+    text: String = "",
+    placeholder: String = "",
+    label: String? = null,
+    enabled: Boolean = true,
+    onClick: () -> Unit,
+    isArrowVisible: Boolean = true,
+    rotation: Float = 0f,
+    isLoading: Boolean = false
+) {
+    val hasFocus = remember { mutableStateOf(false) }
+    Column(
+        verticalArrangement = Arrangement.Top, modifier = modifier
+    ) {
+        label?.let {
+            Text(
+                text = it,
+                style = ArniTheme.typography.subhead.regular,
+                color = ArniTheme.colors.neutral_300,
+                modifier = Modifier.padding(bottom = 4.dp)
+            )
+        }
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+            .background(
+                color = if (enabled) ArniTheme.colors.neutral_100 else ArniTheme.colors.neutral_100,
+                shape = RoundedCornerShape(16.dp),
+            )
+            .clip(RoundedCornerShape(16.dp))
+            .border(
+                color = if (hasFocus.value) ArniTheme.colors.black_100
+                else ArniTheme.colors.neutral_300,
+                width = 1.dp,
+                shape = RoundedCornerShape(16.dp)
+            )
+            .clickable(enabled = enabled) {
+                if (!isLoading)
+                    onClick()
+            }
+            .padding(horizontal = 16.dp))
+        {
+            Text(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(top = 13.dp, bottom = 13.dp, end = 12.dp),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                text = text.ifEmpty { placeholder },
+                color = when {
+                    !enabled -> ArniTheme.colors.neutral_500
+                    text.isEmpty() -> ArniTheme.colors.neutral_300
+                    else -> ArniTheme.colors.neutral_300
+                },
+                style = ArniTheme.typography.body.regular,
+            )
+        }
+    }
+}
+
 
 @Composable
 @Preview(showBackground = true)
@@ -209,6 +273,7 @@ private fun TextInputFieldPreview() {
                 placeholder = "Placeholder",
                 error = "Example Error",
             )
+            TextFieldSelector(onClick = { /*TODO*/ }, label = "Label")
         }
     }
 }

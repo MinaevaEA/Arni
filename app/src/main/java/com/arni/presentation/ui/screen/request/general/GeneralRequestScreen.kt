@@ -1,4 +1,4 @@
-package com.arni.presentation.ui.screen.general
+package com.arni.presentation.ui.screen.request.general
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -7,10 +7,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.androidx.AndroidScreen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.arni.presentation.ui.screen.general.ui.GeneralCheckingAction
-import com.arni.presentation.ui.screen.general.ui.GeneralCheckingEvent
-import com.arni.presentation.ui.screen.general.ui.GeneralCheckingView
-import com.arni.presentation.ui.screen.general.ui.GeneralCheckingViewModel
+import com.arni.presentation.ui.screen.request.general.ui.GeneralRequestAction
+import com.arni.presentation.ui.screen.request.general.ui.GeneralRequestEvent
+import com.arni.presentation.ui.screen.request.general.ui.GeneralRequestView
+import com.arni.presentation.ui.screen.request.general.ui.GeneralRequestViewModel
 import org.koin.androidx.compose.koinViewModel
 import pro.midev.mec.presentation.ui.style.ArniTheme
 
@@ -24,7 +24,7 @@ class GeneralRequestScreen : AndroidScreen() {
 
 @Composable
 private fun GeneralCheckingScreen(
-    viewModel: GeneralCheckingViewModel
+    viewModel: GeneralRequestViewModel
 ) {
     val navigator = LocalNavigator.currentOrThrow
     val state by viewModel.viewStates.collectAsStateWithLifecycle()
@@ -32,18 +32,18 @@ private fun GeneralCheckingScreen(
 
     LaunchedEffect(action) {
         when (val act = action) {
-            is GeneralCheckingAction.OpenScreenDetailInfo -> {}
-            GeneralCheckingAction.ExitScreen -> navigator.pop()
+            is GeneralRequestAction.OpenScreenDetailInfo -> {}
+            GeneralRequestAction.ExitScreen -> navigator.pop()
             null -> Unit
         }
     }
 
     LaunchedEffect(null) {
-        viewModel.obtainEvent(GeneralCheckingEvent.OnCreate)
+        viewModel.obtainEvent(GeneralRequestEvent.OnCreate)
     }
 
     ArniTheme() {
-        GeneralCheckingView(
+        GeneralRequestView(
             state = state,
             eventConsumer = viewModel::obtainEvent
         )

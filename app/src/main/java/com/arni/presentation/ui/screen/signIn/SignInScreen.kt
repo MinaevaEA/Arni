@@ -7,7 +7,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.androidx.AndroidScreen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.arni.presentation.ui.screen.general.GeneralRequestScreen
+import com.arni.presentation.ui.screen.request.general.GeneralRequestScreen
 import com.arni.presentation.ui.screen.signIn.ui.SignInAction
 import com.arni.presentation.ui.screen.signIn.ui.SignInView
 import com.arni.presentation.ui.screen.signIn.ui.SignInViewModel
