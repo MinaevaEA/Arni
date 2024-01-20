@@ -50,7 +50,7 @@ fun SignInView(
             label = stringResource(R.string.signIn_login_label),
             text = state.username,
             placeholder = stringResource(R.string.signIn_login_placeholder),
-            onValueChange = { eventConsumer(SignInEvent.OnEmailValueChange(it)) },
+            onValueChange = { eventConsumer(SignInEvent.OnPhoneValueChange(it)) },
             error = "",
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Phone

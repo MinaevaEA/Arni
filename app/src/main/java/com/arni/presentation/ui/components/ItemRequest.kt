@@ -25,7 +25,7 @@ import com.arni.presentation.enum.StatusRequests
 import pro.midev.mec.presentation.ui.style.ArniTheme
 
 @Composable
-fun ItemEvent(
+fun ItemRequest(
     fromDepartment: String,
     toDepartment: String,
     nameExecutor: String?,
@@ -35,7 +35,7 @@ fun ItemEvent(
 ) {
     Column(
         modifier = Modifier
-            .padding(bottom = 12.dp, start = 16.dp, end = 16.dp)
+            .padding(top = 12.dp, bottom = 12.dp, start = 10.dp, end = 10.dp)
             .shadow(
                 elevation = 10.dp,
                 spotColor = ArniTheme.colors.black_100,
@@ -44,6 +44,7 @@ fun ItemEvent(
             .clip(shape = RoundedCornerShape(24.dp))
             .clickable { onClick() }
             .background(color = ArniTheme.colors.white_100)
+            .fillMaxWidth()
             .padding(16.dp)
 
     ) {
@@ -159,9 +160,9 @@ private fun ItemEventPreview() {
                     .width(900.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                ItemEvent("Отделение 1", "Отделение 2", "Иванов Иван", 1, "П") {}
-                ItemEvent("Отделение 1", "Отделение 2", "Иванов Иван", 2, "Э") {}
-                ItemEvent("Отделение 1", "Отделение 2", null, 3, "П") {}
+                ItemRequest("Отделение 1", "Отделение 2", "Иванов Иван", 1, "П") {}
+                ItemRequest("Отделение 1", "Отделение 2", "Иванов Иван", 2, "Э") {}
+                ItemRequest("Отделение 1", "Отделение 2", null, 3, "П") {}
             }
         }
     }

@@ -7,6 +7,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.androidx.AndroidScreen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.arni.presentation.ext.LocalGlobalNavigator
+import com.arni.presentation.ui.screen.main.MainScreen
 import com.arni.presentation.ui.screen.request.general.GeneralRequestScreen
 import com.arni.presentation.ui.screen.signIn.ui.SignInAction
 import com.arni.presentation.ui.screen.signIn.ui.SignInView
@@ -34,8 +36,8 @@ private fun SignInScreen(
     LaunchedEffect(action) {
 
         when(action) {
-            SignInAction.OpenNextScreen -> navigator.push(GeneralRequestScreen())
-            SignInAction.OpenRestorePasswordScreen -> navigator.push(GeneralRequestScreen())
+            SignInAction.OpenNextScreen -> navigator.replaceAll(MainScreen())
+            SignInAction.OpenRestorePasswordScreen -> navigator.replaceAll(MainScreen())
             null -> Unit
         }
     }

@@ -16,7 +16,7 @@ sealed interface SignInEvent : BaseEvent {
 
     object OnLoginBtnClick : SignInEvent
 
-    data class OnEmailValueChange(val value: String) : SignInEvent
+    data class OnPhoneValueChange(val value: String) : SignInEvent
     data class OnPasswordValueChange(val value: String) : SignInEvent
 
 }

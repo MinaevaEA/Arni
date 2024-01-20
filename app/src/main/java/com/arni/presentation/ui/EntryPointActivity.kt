@@ -10,13 +10,12 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import cafe.adriel.voyager.androidx.AndroidScreen
+import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.FadeTransition
 import com.arni.R
-import com.arni.data.base.DataStatus
 import com.arni.data.local.keystorage.UserKeyStorage
 import com.arni.ext.launchIO
-import com.arni.ext.withUI
 import org.koin.core.component.KoinComponent
 import com.arni.presentation.ui.screen.signIn.SignInScreen
 import com.arni.remote.exceptions.ArniRemoteException

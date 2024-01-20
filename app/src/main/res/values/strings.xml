@@ -3,7 +3,7 @@
     <string name="signIn_title">Авторизация</string>
     <string name="signIn_instruction">Введи логин и пароль для входа</string>
     <string name="signIn_login_label">Логин</string>
-    <string name="signIn_login_placeholder">Введи логин</string>
+    <string name="signIn_login_placeholder">+7(900)111-111-11</string>
     <string name="signIn_password_label">Пароль</string>
     <string name="signIn_password_placeholder">Введи пароль</string>
     <string name="signIn_action_1">Войти</string>
@@ -13,4 +13,20 @@
     <string name="error_server">Ошибка сервера</string>
     <string name="error_unauthorized">Ошибка авторизации</string>
     <string name="error_undefined">Неизвестная ошибка</string>
+
+    //detail screen
+    <string name="status_order">Статус заявки</string>
+    <string name="date_order">Дата</string>
+    <string name="local_order">Подразделение</string>
+    <string name="from_local">Откуда</string>
+    <string name="to_local">Куда</string>
+    <string name="begin_date">Начало выполнения</string>
+    <string name="end_date">Конец выполнения</string>
+    <string name="draft_order">Срочность</string>
+    <string name="checking_order">Исполнитель(-и)</string>
+    <string name="name_patient_order">ФИО пациента</string>
+    <string name="status_patient">Статус пациента</string>
+    <string name="comment_order">Примечание</string>
+    <string name="name_inicial">Имя инициатора</string>
+    <string name="photo">Фото</string>
 </resources>

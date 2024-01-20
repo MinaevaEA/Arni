@@ -12,9 +12,10 @@ class SignInViewModel(val authUseCase: AuthUseCase) :
 
     override fun obtainEvent(event: SignInEvent) {
         when (event) {
-            is SignInEvent.OnEmailValueChange -> changePhone(event.value)
+            is SignInEvent.OnPhoneValueChange -> changePhone(event.value)
             is SignInEvent.OnPasswordValueChange -> changePassword(event.value)
-            is SignInEvent.OnLoginBtnClick -> signIn()
+            //TODO времянка навигации
+            is SignInEvent.OnLoginBtnClick -> action = SignInAction.OpenNextScreen
         }
     }
 

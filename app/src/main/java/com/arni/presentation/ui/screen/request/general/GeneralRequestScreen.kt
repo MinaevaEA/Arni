@@ -1,5 +1,7 @@
 package com.arni.presentation.ui.screen.request.general
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -7,6 +9,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.androidx.AndroidScreen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.arni.presentation.ui.screen.request.detail.DetailRequestScreen
 import com.arni.presentation.ui.screen.request.general.ui.GeneralRequestAction
 import com.arni.presentation.ui.screen.request.general.ui.GeneralRequestEvent
 import com.arni.presentation.ui.screen.request.general.ui.GeneralRequestView
@@ -16,12 +19,14 @@ import pro.midev.mec.presentation.ui.style.ArniTheme
 
 class GeneralRequestScreen : AndroidScreen() {
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     override fun Content() {
         GeneralCheckingScreen(viewModel = koinViewModel())
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 private fun GeneralCheckingScreen(
     viewModel: GeneralRequestViewModel
@@ -32,14 +37,11 @@ private fun GeneralCheckingScreen(
 
     LaunchedEffect(action) {
         when (val act = action) {
+            is GeneralRequestAction.OpenScreenAddRequest -> navigator.push(DetailRequestScreen())
             is GeneralRequestAction.OpenScreenDetailInfo -> {}
             GeneralRequestAction.ExitScreen -> navigator.pop()
             null -> Unit
         }
-    }
-
-    LaunchedEffect(null) {
-        viewModel.obtainEvent(GeneralRequestEvent.OnCreate)
     }
 
     ArniTheme() {

@@ -29,6 +29,8 @@ interface BaseEventType {
 }
 
 sealed interface EventType : BaseEventType {
+
+    data class ChangeVisibilityBottomMenu(val isVisible: Boolean) : EventType
     data class ShowErrorToast(val ex: Exception) : EventType
     data class ShowTextToast(val text: String) : EventType
 }

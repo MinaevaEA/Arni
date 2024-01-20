@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -22,10 +21,6 @@ import com.arni.presentation.ui.components.PhotoLine
 import com.arni.presentation.ui.components.TextFieldInput
 import com.arni.presentation.ui.components.TextFieldSelector
 import com.arni.presentation.ui.components.TextTitleToolbar
-import com.arni.presentation.ui.screen.request.general.ui.GeneralRequestEvent
-import com.arni.presentation.ui.screen.request.general.ui.GeneralRequestState
-import com.arni.presentation.ui.screen.request.general.ui.GeneralRequestView
-import kotlinx.collections.immutable.persistentListOf
 import pro.midev.mec.presentation.ui.style.ArniTheme
 
 @Composable
@@ -44,26 +39,25 @@ fun DetailRequestView(
     ) {
 
         TextTitleToolbar(title = stringResource(R.string.app_name), onBackPressed = {})
-        LazyColumn() {
+        LazyColumn(modifier = Modifier.padding(bottom = 80.dp)) {
             item {
-                //todo доделать дизайн
                 Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                    TextFieldSelector(label = "Статус заявки", onClick = {})
-                    TextFieldSelector(label = "Дата", onClick = {})
-                    TextFieldSelector(label = "Подразделение", onClick = {})
-                    TextFieldSelector(label = "Откуда", onClick = {})
-                    TextFieldSelector(label = "Куда", onClick = {})
-                    TextFieldSelector(label = "Начало выполнения", onClick = {})
-                    TextFieldSelector(label = "Окончание выполнения", onClick = {})
-                    TextFieldSelector(label = "Срочность", onClick = {})
-                    TextFieldSelector(label = "Исполнитель(-и)", onClick = {})
-                    TextFieldInput(label = "ФИО пациента")
-                    TextFieldSelector(label = "Статус пациента", onClick = {})
-                    TextFieldInput(label = "Примечание")
-                    TextFieldInput(label = "ФИО инициатора")
+                    TextFieldSelector(label = stringResource(id = R.string.status_order), onClick = {})
+                    TextFieldSelector(label = stringResource(id = R.string.date_order), onClick = {})
+                    TextFieldSelector(label = stringResource(id = R.string.local_order), onClick = {})
+                    TextFieldSelector(label = stringResource(id = R.string.from_local), onClick = {})
+                    TextFieldSelector(label = stringResource(id = R.string.to_local), onClick = {})
+                    TextFieldSelector(label = stringResource(id = R.string.begin_date), onClick = {})
+                    TextFieldSelector(label = stringResource(id = R.string.end_date), onClick = {})
+                    TextFieldSelector(label = stringResource(id = R.string.draft_order), onClick = {})
+                    TextFieldSelector(label = stringResource(id = R.string.checking_order), onClick = {})
+                    TextFieldInput(label = stringResource(id = R.string.name_patient_order))
+                    TextFieldSelector(label = stringResource(id = R.string.status_patient), onClick = {})
+                    TextFieldInput(label = stringResource(id = R.string.comment_order))
+                    TextFieldInput(label = stringResource(id = R.string.name_inicial))
                     //todo компонент фото
                     Text(
-                        text = "Фото", style = ArniTheme.typography.subhead.regular,
+                        text = stringResource(id = R.string.photo), style = ArniTheme.typography.subhead.regular,
                         color = ArniTheme.colors.neutral_300,
                         modifier = Modifier.padding(bottom = 4.dp)
                     )
@@ -74,7 +68,6 @@ fun DetailRequestView(
                         deletePhotoAction = {},
                         photos = listOf("https://memepedia.ru/wp-content/uploads/2020/10/screenshot_11-3-360x270.png"),
                     )
-
                 }
             }
         }
