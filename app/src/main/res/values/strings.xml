@@ -7,6 +7,7 @@
     <string name="signIn_password_label">Пароль</string>
     <string name="signIn_password_placeholder">Введи пароль</string>
     <string name="signIn_action_1">Войти</string>
+    <string name="signOut_action">Выйти из профиля</string>
     <string name="signIn_action_2">Забыл пароль</string>
 
     <string name="error_no_connectivity">Нет соединения с интернетом</string>
@@ -29,4 +30,8 @@
     <string name="comment_order">Примечание</string>
     <string name="name_inicial">Имя инициатора</string>
     <string name="photo">Фото</string>
+
+    <string name="title_add_screen">Создать заявку</string>
+    <string name="name_profile">ФИО</string>
+    <string name="name_profession">Должность</string>
 </resources>

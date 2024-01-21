@@ -53,7 +53,7 @@ fun GeneralRequestView(
                     nameExecutor = item.nameExecutor,
                     isStatus = item.statusRequest,
                     Urgency = item.urgency,
-                    onClick = {})
+                    onClick = {eventConsumer(GeneralRequestEvent.onClickItem(item))})
             }
         }
     }

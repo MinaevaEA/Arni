@@ -1,6 +1,7 @@
 package com.arni.presentation.model.human
 
 data class RequestHuman(
+    val id: Long,
     val statusRequest: Int,
     val date: String,
     val fromDepartament: String,
@@ -18,6 +19,7 @@ data class RequestHuman(
     companion object {
 
         fun getDefault() = RequestHuman(
+            id = 1,
             statusRequest = 1,
             date = "12.01.2024",
             fromDepartament = "Отделение 1",

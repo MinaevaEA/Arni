@@ -71,6 +71,7 @@ dependencies {
     implementation('androidx.compose.runtime:runtime:1.4.0@aar')
     implementation("androidx.room:room-runtime:2.5.2")
     implementation 'com.google.firebase:firebase-crashlytics-buildtools:2.9.8'
+    implementation 'io.coil-kt:coil-base:2.2.2@aar'
     annotationProcessor("androidx.room:room-compiler:2.5.2")
     implementation("androidx.room:room-ktx:2.5.2")
     implementation(platform("com.squareup.okhttp3:okhttp-bom:4.11.0"))

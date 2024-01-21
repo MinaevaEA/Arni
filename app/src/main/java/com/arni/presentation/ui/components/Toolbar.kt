@@ -51,6 +51,7 @@ import pro.midev.mec.presentation.ui.style.ArniTheme
 @Composable
 fun TextTitleToolbar(
     title: String = "",
+    btnTitile: String = "",
     onBackPressed: (() -> Unit)? = null,
     actionsStart: @Composable () -> Unit = {},
     actionsEnd: @Composable RowScope.() -> Unit = {}

@@ -1,4 +1,4 @@
-package com.arni.presentation.ui.screen.request.detail
+package com.arni.presentation.ui.screen.request.create
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -7,24 +7,22 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.androidx.AndroidScreen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.arni.presentation.model.human.RequestHuman
-import com.arni.presentation.ui.screen.main.MainScreen
-import com.arni.presentation.ui.screen.request.detail.ui.DetailRequestAction
-import com.arni.presentation.ui.screen.request.detail.ui.DetailRequestView
+import com.arni.presentation.ui.screen.request.create.ui.CreateRequestAction
+import com.arni.presentation.ui.screen.request.create.ui.CreateRequestView
+import com.arni.presentation.ui.screen.request.create.ui.CreateRequestViewModel
 import com.arni.presentation.ui.screen.request.detail.ui.DetailRequestViewModel
 import org.koin.androidx.compose.koinViewModel
-import org.koin.core.parameter.parametersOf
 import pro.midev.mec.presentation.ui.style.ArniTheme
 
-class DetailRequestScreen(val item: RequestHuman): AndroidScreen() {
+class CreateRequestScreen: AndroidScreen() {
     @Composable
     override fun Content() {
-       DetailRequestScreen(viewModel = koinViewModel{ parametersOf(item) })
+       CreateRequestScreen(viewModel = koinViewModel())
     }
 
     @Composable
-    private fun DetailRequestScreen(
-        viewModel: DetailRequestViewModel
+    private fun CreateRequestScreen(
+        viewModel: CreateRequestViewModel
     ) {
         val navigator = LocalNavigator.currentOrThrow
         val state by viewModel.viewStates.collectAsStateWithLifecycle()
@@ -32,13 +30,13 @@ class DetailRequestScreen(val item: RequestHuman): AndroidScreen() {
 
         LaunchedEffect(action) {
             when (val act = action) {
-               is DetailRequestAction.returnScreenList -> navigator.pop()
+                CreateRequestAction.returnGeneralScreen -> navigator.pop()
                 else -> {}
             }
         }
 
         ArniTheme() {
-            DetailRequestView(
+            CreateRequestView(
                 state = state,
                 eventConsumer = viewModel::obtainEvent
             )

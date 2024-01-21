@@ -9,6 +9,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.androidx.AndroidScreen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.arni.presentation.ui.screen.request.create.CreateRequestScreen
 import com.arni.presentation.ui.screen.request.detail.DetailRequestScreen
 import com.arni.presentation.ui.screen.request.general.ui.GeneralRequestAction
 import com.arni.presentation.ui.screen.request.general.ui.GeneralRequestEvent
@@ -37,8 +38,8 @@ private fun GeneralCheckingScreen(
 
     LaunchedEffect(action) {
         when (val act = action) {
-            is GeneralRequestAction.OpenScreenAddRequest -> navigator.push(DetailRequestScreen())
-            is GeneralRequestAction.OpenScreenDetailInfo -> {}
+            is GeneralRequestAction.OpenScreenDetailInfo -> navigator.push(DetailRequestScreen(act.item))
+            is GeneralRequestAction.OpenScreenAddRequest -> navigator.push(CreateRequestScreen())
             GeneralRequestAction.ExitScreen -> navigator.pop()
             null -> Unit
         }

@@ -18,10 +18,12 @@ sealed interface GeneralRequestEvent : BaseEvent {
    // object OnCreate : GeneralRequestEvent
    object OnClickAddRequest : GeneralRequestEvent
     object OnBackBtnClick : GeneralRequestEvent
+
+    data class onClickItem(val item: RequestHuman): GeneralRequestEvent
 }
 
 sealed interface GeneralRequestAction : BaseAction {
-    data class OpenScreenDetailInfo(val item: String): GeneralRequestAction
+    data class OpenScreenDetailInfo(val item: RequestHuman): GeneralRequestAction
     object OpenScreenAddRequest: GeneralRequestAction
 
     object ExitScreen: GeneralRequestAction

@@ -8,6 +8,7 @@ import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.arni.R
+import com.arni.presentation.ui.screen.profile.ProfileScreen
 import com.arni.presentation.ui.screen.request.general.GeneralRequestScreen
 
 class GeneralTab : Tab {
@@ -87,7 +88,7 @@ class ProfileTab : Tab {
     @Composable
     override fun Content() {
         Navigator(
-            GeneralRequestScreen()
+            ProfileScreen()
         )
     }
 

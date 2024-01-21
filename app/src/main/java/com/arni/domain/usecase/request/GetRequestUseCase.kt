@@ -11,6 +11,7 @@ class GetRequestUseCase {
             DataStatus.Success(
                 listOf(
                     RequestHuman(
+                        id = 1,
                         statusRequest = 1,
                         date = "12.01.2024",
                         fromDepartament = "Отделение 1",
@@ -25,6 +26,7 @@ class GetRequestUseCase {
                         photo = listOf()
                     ),
                     RequestHuman(
+                        id = 1,
                         statusRequest = 1,
                         date = "12.01.2024",
                         fromDepartament = "Отделение 1",
@@ -39,6 +41,7 @@ class GetRequestUseCase {
                         photo = listOf()
                     ),
                     RequestHuman(
+                        id = 1,
                         statusRequest = 1,
                         date = "12.01.2024",
                         fromDepartament = "Отделение 1",
@@ -53,6 +56,7 @@ class GetRequestUseCase {
                         photo = listOf()
                     ),
                     RequestHuman(
+                        id = 1,
                         statusRequest = 2,
                         date = "12.01.2024",
                         fromDepartament = "Отделение 1",
@@ -67,6 +71,7 @@ class GetRequestUseCase {
                         photo = listOf()
                     ),
                     RequestHuman(
+                        id = 1,
                         statusRequest = 3,
                         date = "12.01.2024",
                         fromDepartament = "Отделение 1",
