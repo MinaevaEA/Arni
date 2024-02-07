@@ -35,9 +35,9 @@ fun GeneralRequestView(
     ) {
         SelectorToolbarMainScreen(
             "Подразделение",
-            onClickFilter = {},
+            onClickFilter = {eventConsumer(GeneralRequestEvent.OnClickFilter)},
             onClickSearch = {},
-            onClickAddRequest = {eventConsumer(GeneralRequestEvent.OnClickAddRequest)},
+            onClickAddRequest = { eventConsumer(GeneralRequestEvent.OnClickAddRequest)},
             onNameClick = {})
         LazyColumn(
             modifier = Modifier

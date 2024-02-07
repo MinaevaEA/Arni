@@ -42,7 +42,7 @@ fun CreateRequestView(
     ) {
 
         TextTitleToolbar(title = stringResource(R.string.title_add_screen), onBackPressed = {eventConsumer(CreateRequestEvent.onClickBack)})
-        LazyColumn(modifier = Modifier.padding(bottom = 80.dp)) {
+        LazyColumn() {
             item {
                 Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
                     TextFieldSelector(label = stringResource(id = R.string.status_order), onClick = {})
@@ -54,10 +54,10 @@ fun CreateRequestView(
                     TextFieldSelector(label = stringResource(id = R.string.end_date), onClick = {})
                     TextFieldSelector(label = stringResource(id = R.string.draft_order), onClick = {})
                     TextFieldSelector(label = stringResource(id = R.string.checking_order), onClick = {})
-                    TextFieldInput(label = stringResource(id = R.string.name_patient_order))
+                    TextFieldInput(label = stringResource(id = R.string.name_patient_order), enabled = true)
                     TextFieldSelector(label = stringResource(id = R.string.status_patient), onClick = {})
-                    TextFieldInput(label = stringResource(id = R.string.comment_order))
-                    TextFieldInput(label = stringResource(id = R.string.name_inicial))
+                    TextFieldInput(label = stringResource(id = R.string.comment_order), enabled = true)
+                    TextFieldInput(label = stringResource(id = R.string.name_inicial), enabled = true)
                     //todo компонент фото
                     Text(
                         text = stringResource(id = R.string.photo), style = ArniTheme.typography.subhead.regular,

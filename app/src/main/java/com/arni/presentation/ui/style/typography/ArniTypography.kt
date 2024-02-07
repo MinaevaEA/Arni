@@ -26,7 +26,7 @@ data class ArniTypography(
     val caption_2: ArniFont,
 )
 
-private val mecFontFamily = FontFamily(
+val mecFontFamily = FontFamily(
     Font(R.font.ubuntubold, FontWeight.W700),
     Font(R.font.ubunturegular, FontWeight.W400),
 )

@@ -1,4 +1,4 @@
-package com.arni.presentation.ui.screen.signIn
+package com.arni.presentation.ui.screen.filter
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -7,44 +7,38 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.androidx.AndroidScreen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.arni.presentation.ext.LocalGlobalNavigator
-import com.arni.presentation.ui.screen.main.MainScreen
-import com.arni.presentation.ui.screen.request.general.GeneralRequestScreen
-import com.arni.presentation.ui.screen.signIn.ui.SignInAction
-import com.arni.presentation.ui.screen.signIn.ui.SignInView
-import com.arni.presentation.ui.screen.signIn.ui.SignInViewModel
+import com.arni.presentation.ui.screen.filter.ui.FilterView
+import com.arni.presentation.ui.screen.filter.ui.FilterViewModel
 import org.koin.androidx.compose.koinViewModel
 import pro.midev.mec.presentation.ui.style.ArniTheme
 
-
-class SignInScreen : AndroidScreen() {
+class FilterScreen : AndroidScreen() {
 
     @Composable
     override fun Content() {
-        SignInScreen(viewModel = koinViewModel())
+        FilterScreen(viewModel = koinViewModel())
     }
 }
 
 @Composable
-private fun SignInScreen(
-    viewModel: SignInViewModel
+private fun FilterScreen(
+    viewModel: FilterViewModel
 ) {
-    val navigator = LocalGlobalNavigator.current
+    val navigator = LocalNavigator.currentOrThrow
     val state by viewModel.viewStates.collectAsStateWithLifecycle()
     val action by viewModel.viewActions.collectAsStateWithLifecycle(initialValue = null)
 
     LaunchedEffect(action) {
 
         when(action) {
-            SignInAction.OpenNextScreen -> navigator.push(MainScreen())
-            SignInAction.OpenRestorePasswordScreen -> {}
             null -> Unit
+            else -> {}
         }
     }
 
 
     ArniTheme() {
-        SignInView(
+        FilterView(
             state = state,
             eventConsumer = viewModel::obtainEvent
         )

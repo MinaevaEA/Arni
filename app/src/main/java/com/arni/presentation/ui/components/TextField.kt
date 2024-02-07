@@ -23,11 +23,14 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.arni.R
+import com.arni.presentation.ui.style.typography.mecFontFamily
 import pro.midev.mec.presentation.ui.style.ArniTheme
 
 @Composable
@@ -39,7 +42,7 @@ fun TextFieldInput(
     @DrawableRes iconStart: Int? = null,
     @DrawableRes iconEnd: Int? = null,
     onEndIconClick: () -> Unit = {},
-    enabled: Boolean = true,
+    enabled: Boolean = false,
     error: String? = null,
     status: Int = 0,
     onValueChange: (value: String) -> Unit = {},
@@ -107,12 +110,19 @@ fun TextFieldInput(
                     },
                 text = text,
                 onValueChange = onValueChange,
-                textStyle = ArniTheme.typography.body.regular,
+                textStyle = TextStyle(
+                    fontFamily = mecFontFamily,
+                    fontWeight = FontWeight.W400,
+                    fontSize = 17.sp,
+                    lineHeight = 22.sp,
+                    color = if (!enabled) ArniTheme.colors.neutral_300 else ArniTheme.colors.black_100
+                ),
                 cursorBrush = SolidColor(ArniTheme.colors.black_100),
                 placeholder = placeholder,
                 keyboardOptions = keyboardOptions,
                 visualTransformation = visualTransformation,
-                singleLine = singleLine
+                singleLine = singleLine,
+                enabled = enabled
             )
 
             iconEnd?.let { res ->
@@ -144,7 +154,7 @@ fun TextFieldInput(
 fun BaseInput(
     modifier: Modifier = Modifier,
     text: String = "",
-    textStyle: TextStyle = ArniTheme.typography.body.regular,
+    textStyle: TextStyle,
     placeholder: String = "",
     onValueChange: (value: String) -> Unit = {},
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
@@ -153,9 +163,11 @@ fun BaseInput(
     singleLine: Boolean = false,
     minLines: Int = 1,
     maxLines: Int = 10,
+    enabled: Boolean
 ) {
     BasicTextField(
         value = text,
+        enabled = enabled,
         onValueChange = onValueChange,
         modifier = modifier,
         textStyle = textStyle,
@@ -246,9 +258,9 @@ fun TextFieldSelector(
                 overflow = TextOverflow.Ellipsis,
                 text = text.ifEmpty { placeholder },
                 color = when {
-                    !enabled -> ArniTheme.colors.neutral_500
+                    !enabled -> ArniTheme.colors.neutral_300
                     text.isEmpty() -> ArniTheme.colors.neutral_300
-                    else -> ArniTheme.colors.neutral_300
+                    else -> ArniTheme.colors.black_100
                 },
                 style = ArniTheme.typography.body.regular,
             )
@@ -267,11 +279,13 @@ private fun TextInputFieldPreview() {
             TextFieldInput(
                 label = "Label",
                 placeholder = "Placeholder",
+                enabled = true
             )
             TextFieldInput(
                 label = "Label",
                 placeholder = "Placeholder",
                 error = "Example Error",
+                enabled = false
             )
             TextFieldSelector(onClick = { /*TODO*/ }, label = "Label")
         }

@@ -7,12 +7,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.androidx.AndroidScreen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
+import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
+import com.arni.presentation.ext.LocalGlobalNavigator
+import com.arni.presentation.ui.screen.filter.FilterScreen
 import com.arni.presentation.ui.screen.request.create.CreateRequestScreen
 import com.arni.presentation.ui.screen.request.detail.DetailRequestScreen
 import com.arni.presentation.ui.screen.request.general.ui.GeneralRequestAction
-import com.arni.presentation.ui.screen.request.general.ui.GeneralRequestEvent
 import com.arni.presentation.ui.screen.request.general.ui.GeneralRequestView
 import com.arni.presentation.ui.screen.request.general.ui.GeneralRequestViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -32,7 +32,8 @@ class GeneralRequestScreen : AndroidScreen() {
 private fun GeneralCheckingScreen(
     viewModel: GeneralRequestViewModel
 ) {
-    val navigator = LocalNavigator.currentOrThrow
+    val navigator = LocalGlobalNavigator.current
+    val bottomSheetNavigator = LocalBottomSheetNavigator.current
     val state by viewModel.viewStates.collectAsStateWithLifecycle()
     val action by viewModel.viewActions.collectAsStateWithLifecycle(initialValue = null)
 
@@ -41,6 +42,7 @@ private fun GeneralCheckingScreen(
             is GeneralRequestAction.OpenScreenDetailInfo -> navigator.push(DetailRequestScreen(act.item))
             is GeneralRequestAction.OpenScreenAddRequest -> navigator.push(CreateRequestScreen())
             GeneralRequestAction.ExitScreen -> navigator.pop()
+            is GeneralRequestAction.OpenScreenFilter -> bottomSheetNavigator.show(FilterScreen())
             null -> Unit
         }
     }

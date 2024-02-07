@@ -1,7 +1,11 @@
 package com.arni.presentation.di
 
 
+import com.arni.presentation.ui.screen.filter.ui.FilterViewModel
 import com.arni.presentation.ui.screen.main.MainScreenViewModel
+import com.arni.presentation.ui.screen.pickers.time.ui.TimePickerViewModel
+import com.arni.presentation.ui.screen.pickers.yearmonth.ui.YearMonthPickerViewModel
+import com.arni.presentation.ui.screen.pickers.yearmonthday.ui.YearMonthDayPickerViewModel
 import com.arni.presentation.ui.screen.profile.ui.ProfileViewModel
 import com.arni.presentation.ui.screen.request.create.ui.CreateRequestViewModel
 import com.arni.presentation.ui.screen.request.detail.ui.DetailRequestViewModel
@@ -27,9 +31,23 @@ val viewModelModule = module {
         GeneralRequestViewModel(get())
     }
     viewModel {
+        FilterViewModel()
+    }
+    viewModel {
         CreateRequestViewModel()
     }
     viewModel {
         DetailRequestViewModel(get())
+    }
+    viewModel { params ->
+        TimePickerViewModel(params[0], params[1], params[2], params[3], params[4])
+    }
+
+    viewModel { params ->
+        YearMonthDayPickerViewModel(params[0], params[1], params[2], params[3])
+    }
+
+    viewModel { params ->
+        YearMonthPickerViewModel(params[0], params[1], params[2])
     }
 }

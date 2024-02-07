@@ -23,6 +23,7 @@ class GeneralRequestViewModel(
             is GeneralRequestEvent.onClickItem -> action = GeneralRequestAction.OpenScreenDetailInfo(event.item)
             is GeneralRequestEvent.OnClickAddRequest -> action = GeneralRequestAction.OpenScreenAddRequest
             is GeneralRequestEvent.OnBackBtnClick -> action = GeneralRequestAction.ExitScreen
+            is GeneralRequestEvent.OnClickFilter -> action = GeneralRequestAction.OpenScreenFilter
         }
     }
 

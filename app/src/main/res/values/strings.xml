@@ -34,4 +34,13 @@
     <string name="title_add_screen">Создать заявку</string>
     <string name="name_profile">ФИО</string>
     <string name="name_profession">Должность</string>
+
+    <string name="filter_status">Выберите статус</string>
+    <string name="filter_date">Выберите период</string>
+    <string name="undesirable_time_placeholder_start">c 00:00</string>
+    <string name="undesirable_time_placeholder_end">до 00:00</string>
+    <string name="add_action_filter">Применить</string>
+
+    <string name="cancel">Отменить</string>
+    <string name="ready">Готово</string>
 </resources>

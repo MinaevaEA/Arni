@@ -9,14 +9,8 @@ class MainScreenViewModel : BaseViewModel<MainScreenState, MainScreenEvent, Main
 ) {
     override fun obtainEvent(event: MainScreenEvent) {
         when (event) {
-            MainScreenEvent.OnCreate -> listenChangeVisibilityBottomMenuEvent()
+            else -> {}
         }
     }
 
-
-    private fun listenChangeVisibilityBottomMenuEvent() {
-        subscribeEvent<EventType.ChangeVisibilityBottomMenu> { event ->
-            viewState = viewState.copy(changeVisibilityBottomMenuTrigger = HideBottomMenuTrigger(event.isVisible))
-        }
-    }
 }

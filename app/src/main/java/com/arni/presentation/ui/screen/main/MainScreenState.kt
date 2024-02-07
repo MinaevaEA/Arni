@@ -13,8 +13,6 @@ data class MainScreenState(
 
 sealed interface MainScreenEvent : BaseEvent {
 
-    object OnCreate : MainScreenEvent
-
 }
 
 sealed interface MainScreenAction : BaseAction {
