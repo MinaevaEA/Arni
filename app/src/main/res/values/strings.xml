@@ -18,6 +18,7 @@
     //detail screen
     <string name="status_order">Статус заявки</string>
     <string name="date_order">Дата</string>
+    <string name="time_order">Время</string>
     <string name="local_order">Подразделение</string>
     <string name="from_local">Откуда</string>
     <string name="to_local">Куда</string>

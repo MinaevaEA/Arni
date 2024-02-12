@@ -63,6 +63,12 @@ fun DetailRequestView(
                         enabled = state.enabled
                     )
                     TextFieldSelector(
+                        label = stringResource(id = R.string.time_order),
+                        onClick = {},
+                        text = state.item.date,
+                        enabled = state.enabled
+                    )
+                    TextFieldSelector(
                         label = stringResource(id = R.string.local_order),
                         onClick = {},
                         text = "",

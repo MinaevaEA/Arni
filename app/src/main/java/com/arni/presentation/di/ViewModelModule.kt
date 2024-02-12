@@ -39,8 +39,8 @@ val viewModelModule = module {
     viewModel {
         DetailRequestViewModel(get())
     }
-    viewModel { params ->
-        TimePickerViewModel(params[0], params[1], params[2], params[3], params[4])
+    viewModel {
+        TimePickerViewModel(/*params[0], params[1], params[2], params[3], params[4]*/)
     }
 
     viewModel { params ->

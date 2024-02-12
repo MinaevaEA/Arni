@@ -11,23 +11,19 @@ import com.arni.presentation.ui.screen.pickers.time.ui.TimePickerAction
 import com.arni.presentation.ui.screen.pickers.time.ui.TimePickerEvent
 import com.arni.presentation.ui.screen.pickers.time.ui.TimePickerView
 import com.arni.presentation.ui.screen.pickers.time.ui.TimePickerViewModel
+import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 import pro.midev.mec.presentation.ui.style.ArniTheme
 import java.time.LocalTime
 
 class TimePickerScreen(
-    private val id: Int,
-    private val initial: LocalTime = LocalTime.now(),
-    private val min: LocalTime? = null,
-    private val max: LocalTime? = null,
-    private val isCropMinTime: Boolean = false
+ /*   private val id: Int,
+    private val initial: LocalTime = LocalTime.now(),*/
 ) : AndroidScreen() {
 
     @Composable
     override fun Content() {
-        TimePickerScreen(
-            viewModel = getScreenModel { parametersOf(id, initial, min, max, isCropMinTime) }
-        )
+        TimePickerScreen(viewModel = koinViewModel() /*{ parametersOf(id, initial) }*/ )
     }
 }
 

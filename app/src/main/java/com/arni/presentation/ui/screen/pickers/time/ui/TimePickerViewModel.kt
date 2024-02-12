@@ -11,28 +11,29 @@ import java.time.LocalTime
 
 @SuppressLint("NewApi")
 class TimePickerViewModel(
-    private val id: Int,
-    private val initial: LocalTime,
-    private val min: LocalTime?,
-    private val max: LocalTime?,
-    private val isCropMinTime: Boolean
+/*    private val id: Int = 1,
+    private val initial: LocalTime = LocalTime.now(),
+    private val min: LocalTime? = LocalTime.now(),
+    private val max: LocalTime? = LocalTime.now(),
+    private val isCropMinTime: Boolean*/
 ) : BaseViewModel<TimePickerState, TimePickerEvent, TimePickerAction>(
     TimePickerState()
 ) {
 
-    private var selectedHour = initial.hour
-    private var selectedMinute = initial.minute
+   // private var selectedHour = initial.hour
+  //  private var selectedMinute = initial.minute
 
     override fun obtainEvent(event: TimePickerEvent) {
         when (event) {
-            TimePickerEvent.OnCreate -> initSpinner()
-            is TimePickerEvent.OnHourSelected -> changeHour(event.hour)
-            is TimePickerEvent.OnMinuteSelected -> changeMinute(event.minute)
-            TimePickerEvent.OnBackPressed -> action = TimePickerAction.Dismiss
-            TimePickerEvent.OnConfirm -> confirm()
+          //  TimePickerEvent.OnCreate -> initSpinner()
+         //   is TimePickerEvent.OnHourSelected -> changeHour(event.hour)
+         //   is TimePickerEvent.OnMinuteSelected -> changeMinute(event.minute)
+          //  TimePickerEvent.OnBackPressed -> action = TimePickerAction.Dismiss
+          //  TimePickerEvent.OnConfirm -> confirm()
+            else -> {}
         }
     }
-
+/*
     private fun initSpinner() {
         val minHour = if (isCropMinTime && min?.hour != null) min.hour else 0
         val maxHour = max?.hour ?: 23
@@ -87,7 +88,7 @@ class TimePickerViewModel(
                 action = TimePickerAction.Dismiss
             }
         }
-    }
+    }*/
 
 }
 

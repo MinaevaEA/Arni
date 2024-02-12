@@ -58,7 +58,7 @@ fun TimePickerView(
             // Часы
             InfiniteSpinner(
                 modifier = Modifier.width(130.dp),
-                list = state.hoursList.map { it.toTimeString() },
+                list = /*state.hoursList.map { it.toTimeString() }*/(0..23).toPersistentList(),
                 firstIndex = 0,
                 onSelect = { hour ->
                     eventConsumer(TimePickerEvent.OnHourSelected(hour.toInt()))
@@ -68,7 +68,7 @@ fun TimePickerView(
             // Минуты
             InfiniteSpinner(
                 modifier = Modifier.width(50.dp),
-                list = state.minutesList.map { it.toTimeString() },
+                list = /*state.minutesList.map { it.toTimeString() }*/(0..59).toPersistentList(),
                 firstIndex = 0,
                 onSelect = { minute ->
                     eventConsumer(TimePickerEvent.OnMinuteSelected(minute.toInt()))
