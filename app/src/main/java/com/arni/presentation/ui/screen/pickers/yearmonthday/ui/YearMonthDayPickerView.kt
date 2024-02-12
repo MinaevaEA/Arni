@@ -62,7 +62,7 @@ fun YearMonthDayPickerView(
         ) {
             InfiniteSpinner(
                 modifier = Modifier.width(50.dp),
-                list = state.daysList.map { it.toTimeString() },
+                list = /*state.daysList.map { it.toTimeString() }*/(0..31).toPersistentList(),
                 firstIndex = 0,
                 onSelect = { day ->
                     eventConsumer(YearMonthDayPickerEvent.OnDaySelected(day.toInt()))
@@ -71,16 +71,16 @@ fun YearMonthDayPickerView(
             Spacer(modifier = Modifier.width(24.dp))
             InfiniteSpinner(
                 modifier = Modifier.width(130.dp),
-                list = state.monthList.map { CalendarUtils.getStandaloneMonthName(LocalDate.of(1970, it, 1).month) },
+                list = /*state.monthList.map { CalendarUtils.getStandaloneMonthName(LocalDate.of(1970, it, 1).month) }*/(1..12).toPersistentList(),
                 firstIndex = 0,
                 onSelect = { month ->
-                    eventConsumer(YearMonthDayPickerEvent.OnMonthSelected(CalendarUtils.getMonthToInt(month)))
+                    eventConsumer(YearMonthDayPickerEvent.OnMonthSelected(CalendarUtils.getMonthToInt("Декабрь")))
                 }
             )
             Spacer(modifier = Modifier.width(24.dp))
             InfiniteSpinner(
                 modifier = Modifier.wrapContentWidth(),
-                list = state.yearList.map { it.toTimeString() },
+                list = /*tate.yearList.map { it.toTimeString() }*/(1970..2023).toPersistentList(),
                 firstIndex = 0,
                 onSelect = { year ->
                     eventConsumer(YearMonthDayPickerEvent.OnYearSelected(year.toInt()))

@@ -13,6 +13,7 @@ sealed interface CreateRequestEvent : BaseEvent {
 
     object onClickBack: CreateRequestEvent
     object onClickSelectorTime: CreateRequestEvent
+    object onClickSelectorDate: CreateRequestEvent
 }
 sealed interface CreateRequestAction : BaseAction {
     object returnGeneralScreen: CreateRequestAction

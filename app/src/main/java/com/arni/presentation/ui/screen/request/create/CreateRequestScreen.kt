@@ -38,6 +38,7 @@ class CreateRequestScreen: AndroidScreen() {
             when (val act = action) {
                 CreateRequestAction.returnGeneralScreen -> navigator.pop()
                 is CreateRequestAction.OpenTimePicker ->bottomSheetNavigator.show(TimePickerScreen(/* act.id,act.initial)*/))
+                is CreateRequestAction.OpenYearMonthDayPicker -> bottomSheetNavigator.show(YearMonthDayPickerScreen())
                 else -> {}
             }
         }

@@ -13,6 +13,7 @@ class CreateRequestViewModel(
             is CreateRequestEvent.onClickBack -> action = CreateRequestAction.returnGeneralScreen
             CreateRequestEvent.onClickSelectorTime -> action = CreateRequestAction.OpenTimePicker(ACT_TIME_ID,
                 LocalTime.now(), true)
+            CreateRequestEvent.onClickSelectorDate -> action = CreateRequestAction.OpenYearMonthDayPicker(ACT_DATE_ID, LocalDate.now())
         }
     }
     companion object {

@@ -10,21 +10,21 @@ import java.time.LocalDate
 
 @SuppressLint("NewApi")
 class YearMonthDayPickerViewModel(
-    private val id: Int,
+/*    private val id: Int,
     private val initial: LocalDate,
     private val min: LocalDate?,
-    private val max: LocalDate?
+    private val max: LocalDate?*/
 ) : BaseViewModel<YearMonthDayPickerState, YearMonthDayPickerEvent, YearMonthDayPickerAction>(
     YearMonthDayPickerState()
 ) {
 
-    private var selectedYear = initial.year
+   /* private var selectedYear = initial.year
     private var selectedMonth = initial.month.value
-    private var selectedDay = initial.dayOfMonth
+    private var selectedDay = initial.dayOfMonth*/
 
     override fun obtainEvent(event: YearMonthDayPickerEvent) {
         when (event) {
-            is YearMonthDayPickerEvent.OnCreate -> initSpinner()
+      /*      is YearMonthDayPickerEvent.OnCreate -> initSpinner()
             is YearMonthDayPickerEvent.OnDaySelected -> {
                 changeDay(event.day)
             }
@@ -38,11 +38,12 @@ class YearMonthDayPickerViewModel(
             }
 
             is YearMonthDayPickerEvent.OnBackPressed -> action = YearMonthDayPickerAction.Dismiss
-            is YearMonthDayPickerEvent.OnConfirm -> confirm()
+            is YearMonthDayPickerEvent.OnConfirm -> confirm()*/
+            else -> {}
         }
     }
 
-    private fun initSpinner() {
+/*    private fun initSpinner() {
         val minYear = min?.year ?: MIN_YEAR
         val maxYear = max?.year ?: MAX_YEAR
         val initialYear = initial.year
@@ -141,6 +142,6 @@ class YearMonthDayPickerViewModel(
         private const val MIN_YEAR = 1900
         private val MAX_YEAR = LocalDate.now().plusYears(10).year
 
-    }
+    }*/
 
 }

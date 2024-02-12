@@ -46,7 +46,7 @@ fun CreateRequestView(
             item {
                 Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
                     TextFieldSelector(label = stringResource(id = R.string.status_order), onClick = {})
-                    TextFieldSelector(label = stringResource(id = R.string.date_order), onClick = {})
+                    TextFieldSelector(label = stringResource(id = R.string.date_order), onClick = {eventConsumer(CreateRequestEvent.onClickSelectorDate)})
                     TextFieldSelector(label = stringResource(id = R.string.time_order), onClick = {eventConsumer(CreateRequestEvent.onClickSelectorTime)},)
                     TextFieldSelector(label = stringResource(id = R.string.local_order), onClick = {})
                     TextFieldSelector(label = stringResource(id = R.string.from_local), onClick = {})

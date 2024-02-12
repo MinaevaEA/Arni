@@ -43,8 +43,8 @@ val viewModelModule = module {
         TimePickerViewModel(/*params[0], params[1], params[2], params[3], params[4]*/)
     }
 
-    viewModel { params ->
-        YearMonthDayPickerViewModel(params[0], params[1], params[2], params[3])
+    viewModel {
+        YearMonthDayPickerViewModel(/*params[0], params[1], params[2], params[3]*/)
     }
 
     viewModel { params ->

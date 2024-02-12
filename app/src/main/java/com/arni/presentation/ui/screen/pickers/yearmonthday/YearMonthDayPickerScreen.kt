@@ -13,22 +13,23 @@ import com.arni.presentation.ui.screen.pickers.yearmonthday.ui.YearMonthDayPicke
 import com.arni.presentation.ui.screen.pickers.yearmonthday.ui.YearMonthDayPickerEvent
 import com.arni.presentation.ui.screen.pickers.yearmonthday.ui.YearMonthDayPickerView
 import com.arni.presentation.ui.screen.pickers.yearmonthday.ui.YearMonthDayPickerViewModel
+import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 import pro.midev.mec.presentation.ui.style.ArniTheme
 import java.time.LocalDate
 
 class YearMonthDayPickerScreen(
-    private val id: Int,
+ /*   private val id: Int,
     private val initial: LocalDate? = null,
     private val min: LocalDate? = null,
-    private val max: LocalDate? = null
+    private val max: LocalDate? = null*/
 ) : Screen {
 
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     override fun Content() {
         YearMonthDayPickerScreen(
-            viewModel = getScreenModel { parametersOf(id, initial, min, max) }
+            viewModel = koinViewModel()/*getScreenModel { parametersOf(id, initial, min, max) }*/
         )
     }
 
