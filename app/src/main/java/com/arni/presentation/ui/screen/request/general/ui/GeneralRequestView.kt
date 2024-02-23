@@ -48,12 +48,12 @@ fun GeneralRequestView(
         ) {
             itemsIndexed(items = state.tasks) { index, item ->
                 ItemRequest(
-                    fromDepartment = item.fromDepartament,
-                    toDepartment = item.toDepartament,
-                    nameExecutor = item.nameExecutor,
-                    isStatus = item.statusRequest,
-                    Urgency = item.urgency,
-                    onClick = {eventConsumer(GeneralRequestEvent.onClickItem(item))})
+                    fromDepartment = item.fromDepartament ?:"",
+                    toDepartment = item.toDepartament ?:"",
+                    nameExecutor = item.nameExecutor ?:"",
+                    isStatus = item.statusRequest ?: 0,
+                    Urgency = item.urgency ?:"",
+                    onClick = {eventConsumer(GeneralRequestEvent.onClickItem(item, state.human))})
             }
         }
     }

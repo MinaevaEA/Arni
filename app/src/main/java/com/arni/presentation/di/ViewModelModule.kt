@@ -10,6 +10,12 @@ import com.arni.presentation.ui.screen.profile.ui.ProfileViewModel
 import com.arni.presentation.ui.screen.request.create.ui.CreateRequestViewModel
 import com.arni.presentation.ui.screen.request.detail.ui.DetailRequestViewModel
 import com.arni.presentation.ui.screen.request.general.ui.GeneralRequestViewModel
+import com.arni.presentation.ui.screen.select_status_request.ui.SelectStatusRequestViewModel
+import com.arni.presentation.ui.screen.select_departament.ui.SelectDepartamentViewModel
+import com.arni.presentation.ui.screen.select_executor.ui.SelectExecutorViewModel
+import com.arni.presentation.ui.screen.select_status_patient.ui.SelectStatusPatientViewModel
+import com.arni.presentation.ui.screen.select_subdivision.ui.SelectSubdivisionViewModel
+import com.arni.presentation.ui.screen.select_urgently_status.ui.SelectUrgentlyStatusViewModel
 import com.arni.presentation.ui.screen.signIn.ui.SignInViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -35,6 +41,26 @@ val viewModelModule = module {
     }
     viewModel {
         CreateRequestViewModel()
+    }
+    viewModel {
+        SelectExecutorViewModel()
+    }
+    viewModel {
+        SelectStatusPatientViewModel()
+    }
+
+    viewModel {
+        SelectDepartamentViewModel()
+    }
+    viewModel {
+        SelectUrgentlyStatusViewModel()
+    }
+
+    viewModel { params ->
+        SelectSubdivisionViewModel(/*params[0], params[1]*/)
+    }
+    viewModel { params ->
+        SelectStatusRequestViewModel(/*params[0], params[1]*/)
     }
     viewModel {
         DetailRequestViewModel(get())

@@ -20,7 +20,7 @@ class GeneralRequestViewModel(
 
     override fun obtainEvent(event: GeneralRequestEvent) {
         when (event) {
-            is GeneralRequestEvent.onClickItem -> action = GeneralRequestAction.OpenScreenDetailInfo(event.item)
+            is GeneralRequestEvent.onClickItem -> action = GeneralRequestAction.OpenScreenDetailInfo(event.item, event.human)
             is GeneralRequestEvent.OnClickAddRequest -> action = GeneralRequestAction.OpenScreenAddRequest
             is GeneralRequestEvent.OnBackBtnClick -> action = GeneralRequestAction.ExitScreen
             is GeneralRequestEvent.OnClickFilter -> action = GeneralRequestAction.OpenScreenFilter

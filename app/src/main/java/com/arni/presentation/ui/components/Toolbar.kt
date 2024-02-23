@@ -352,7 +352,7 @@ private fun ToolbarsPreview() {
                 onBackPressed = {},
                 actionsEnd = {
                     TextButton(onClick = {}) {
-                        Text(text = "Cохранить")
+                        Text(color = ArniTheme.colors.black_100, text = "Cохранить")
                     }
                 }
             )

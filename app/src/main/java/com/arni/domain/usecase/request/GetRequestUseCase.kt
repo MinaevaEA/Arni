@@ -12,8 +12,8 @@ class GetRequestUseCase {
                 listOf(
                     RequestHuman(
                         id = 1,
-                        statusRequest = 1,
-                        date = "12.01.2024",
+                        statusRequest = 2,
+                        date = "12.03.2024",
                         fromDepartament = "Отделение 1",
                         toDepartament = "Отделение 2",
                         beginTime = "14:00",
@@ -23,7 +23,24 @@ class GetRequestUseCase {
                         namePatient = "Иванова Ольга",
                         statusPatient = "Л",
                         description = "Здесь описание",
-                        photo = listOf()
+                        photo = listOf(),
+                        nameDispatcher = "Иванов Иван"
+                    ),
+                    RequestHuman(
+                        id = 1,
+                        statusRequest = 1,
+                        date = "1.01.2024",
+                        fromDepartament = "Отделение 1",
+                        toDepartament = "Отделение 2",
+                        beginTime = "14:00",
+                        endTime = "17:00",
+                        urgency = "Э",
+                        nameExecutor = "Петров Иван",
+                        namePatient = "Иванова Ольга",
+                        statusPatient = "Л",
+                        description = "Здесь описание",
+                        photo = listOf(),
+                        nameDispatcher = "Иванов Иван"
                     ),
                     RequestHuman(
                         id = 1,
@@ -38,22 +55,8 @@ class GetRequestUseCase {
                         namePatient = "Иванова Ольга",
                         statusPatient = "Л",
                         description = "Здесь описание",
-                        photo = listOf()
-                    ),
-                    RequestHuman(
-                        id = 1,
-                        statusRequest = 1,
-                        date = "12.01.2024",
-                        fromDepartament = "Отделение 1",
-                        toDepartament = "Отделение 2",
-                        beginTime = "14:00",
-                        endTime = "17:00",
-                        urgency = "Э",
-                        nameExecutor = "Иванов Иван",
-                        namePatient = "Иванова Ольга",
-                        statusPatient = "Л",
-                        description = "Здесь описание",
-                        photo = listOf()
+                        photo = listOf(),
+                        nameDispatcher = "Иванов Иван"
                     ),
                     RequestHuman(
                         id = 1,
@@ -68,12 +71,13 @@ class GetRequestUseCase {
                         namePatient = "Иванова Ольга",
                         statusPatient = "Л",
                         description = "Здесь описание",
-                        photo = listOf()
+                        photo = listOf(),
+                        nameDispatcher = "Иванов Иван"
                     ),
                     RequestHuman(
                         id = 1,
                         statusRequest = 3,
-                        date = "12.01.2024",
+                        date = "12.04.2024",
                         fromDepartament = "Отделение 1",
                         toDepartament = "Отделение 2",
                         beginTime = "14:00",
@@ -83,7 +87,8 @@ class GetRequestUseCase {
                         namePatient = "Иванова Ольга",
                         statusPatient = "Л",
                         description = "Здесь описание",
-                        photo = listOf()
+                        photo = listOf(),
+                        nameDispatcher = "Иванов Иван"
                     ),
                 )
             )

@@ -16,18 +16,19 @@
     <string name="error_undefined">Неизвестная ошибка</string>
 
     //detail screen
-    <string name="status_order">Статус заявки</string>
-    <string name="date_order">Дата</string>
-    <string name="time_order">Время</string>
-    <string name="local_order">Подразделение</string>
-    <string name="from_local">Откуда</string>
-    <string name="to_local">Куда</string>
+    <string name="status_order">Статус заявки*</string>
+    <string name="date_order">Дата*</string>
+    <string name="time_order">Время*</string>
+    <string name="local_order">Подразделение*</string>
+    <string name="from_local">Откуда*</string>
+    <string name="to_local">Куда*</string>
     <string name="begin_date">Начало выполнения</string>
     <string name="end_date">Конец выполнения</string>
-    <string name="draft_order">Срочность</string>
+    <string name="draft_order">Срочность*</string>
     <string name="checking_order">Исполнитель(-и)</string>
-    <string name="name_patient_order">ФИО пациента</string>
-    <string name="status_patient">Статус пациента</string>
+    <string name="name_dispatcher">ФИО диспетчера</string>
+    <string name="name_patient_order">ФИО пациента*</string>
+    <string name="status_patient">Статус пациента*</string>
     <string name="comment_order">Примечание</string>
     <string name="name_inicial">Имя инициатора</string>
     <string name="photo">Фото</string>
@@ -44,4 +45,11 @@
 
     <string name="cancel">Отменить</string>
     <string name="ready">Готово</string>
+
+    <string name="add_status">Выберите статус</string>
+    <string name="add_subdivision">Выберите подразделение</string>
+    <string name="add_departament">Выберите отделение</string>
+    <string name="add_executor">Выберите исполнителя</string>
+    <string name="add_status_patient">Выберите статус пациента</string>
+
 </resources>

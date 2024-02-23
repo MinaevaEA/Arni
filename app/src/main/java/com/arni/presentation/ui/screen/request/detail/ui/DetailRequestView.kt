@@ -18,6 +18,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.arni.R
+import com.arni.presentation.enum.StatusRequests
+import com.arni.presentation.enum.StatusRoleHuman
 import com.arni.presentation.ui.components.PhotoLine
 import com.arni.presentation.ui.components.TextFieldInput
 import com.arni.presentation.ui.components.TextFieldSelector
@@ -40,11 +42,14 @@ fun DetailRequestView(
     ) {
 
         TextTitleToolbar(
-            title = state.item.namePatient,
+            title = state.item.namePatient ?: "",
             onBackPressed = { eventConsumer(DetailRequestEvent.onClickBackList) },
             actionsEnd = {
-                TextButton(onClick = {}) {
-                    Text(text = "Редактировать")
+                TextButton(
+                    enabled = state.isEditRequest && state.isEnabledButton,
+                    onClick = { eventConsumer(DetailRequestEvent.onClickToolbarButton(!state.enabled)) }
+                ) {
+                    Text(color = ArniTheme.colors.black_100, text = if (!state.enabled) "Ред." else "Cохранить")
                 }
             })
         LazyColumn(modifier = Modifier) {
@@ -53,108 +58,125 @@ fun DetailRequestView(
                     TextFieldSelector(
                         label = stringResource(id = R.string.status_order),
                         onClick = {},
-                        text = state.item.statusRequest.toString(),
-                        enabled = state.enabled
-                    )
-                    TextFieldSelector(
-                        label = stringResource(id = R.string.date_order),
-                        onClick = {},
-                        text = state.item.date,
-                        enabled = state.enabled
-                    )
-                    TextFieldSelector(
-                        label = stringResource(id = R.string.time_order),
-                        onClick = {},
-                        text = state.item.date,
-                        enabled = state.enabled
-                    )
-                    TextFieldSelector(
-                        label = stringResource(id = R.string.local_order),
-                        onClick = {},
-                        text = "",
-                        enabled = state.enabled
-                    )
-                    TextFieldSelector(
-                        label = stringResource(id = R.string.from_local),
-                        onClick = {},
-                        text = state.item.fromDepartament,
-                        enabled = state.enabled
-                    )
-                    TextFieldSelector(
-                        label = stringResource(id = R.string.to_local),
-                        onClick = {},
-                        text = state.item.toDepartament,
-                        enabled = state.enabled
-                    )
-                    TextFieldSelector(
-                        label = stringResource(id = R.string.begin_date),
-                        onClick = {},
-                        text = state.item.beginTime,
-                        enabled = state.enabled
-                    )
-                    TextFieldSelector(
-                        label = stringResource(id = R.string.end_date),
-                        onClick = {},
-                        text = state.item.endTime,
-                        enabled = state.enabled
-                    )
-                    TextFieldSelector(
-                        label = stringResource(id = R.string.draft_order),
-                        onClick = {},
-                        text = state.item.urgency,
-                        enabled = state.enabled
-                    )
-                    TextFieldSelector(
-                        label = stringResource(id = R.string.checking_order),
-                        onClick = {},
-                        text = state.item.nameExecutor,
-                        enabled = state.enabled
-                    )
-                    TextFieldInput(
-                        label = stringResource(id = R.string.name_patient_order),
-                        text = state.item.namePatient,
-                        enabled = state.enabled
-                    )
-                    TextFieldSelector(
-                        label = stringResource(id = R.string.status_patient),
-                        onClick = {},
-                        text = state.item.statusPatient,
-                        enabled = state.enabled
-                    )
-                    //todo разобраться с отключением на редактирование
-                    TextFieldInput(
-                        label = stringResource(id = R.string.comment_order),
-                        text = state.item.description,
-                        enabled = state.enabled
-                    )
-                    TextFieldInput(
-                        label = stringResource(id = R.string.name_inicial),
-                        text = state.item.nameExecutor,
-                        enabled = state.enabled
-                    )
-                    //todo компонент фото
-                    Text(
-                        text = stringResource(id = R.string.photo), style = ArniTheme.typography.subhead.regular,
-                        color = ArniTheme.colors.neutral_300,
-                        modifier = Modifier.padding(bottom = 4.dp)
-                    )
-                    PhotoLine(
-                        addPhotoAction = {
-                            showSelectMediaOptionBs.value = true
-                        },
-                        deletePhotoAction = {},
-                        photos = listOf("https://memepedia.ru/wp-content/uploads/2020/10/screenshot_11-3-360x270.png"),
-                    )
+                        text = when (state.item.statusRequest) {
+                            StatusRequests.parse(StatusRequests.WORK) -> "Рабочая"
+                            StatusRequests.parse(StatusRequests.DRAFT) -> "Черновик"
+                            StatusRequests.parse(StatusRequests.COMPLETED) -> "Завершена"
+                            else -> {""}
+                        } ,
+                            enabled = if (state.human.role != StatusRoleHuman.INITIAL) state.enabled else false
+                                )
+                                TextFieldSelector(
+                                    label = stringResource(id = R.string.date_order),
+                                    onClick = {},
+                                    text = state.item.date ?: "",
+                                    enabled = if (state.human.role == StatusRoleHuman.EXECUTOR || state.human.role == StatusRoleHuman.EXECUTOR_INITIAL) false else state.enabled
+                                )
+
+                            TextFieldSelector(
+                                label = stringResource(id = R.string.time_order),
+                                onClick = {},
+                                text = state.item.date ?: "",
+                                enabled = if (state.human.role == StatusRoleHuman.EXECUTOR || state.human.role == StatusRoleHuman.EXECUTOR_INITIAL) false else state.enabled
+                            )
+                                    TextFieldSelector (
+                                    label = stringResource(id = R.string.local_order),
+                            onClick = {},
+                            text = state.human.subdivision ?: "",
+                            enabled =
+                                if (state.human.role == StatusRoleHuman.EXECUTOR || state.human.role == StatusRoleHuman.INITIAL || state.human.role == StatusRoleHuman.EXECUTOR_INITIAL) false else state.enabled
+                                )
+                                TextFieldSelector(
+                                    label = stringResource(id = R.string.from_local),
+                                    onClick = {},
+                                    text = state.item.fromDepartament ?: "",
+                                    enabled = if (state.human.role == StatusRoleHuman.EXECUTOR || state.human.role == StatusRoleHuman.EXECUTOR_INITIAL) false else state.enabled
+                                )
+
+                            TextFieldSelector(
+                                label = stringResource(id = R.string.to_local),
+                                onClick = {},
+                                text = state.item.toDepartament ?: "",
+                                enabled = if (state.human.role == StatusRoleHuman.EXECUTOR || state.human.role == StatusRoleHuman.EXECUTOR_INITIAL) false else state.enabled
+                            )
+                                    TextFieldSelector (
+                                    label = stringResource(id = R.string.begin_date),
+                            onClick = {},
+                            text = state.item.beginTime ?: "",
+                            enabled = if (state.human.role != StatusRoleHuman.INITIAL) state.enabled else false
+                                )
+                                TextFieldSelector(
+                                    label = stringResource(id = R.string.end_date),
+                                    onClick = {},
+                                    text = state.item.endTime ?: "",
+                                    enabled = if (state.human.role != StatusRoleHuman.INITIAL) state.enabled else false
+                                )
+
+                            TextFieldInput(
+                                label = stringResource(id = R.string.name_dispatcher),
+                                text = state.item.nameDispatcher ?: "",
+                                enabled = if (state.human.role != StatusRoleHuman.INITIAL) state.enabled else false
+                            )
+                                    TextFieldSelector (
+                                    label = stringResource(id = R.string.draft_order),
+                            onClick = {},
+                            text = state.item.urgency ?: "",
+                            enabled =
+                                if (state.human.role == StatusRoleHuman.EXECUTOR || state.human.role == StatusRoleHuman.EXECUTOR_INITIAL) false else state.enabled
+                                )
+                                TextFieldInput(
+                                    label = stringResource(id = R.string.name_patient_order),
+                                    text = state.item.namePatient ?: "",
+                                    enabled = state.enabled
+                                )
+
+                            TextFieldSelector(
+                                label = stringResource(id = R.string.checking_order),
+                                onClick = {},
+                                text = state.item.nameExecutor ?: "",
+                                enabled = if (state.human.role == StatusRoleHuman.EXECUTOR || state.human.role == StatusRoleHuman.INITIAL) false else state.enabled
+                            )
+                                    TextFieldSelector (
+                                    label = stringResource(id = R.string.status_patient),
+                            onClick = {},
+                            text = state.item.statusPatient ?: "",
+                            enabled = state.enabled
+                                )
+                                TextFieldInput(
+                                    label = stringResource(id = R.string.name_inicial),
+                                    text = state.item.nameExecutor ?: "",
+                                    enabled = if (state.human.role != StatusRoleHuman.ADMIN) false else state.enabled
+                                )
+
+                            TextFieldInput(
+                                label = stringResource(id = R.string.comment_order),
+                                text = state.item.description ?: "",
+                                enabled = state.enabled
+                            )
+
+                                    Text (
+                                    text = stringResource(id = R.string.photo), style =
+                                ArniTheme.typography.subhead.regular,
+                            color = ArniTheme.colors.neutral_300,
+                            modifier = Modifier.padding(bottom = 4.dp)
+                                )
+                                PhotoLine(
+                                    addPhotoAction = {
+                                        showSelectMediaOptionBs.value = true
+                                    },
+                                    deletePhotoAction = {},
+                                    photos = listOf("https://memepedia.ru/wp-content/uploads/2020/10/screenshot_11-3-360x270.png"),
+                                )
+                        }
                 }
             }
         }
     }
-}
 
-@Composable
-@Preview
-private fun DetailRequestViewPreview() {
-    ArniTheme {
-        DetailRequestView(state = DetailRequestState(), eventConsumer = {})
+    @Composable
+    @Preview
+    private fun DetailRequestViewPreview() {
+        ArniTheme {
+            DetailRequestView(state = DetailRequestState(), eventConsumer = {})
+        }
     }
-}

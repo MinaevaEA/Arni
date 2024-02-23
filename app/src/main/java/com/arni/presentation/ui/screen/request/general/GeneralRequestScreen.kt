@@ -39,7 +39,7 @@ private fun GeneralCheckingScreen(
 
     LaunchedEffect(action) {
         when (val act = action) {
-            is GeneralRequestAction.OpenScreenDetailInfo -> navigator.push(DetailRequestScreen(act.item))
+            is GeneralRequestAction.OpenScreenDetailInfo -> navigator.push(DetailRequestScreen(act.item, act.user))
             is GeneralRequestAction.OpenScreenAddRequest -> navigator.push(CreateRequestScreen())
             GeneralRequestAction.ExitScreen -> navigator.pop()
             is GeneralRequestAction.OpenScreenFilter -> bottomSheetNavigator.show(FilterScreen())

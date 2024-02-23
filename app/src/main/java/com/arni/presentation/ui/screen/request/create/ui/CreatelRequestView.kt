@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -17,13 +18,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.arni.R
+import com.arni.presentation.enum.StatusRequests
 import com.arni.presentation.ui.components.PhotoLine
 import com.arni.presentation.ui.components.TextFieldInput
 import com.arni.presentation.ui.components.TextFieldSelector
 import com.arni.presentation.ui.components.TextTitleToolbar
-import com.arni.presentation.ui.screen.request.detail.ui.DetailRequestEvent
-import com.arni.presentation.ui.screen.request.detail.ui.DetailRequestState
-import com.arni.presentation.ui.screen.request.detail.ui.DetailRequestView
 import pro.midev.mec.presentation.ui.style.ArniTheme
 
 @Composable
@@ -41,24 +40,97 @@ fun CreateRequestView(
             .navigationBarsPadding()
     ) {
 
-        TextTitleToolbar(title = stringResource(R.string.title_add_screen), onBackPressed = {eventConsumer(CreateRequestEvent.onClickBack)})
+        TextTitleToolbar(
+            title = stringResource(R.string.title_add_screen),
+            onBackPressed = { eventConsumer(CreateRequestEvent.onClickBack) },
+            actionsEnd = {
+                TextButton(
+                    enabled = state.isEnabledButton,
+                    onClick = { /*eventConsumer(DetailRequestEvent.onClickToolbarButton(!state.enabled))*/ }
+                ) {
+                    Text(color = ArniTheme.colors.black_100, text = "Cохранить")
+                }
+            })
         LazyColumn() {
             item {
                 Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                    TextFieldSelector(label = stringResource(id = R.string.status_order), onClick = {})
-                    TextFieldSelector(label = stringResource(id = R.string.date_order), onClick = {eventConsumer(CreateRequestEvent.onClickSelectorDate)})
-                    TextFieldSelector(label = stringResource(id = R.string.time_order), onClick = {eventConsumer(CreateRequestEvent.onClickSelectorTime)},)
-                    TextFieldSelector(label = stringResource(id = R.string.local_order), onClick = {})
-                    TextFieldSelector(label = stringResource(id = R.string.from_local), onClick = {})
-                    TextFieldSelector(label = stringResource(id = R.string.to_local), onClick = {})
-                    TextFieldSelector(label = stringResource(id = R.string.begin_date), onClick = {})
-                    TextFieldSelector(label = stringResource(id = R.string.end_date), onClick = {})
-                    TextFieldSelector(label = stringResource(id = R.string.draft_order), onClick = {})
-                    TextFieldSelector(label = stringResource(id = R.string.checking_order), onClick = {})
-                    TextFieldInput(label = stringResource(id = R.string.name_patient_order), enabled = true)
-                    TextFieldSelector(label = stringResource(id = R.string.status_patient), onClick = {})
-                    TextFieldInput(label = stringResource(id = R.string.comment_order), enabled = true)
-                    TextFieldInput(label = stringResource(id = R.string.name_inicial), enabled = true)
+                    TextFieldSelector(
+                        label = stringResource(id = R.string.status_order),
+                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectStatus) },
+                        text = when (state.item.statusRequest) {
+                            StatusRequests.parse(StatusRequests.WORK) -> "Рабочая"
+                            StatusRequests.parse(StatusRequests.DRAFT) -> "Черновик"
+                            StatusRequests.parse(StatusRequests.COMPLETED) -> "Завершена"
+                            else -> {
+                                ""
+                            }
+                        }
+                    )
+                    TextFieldSelector(
+                        label = stringResource(id = R.string.date_order),
+                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectorDate) },
+                        text = state.item.date ?: ""
+                    )
+                    TextFieldSelector(
+                        label = stringResource(id = R.string.time_order),
+                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectorTime) },
+                        text = state.item.date ?: ""
+                    )
+                    TextFieldSelector(
+                        label = stringResource(id = R.string.local_order),
+                        onClick = {eventConsumer(CreateRequestEvent.onClickSelectsubDivision)},
+                        text = state.human.subdivision ?: ""
+                    )
+                    TextFieldSelector(
+                        label = stringResource(id = R.string.from_local),
+                        onClick = {eventConsumer(CreateRequestEvent.onClickSelectDepartament)},
+                        text = state.item.fromDepartament ?: ""
+                    )
+                    TextFieldSelector(
+                        label = stringResource(id = R.string.to_local),
+                        onClick = {eventConsumer(CreateRequestEvent.onClickSelectDepartament)},
+                        text = state.item.toDepartament ?: ""
+                    )
+                    TextFieldSelector(
+                        label = stringResource(id = R.string.begin_date),
+                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectorTime) },
+                        text = state.item.beginTime ?: ""
+                    )
+                    TextFieldSelector(
+                        label = stringResource(id = R.string.end_date),
+                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectorTime) },
+                        text = state.item.endTime ?: ""
+                    )
+                    TextFieldSelector(
+                        label = stringResource(id = R.string.draft_order),
+                        onClick = {eventConsumer(CreateRequestEvent.onClickSelectUrgently)},
+                        text = state.item.urgency ?: ""
+                    )
+                    TextFieldSelector(
+                        label = stringResource(id = R.string.checking_order),
+                        onClick = {eventConsumer(CreateRequestEvent.onClickSelectExecutor)},
+                        text = state.item.nameExecutor ?: ""
+                    )
+                    TextFieldInput(
+                        label = stringResource(id = R.string.name_patient_order),
+                        enabled = true,
+                        text = state.item.namePatient ?: ""
+                    )
+                    TextFieldSelector(
+                        label = stringResource(id = R.string.status_patient),
+                        onClick = {eventConsumer(CreateRequestEvent.onClickSelectStatusPatient)},
+                        text = state.item.statusPatient ?: ""
+                    )
+                    TextFieldInput(
+                        label = stringResource(id = R.string.comment_order),
+                        enabled = true,
+                        text = state.item.description ?: ""
+                    )
+                    TextFieldInput(label = stringResource(id = R.string.name_inicial), enabled = true, text = "")
+                    TextFieldInput(
+                        label = stringResource(id = R.string.name_inicial),
+                        text = state.item.nameExecutor ?: "",
+                    )
                     //todo компонент фото
                     Text(
                         text = stringResource(id = R.string.photo), style = ArniTheme.typography.subhead.regular,

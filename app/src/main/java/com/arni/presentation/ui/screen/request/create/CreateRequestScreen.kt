@@ -13,11 +13,14 @@ import com.arni.presentation.ui.screen.pickers.yearmonthday.YearMonthDayPickerSc
 import com.arni.presentation.ui.screen.request.create.ui.CreateRequestAction
 import com.arni.presentation.ui.screen.request.create.ui.CreateRequestView
 import com.arni.presentation.ui.screen.request.create.ui.CreateRequestViewModel
-import com.arni.presentation.ui.screen.request.detail.ui.DetailRequestViewModel
+import com.arni.presentation.ui.screen.select_departament.SelectDepartamentScreen
+import com.arni.presentation.ui.screen.select_executor.SelectExecutorScreen
+import com.arni.presentation.ui.screen.select_status_patient.SelectStatusPatientScreen
+import com.arni.presentation.ui.screen.select_status_request.SelectStatusRequestScreen
+import com.arni.presentation.ui.screen.select_subdivision.SelectSubdivisionScreen
+import com.arni.presentation.ui.screen.select_urgently_status.SelectUrgentlyStatusScreen
 import org.koin.androidx.compose.koinViewModel
 import pro.midev.mec.presentation.ui.style.ArniTheme
-import java.time.LocalDate
-import java.time.LocalTime
 
 class CreateRequestScreen: AndroidScreen() {
     @Composable
@@ -39,6 +42,14 @@ class CreateRequestScreen: AndroidScreen() {
                 CreateRequestAction.returnGeneralScreen -> navigator.pop()
                 is CreateRequestAction.OpenTimePicker ->bottomSheetNavigator.show(TimePickerScreen(/* act.id,act.initial)*/))
                 is CreateRequestAction.OpenYearMonthDayPicker -> bottomSheetNavigator.show(YearMonthDayPickerScreen())
+                is CreateRequestAction.openRequestStatusScreen -> bottomSheetNavigator.show(
+                    SelectStatusRequestScreen()
+                )
+                is CreateRequestAction.openDepartamentScreen -> bottomSheetNavigator.show(SelectDepartamentScreen())
+                is CreateRequestAction.openSubDivisionScreen -> bottomSheetNavigator.show(SelectSubdivisionScreen())
+                is CreateRequestAction.openUrgentlyScreen -> bottomSheetNavigator.show(SelectUrgentlyStatusScreen())
+                is CreateRequestAction.openExecutorScreen -> bottomSheetNavigator.show(SelectExecutorScreen())
+                is CreateRequestAction.openStatusPatientScreen -> bottomSheetNavigator.show(SelectStatusPatientScreen())
                 else -> {}
             }
         }
