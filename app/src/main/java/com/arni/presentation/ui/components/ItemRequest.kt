@@ -35,17 +35,17 @@ fun ItemRequest(
 ) {
     Column(
         modifier = Modifier
-            .padding(top = 12.dp, bottom = 12.dp, start = 10.dp, end = 10.dp)
+            .padding(top = 4.dp, bottom = 4.dp, start = 10.dp, end = 10.dp)
             .shadow(
                 elevation = 10.dp,
                 spotColor = ArniTheme.colors.black_100,
-                shape = RoundedCornerShape(24.dp)
+                shape = RoundedCornerShape(20.dp)
             )
-            .clip(shape = RoundedCornerShape(24.dp))
+            .clip(shape = RoundedCornerShape(20.dp))
             .clickable { onClick() }
             .background(color = ArniTheme.colors.white_100)
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(10.dp)
 
     ) {
         Column(
@@ -54,7 +54,7 @@ fun ItemRequest(
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Column(
                     modifier = Modifier
-                        .padding(end = 4.dp)
+                        .padding(end = 2.dp)
                         .clip(shape = RoundedCornerShape(15.dp))
                         .border(
                             1.dp, color = when (isStatus) {
@@ -87,7 +87,7 @@ fun ItemRequest(
                             else -> {
                                 ""
                             }
-                        }, style = ArniTheme.typography.body.bold, color =
+                        }, style = ArniTheme.typography.subhead.bold, color =
                         when (isStatus) {
                             StatusRequests.parse(StatusRequests.WORK) -> ArniTheme.colors.info
                             StatusRequests.parse(StatusRequests.DRAFT) -> ArniTheme.colors.error
@@ -96,7 +96,7 @@ fun ItemRequest(
                                 ArniTheme.colors.white_100
                             }
                         },
-                        modifier = Modifier.padding(top = 6.dp, bottom = 6.dp, start = 12.dp, end = 12.dp)
+                        modifier = Modifier.padding(top = 4.dp, bottom = 4.dp, start = 10.dp, end = 10.dp)
                     )
                 }
                 Column(
@@ -108,25 +108,25 @@ fun ItemRequest(
                 ) {
                     Text(
                         text = Urgency,
-                        style = ArniTheme.typography.body.semibold,
+                        style = ArniTheme.typography.subhead.bold,
                         color = ArniTheme.colors.black_100,
-                        modifier = Modifier.padding(top = 6.dp, start = 12.dp, bottom = 6.dp, end = 12.dp)
+                        modifier = Modifier.padding(top = 3.dp, start = 10.dp, bottom = 3.dp, end = 10.dp)
                     )
                 }
             }
             Row {
                 Text(
                     text = fromDepartment,
-                    style = ArniTheme.typography.body.semibold,
+                    style = ArniTheme.typography.subhead.bold,
                     color = ArniTheme.colors.black_100,
-                    modifier = Modifier.padding(top = 12.dp, bottom = 6.dp, end = 12.dp)
+                    modifier = Modifier.padding(top = 3.dp, bottom = 3.dp, end = 10.dp)
                 )
-                Icon(modifier = Modifier.padding(top = 18.dp),painter = painterResource(id = R.drawable.ic_next), contentDescription = "")
+                Icon(modifier = Modifier.padding(top = 8.dp),painter = painterResource(id = R.drawable.ic_next), contentDescription = "")
                     Text(
                         text = toDepartment,
-                        style = ArniTheme.typography.body.semibold,
+                        style = ArniTheme.typography.subhead.bold,
                         color = ArniTheme.colors.black_100,
-                        modifier = Modifier.padding(top = 12.dp, bottom = 6.dp, start = 12.dp, end = 12.dp)
+                        modifier = Modifier.padding(top = 3.dp, bottom = 3.dp, start = 10.dp, end = 12.dp)
                     )
 
             }
@@ -138,9 +138,9 @@ fun ItemRequest(
                 Row {
                     Text(
                         text = nameExecutor ?: "Исполнитель не назначен",
-                        style = ArniTheme.typography.body.regular,
+                        style = ArniTheme.typography.subhead.regular,
                         color = if (nameExecutor == null) ArniTheme.colors.black_100.copy(0.5f) else ArniTheme.colors.black_100,
-                        modifier = Modifier.padding(top = 6.dp, bottom = 6.dp, end = 12.dp)
+                        modifier = Modifier.padding(top = 3.dp, bottom = 3.dp, end = 12.dp)
                     )
                 }
             }
