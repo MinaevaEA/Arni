@@ -10,7 +10,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Immutable
 data class SelectStatusRequestState(
-    val listRequestStatus: ImmutableList<RequestStatusHuman> = persistentListOf()
+    val listRequestStatus: List<RequestStatusHuman> = persistentListOf()
 ) : BaseState
 
 

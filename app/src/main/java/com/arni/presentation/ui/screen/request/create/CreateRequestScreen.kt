@@ -45,7 +45,7 @@ class CreateRequestScreen: AndroidScreen() {
                 is CreateRequestAction.openRequestStatusScreen -> bottomSheetNavigator.show(
                     SelectStatusRequestScreen()
                 )
-                is CreateRequestAction.openDepartamentScreen -> bottomSheetNavigator.show(SelectDepartamentScreen())
+                is CreateRequestAction.openDepartamentScreen -> bottomSheetNavigator.show(SelectDepartamentScreen(act.listDepartamentHuman))
                 is CreateRequestAction.openSubDivisionScreen -> bottomSheetNavigator.show(SelectSubdivisionScreen())
                 is CreateRequestAction.openUrgentlyScreen -> bottomSheetNavigator.show(SelectUrgentlyStatusScreen())
                 is CreateRequestAction.openExecutorScreen -> bottomSheetNavigator.show(SelectExecutorScreen())

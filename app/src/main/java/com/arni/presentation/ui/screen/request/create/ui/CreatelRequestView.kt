@@ -8,12 +8,15 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -44,11 +47,11 @@ fun CreateRequestView(
             title = stringResource(R.string.title_add_screen),
             onBackPressed = { eventConsumer(CreateRequestEvent.onClickBack) },
             actionsEnd = {
-                TextButton(
+                IconButton(
                     enabled = state.isEnabledButton,
                     onClick = { /*eventConsumer(DetailRequestEvent.onClickToolbarButton(!state.enabled))*/ }
                 ) {
-                    Text(color = ArniTheme.colors.black_100, text = "Cохранить")
+                    Icon(painter = painterResource(R.drawable.ic_check_mark), contentDescription = "")
                 }
             })
         LazyColumn() {
@@ -78,17 +81,18 @@ fun CreateRequestView(
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.local_order),
-                        onClick = {eventConsumer(CreateRequestEvent.onClickSelectsubDivision)},
+                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectsubDivision) },
+                        //todo откуда берется подразделение
                         text = state.human.subdivision ?: ""
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.from_local),
-                        onClick = {eventConsumer(CreateRequestEvent.onClickSelectDepartament)},
+                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectDepartament(state.subdivisionHuman.departaments)) },
                         text = state.item.fromDepartament ?: ""
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.to_local),
-                        onClick = {eventConsumer(CreateRequestEvent.onClickSelectDepartament)},
+                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectDepartament(state.subdivisionHuman.departaments)) },
                         text = state.item.toDepartament ?: ""
                     )
                     TextFieldSelector(
@@ -103,12 +107,12 @@ fun CreateRequestView(
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.draft_order),
-                        onClick = {eventConsumer(CreateRequestEvent.onClickSelectUrgently)},
+                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectUrgently) },
                         text = state.item.urgency ?: ""
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.checking_order),
-                        onClick = {eventConsumer(CreateRequestEvent.onClickSelectExecutor)},
+                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectExecutor) },
                         text = state.item.nameExecutor ?: ""
                     )
                     TextFieldInput(
@@ -118,18 +122,18 @@ fun CreateRequestView(
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.status_patient),
-                        onClick = {eventConsumer(CreateRequestEvent.onClickSelectStatusPatient)},
+                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectStatusPatient) },
                         text = state.item.statusPatient ?: ""
+                    )
+                    TextFieldInput(
+                        label = stringResource(id = R.string.name_inicial),
+                        enabled = true,
+                        text = state.item.nameExecutor ?: "",
                     )
                     TextFieldInput(
                         label = stringResource(id = R.string.comment_order),
                         enabled = true,
                         text = state.item.description ?: ""
-                    )
-                    TextFieldInput(label = stringResource(id = R.string.name_inicial), enabled = true, text = "")
-                    TextFieldInput(
-                        label = stringResource(id = R.string.name_inicial),
-                        text = state.item.nameExecutor ?: "",
                     )
                     //todo компонент фото
                     Text(

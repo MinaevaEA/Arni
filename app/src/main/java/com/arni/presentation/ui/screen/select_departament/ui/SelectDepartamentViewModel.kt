@@ -3,20 +3,19 @@ package com.arni.presentation.ui.screen.select_departament.ui
 
 import androidx.lifecycle.viewModelScope
 import com.arni.presentation.base.BaseViewModel
-import com.arni.presentation.model.human.RequestStatusHuman
+import com.arni.presentation.model.human.DepartamentHuman
 import kotlinx.coroutines.launch
 
 class SelectDepartamentViewModel(
- /*   private val list: List<RequestStatusHuman>,
-    private val index: Int*/
+    private val list: List<DepartamentHuman>
 ) : BaseViewModel<SelectDepartamentState, SelectDepartamentEvent, SelectDepartamentAction>(
-    SelectDepartamentState(/*list.toImmutableList()*/)
+    SelectDepartamentState(listDepartament = list)
 ) {
     override fun obtainEvent(event: SelectDepartamentEvent) {
         when (event) {
 
             SelectDepartamentEvent.OnBackCLickEvent -> {
-               // publishEvent(EventType.ShowHat(true))
+                // publishEvent(EventType.ShowHat(true))
                 action = SelectDepartamentAction.OnExist
             }
 
@@ -25,16 +24,14 @@ class SelectDepartamentViewModel(
     }
 
     init {
-       // publishEvent(EventType.ShowHat(false))
+        viewModelScope.launch {
+            viewState = viewState.copy(listDepartament = list)
+        }
     }
 
-    private fun selectCause(status: RequestStatusHuman) {
-
-        viewModelScope.launch {
-           // Events.publish(EventType.SelectSport(sport, index))
-        }
+    private fun selectCause() {
+        viewModelScope.launch {}
         action = SelectDepartamentAction.OnExist
-
     }
 }
 

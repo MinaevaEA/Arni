@@ -48,7 +48,7 @@ class DetailRequestScreen(val item: RequestHuman, val human: UserHuman): Android
                 is DetailRequestAction.openRequestStatusScreen -> bottomSheetNavigator.show(
                     SelectStatusRequestScreen()
                 )
-                is DetailRequestAction.openDepartamentScreen -> bottomSheetNavigator.show(SelectDepartamentScreen())
+               // is DetailRequestAction.openDepartamentScreen -> bottomSheetNavigator.show(SelectDepartamentScreen())
                 is DetailRequestAction.openSubDivisionScreen -> bottomSheetNavigator.show(SelectSubdivisionScreen())
                 is DetailRequestAction.openUrgentlyScreen -> bottomSheetNavigator.show(SelectUrgentlyStatusScreen())
                 is DetailRequestAction.openExecutorScreen -> bottomSheetNavigator.show(SelectExecutorScreen())

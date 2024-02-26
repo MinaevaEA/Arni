@@ -16,7 +16,7 @@ class CreateRequestViewModel(
             CreateRequestEvent.onClickSelectorDate -> action = CreateRequestAction.OpenYearMonthDayPicker(ACT_DATE_ID, LocalDate.now())
             CreateRequestEvent.onClickSelectStatus -> action = CreateRequestAction.openRequestStatusScreen
             CreateRequestEvent.onClickSelectsubDivision -> action = CreateRequestAction.openSubDivisionScreen
-            CreateRequestEvent.onClickSelectDepartament -> action = CreateRequestAction.openDepartamentScreen
+            is CreateRequestEvent.onClickSelectDepartament -> action = CreateRequestAction.openDepartamentScreen(event.listDepartamentHuman)
             CreateRequestEvent.onClickSelectUrgently -> action = CreateRequestAction.openUrgentlyScreen
             CreateRequestEvent.onClickSelectExecutor -> action = CreateRequestAction.openExecutorScreen
             CreateRequestEvent.onClickSelectStatusPatient -> action = CreateRequestAction.openStatusPatientScreen

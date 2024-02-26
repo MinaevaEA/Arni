@@ -4,28 +4,22 @@ import androidx.compose.runtime.Immutable
 import com.arni.presentation.base.BaseAction
 import com.arni.presentation.base.BaseEvent
 import com.arni.presentation.base.BaseState
-import com.arni.presentation.model.human.SubdivisionHuman
-import kotlinx.collections.immutable.ImmutableList
+import com.arni.presentation.model.human.UrgentlyHuman
 import kotlinx.collections.immutable.persistentListOf
 
 @Immutable
 data class SelectUrgentlyStatusState(
-    val listSubdivision: ImmutableList<SubdivisionHuman> = persistentListOf()
+    val listUrgently: List<UrgentlyHuman> = persistentListOf()
 ) : BaseState
 
-
 sealed interface SelectUrgentlyStatusEvent : BaseEvent {
-    object OnBackCLickEvent :
-        SelectUrgentlyStatusEvent
+    object OnBackCLickEvent : SelectUrgentlyStatusEvent
 
-    class SelectSubDivision(val subdivisionHuman: SubdivisionHuman) :
+    class SelectUrgently(val urgently: UrgentlyHuman) :
         SelectUrgentlyStatusEvent
-
 }
 
 sealed interface SelectUrgentlyStatusAction : BaseAction {
 
     object OnExist : SelectUrgentlyStatusAction
-
-
 }

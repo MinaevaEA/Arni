@@ -51,5 +51,6 @@
     <string name="add_departament">Выберите отделение</string>
     <string name="add_executor">Выберите исполнителя</string>
     <string name="add_status_patient">Выберите статус пациента</string>
+    <string name="add_status_urgensy">Выберите срочность</string>
 
 </resources>

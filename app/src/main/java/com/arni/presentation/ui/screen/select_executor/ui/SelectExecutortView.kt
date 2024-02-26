@@ -30,8 +30,6 @@ fun SelectExecutorView(
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .statusBarsPadding()
             .navigationBarsPadding()
             .background(color = ArniTheme.colors.neutral_0)
     ) {
@@ -40,12 +38,11 @@ fun SelectExecutorView(
             eventConsumer.invoke(SelectExecutorEvent.OnBackCLickEvent)
         }, title = stringResource(id = R.string.add_executor))
 
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(modifier = Modifier) {
 
-            itemsIndexed(state.listSubdivision) { index, item ->
+            itemsIndexed(state.listExecutor) { index, item ->
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth()
                         .clickable { eventConsumer(SelectExecutorEvent.SelectSubDivision(item)) },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -53,7 +50,7 @@ fun SelectExecutorView(
                         modifier = Modifier
                             .weight(1F)
                             .padding(vertical = 12.dp, horizontal = 20.dp),
-                        text = item.title,
+                        text = item.userName,
                         color = ArniTheme.colors.black_100,
                         style = ArniTheme.typography.body.regular
                     )

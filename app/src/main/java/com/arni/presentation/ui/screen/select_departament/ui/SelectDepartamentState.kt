@@ -4,28 +4,24 @@ import androidx.compose.runtime.Immutable
 import com.arni.presentation.base.BaseAction
 import com.arni.presentation.base.BaseEvent
 import com.arni.presentation.base.BaseState
+import com.arni.presentation.model.human.DepartamentHuman
 import com.arni.presentation.model.human.SubdivisionHuman
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 @Immutable
 data class SelectDepartamentState(
-    val listSubdivision: ImmutableList<SubdivisionHuman> = persistentListOf()
+    val listDepartament: List<DepartamentHuman> = persistentListOf()
 ) : BaseState
 
-
 sealed interface SelectDepartamentEvent : BaseEvent {
-    object OnBackCLickEvent :
-        SelectDepartamentEvent
+    object OnBackCLickEvent : SelectDepartamentEvent
 
-    class SelectSubDivision(val subdivisionHuman: SubdivisionHuman) :
+    class SelectSubDivision(val subdivisionHuman: DepartamentHuman) :
         SelectDepartamentEvent
-
 }
 
 sealed interface SelectDepartamentAction : BaseAction {
 
     object OnExist : SelectDepartamentAction
-
 
 }

@@ -30,8 +30,6 @@ fun SelectSubdivisionView(
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .statusBarsPadding()
             .navigationBarsPadding()
             .background(color = ArniTheme.colors.neutral_0)
     ) {
@@ -40,12 +38,11 @@ fun SelectSubdivisionView(
             eventConsumer.invoke(SelectSubdivisionEvent.OnBackCLickEvent)
         }, title = stringResource(id = R.string.add_subdivision))
 
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(modifier = Modifier) {
 
             itemsIndexed(state.listSubdivision) { index, item ->
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth()
                         .clickable { eventConsumer(SelectSubdivisionEvent.SelectSubDivision(item)) },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -53,7 +50,7 @@ fun SelectSubdivisionView(
                         modifier = Modifier
                             .weight(1F)
                             .padding(vertical = 12.dp, horizontal = 20.dp),
-                        text = item.title,
+                        text = item.title ?: "",
                         color = ArniTheme.colors.black_100,
                         style = ArniTheme.typography.body.regular
                     )

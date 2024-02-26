@@ -12,7 +12,8 @@ import okhttp3.internal.immutableListOf
 @Immutable
 data class GeneralRequestState(
     val tasks: List<RequestHuman> = immutableListOf(),
-    val human: UserHuman = UserHuman.getDefault()
+    val human: UserHuman = UserHuman.getDefault(),
+    val isCreateRequest : Boolean = false
 ) : BaseState
 
 sealed interface GeneralRequestEvent : BaseEvent {

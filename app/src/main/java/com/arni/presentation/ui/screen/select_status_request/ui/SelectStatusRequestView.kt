@@ -30,8 +30,6 @@ fun SelectRequestStatusView(
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .statusBarsPadding()
             .navigationBarsPadding()
             .background(color = ArniTheme.colors.neutral_0)
     ) {
@@ -40,12 +38,11 @@ fun SelectRequestStatusView(
             eventConsumer.invoke(SelectStatusRequestEvent.OnBackCLickEvent)
         }, title = stringResource(id = R.string.add_status))
 
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(modifier = Modifier) {
 
             itemsIndexed(state.listRequestStatus) { index, item ->
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth()
                         .clickable { eventConsumer(SelectStatusRequestEvent.SelectStatusRequest(item)) },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -62,7 +59,6 @@ fun SelectRequestStatusView(
         }
     }
 }
-
 
 @Composable
 @Preview

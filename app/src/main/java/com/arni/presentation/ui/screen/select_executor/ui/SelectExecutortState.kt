@@ -5,20 +5,19 @@ import com.arni.presentation.base.BaseAction
 import com.arni.presentation.base.BaseEvent
 import com.arni.presentation.base.BaseState
 import com.arni.presentation.model.human.SubdivisionHuman
-import kotlinx.collections.immutable.ImmutableList
+import com.arni.presentation.model.human.UserHuman
 import kotlinx.collections.immutable.persistentListOf
 
 @Immutable
 data class SelectExecutorState(
-    val listSubdivision: ImmutableList<SubdivisionHuman> = persistentListOf()
+    val listExecutor: List<UserHuman> = persistentListOf()
 ) : BaseState
 
 
 sealed interface SelectExecutorEvent : BaseEvent {
-    object OnBackCLickEvent :
-        SelectExecutorEvent
+    object OnBackCLickEvent : SelectExecutorEvent
 
-    class SelectSubDivision(val subdivisionHuman: SubdivisionHuman) :
+    class SelectSubDivision(val user: UserHuman) :
         SelectExecutorEvent
 
 }
@@ -26,6 +25,5 @@ sealed interface SelectExecutorEvent : BaseEvent {
 sealed interface SelectExecutorAction : BaseAction {
 
     object OnExist : SelectExecutorAction
-
 
 }

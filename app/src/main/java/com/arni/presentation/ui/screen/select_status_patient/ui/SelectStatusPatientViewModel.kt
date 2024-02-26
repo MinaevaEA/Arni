@@ -2,21 +2,23 @@ package com.arni.presentation.ui.screen.select_status_patient.ui
 
 
 import androidx.lifecycle.viewModelScope
+import com.arni.data.base.DataStatus
+import com.arni.domain.usecase.selects.GetPatientStatusUseCase
 import com.arni.presentation.base.BaseViewModel
-import com.arni.presentation.model.human.RequestStatusHuman
+import com.arni.presentation.model.human.PatientStatusHuman
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class SelectStatusPatientViewModel(
- /*   private val list: List<RequestStatusHuman>,
-    private val index: Int*/
+    private val getPatientStatusUseCase: GetPatientStatusUseCase
 ) : BaseViewModel<SelectStatusPatientState, SelectStatusPatientEvent, SelectStatusPatientAction>(
-    SelectStatusPatientState(/*list.toImmutableList()*/)
+    SelectStatusPatientState()
 ) {
     override fun obtainEvent(event: SelectStatusPatientEvent) {
         when (event) {
 
             SelectStatusPatientEvent.OnBackCLickEvent -> {
-               // publishEvent(EventType.ShowHat(true))
+                // publishEvent(EventType.ShowHat(true))
                 action = SelectStatusPatientAction.OnExist
             }
 
@@ -24,17 +26,32 @@ class SelectStatusPatientViewModel(
         }
     }
 
+    private val allStatus: MutableList<PatientStatusHuman> = mutableListOf()
+
     init {
-       // publishEvent(EventType.ShowHat(false))
+        viewModelScope.launch {
+            getPatientStatusUseCase.invoke().collectLatest {
+                when (it) {
+                    DataStatus.Loading -> {}
+
+                    is DataStatus.Error -> {
+                        showErrorToast(it.ex)
+                    }
+
+                    is DataStatus.Success -> {
+                        allStatus.clear()
+                        allStatus.addAll(it.data)
+                        viewState = viewState.copy(listPatientStatus = it.data)
+                    }
+                }
+            }
+        }
     }
 
-    private fun selectCause(status: RequestStatusHuman) {
+    private fun selectCause() {
 
-        viewModelScope.launch {
-           // Events.publish(EventType.SelectSport(sport, index))
-        }
+        viewModelScope.launch {}
         action = SelectStatusPatientAction.OnExist
-
     }
 }
 

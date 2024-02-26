@@ -4,7 +4,9 @@ import androidx.compose.runtime.Immutable
 import com.arni.presentation.base.BaseAction
 import com.arni.presentation.base.BaseEvent
 import com.arni.presentation.base.BaseState
+import com.arni.presentation.model.human.DepartamentHuman
 import com.arni.presentation.model.human.RequestHuman
+import com.arni.presentation.model.human.SubdivisionHuman
 import com.arni.presentation.model.human.UserHuman
 import java.time.LocalDate
 import java.time.LocalTime
@@ -15,6 +17,7 @@ data class CreateRequestState(
     val isEnabledButton: Boolean = true,
     val item: RequestHuman = RequestHuman.getDefault(),
     val human: UserHuman = UserHuman.getDefault(),
+    val subdivisionHuman: SubdivisionHuman = SubdivisionHuman.getDefault()
 ) : BaseState
 
 sealed interface CreateRequestEvent : BaseEvent {
@@ -22,7 +25,7 @@ sealed interface CreateRequestEvent : BaseEvent {
     object onClickBack : CreateRequestEvent
     object onClickSelectStatus : CreateRequestEvent
     object onClickSelectsubDivision : CreateRequestEvent
-    object onClickSelectDepartament : CreateRequestEvent
+     class onClickSelectDepartament(val listDepartamentHuman: List<DepartamentHuman>) : CreateRequestEvent
     object onClickSelectUrgently : CreateRequestEvent
     object onClickSelectExecutor : CreateRequestEvent
     object onClickSelectStatusPatient : CreateRequestEvent
@@ -51,7 +54,7 @@ sealed interface CreateRequestAction : BaseAction {
 
     object openRequestStatusScreen: CreateRequestAction
     object openSubDivisionScreen: CreateRequestAction
-    object openDepartamentScreen: CreateRequestAction
+    class openDepartamentScreen(val listDepartamentHuman: List<DepartamentHuman>): CreateRequestAction
     object openUrgentlyScreen: CreateRequestAction
     object openExecutorScreen: CreateRequestAction
     object openStatusPatientScreen: CreateRequestAction

@@ -43,24 +43,24 @@ val viewModelModule = module {
         CreateRequestViewModel()
     }
     viewModel {
-        SelectExecutorViewModel()
+        SelectExecutorViewModel(get())
     }
     viewModel {
-        SelectStatusPatientViewModel()
-    }
-
-    viewModel {
-        SelectDepartamentViewModel()
-    }
-    viewModel {
-        SelectUrgentlyStatusViewModel()
+        SelectStatusPatientViewModel(get())
     }
 
     viewModel { params ->
-        SelectSubdivisionViewModel(/*params[0], params[1]*/)
+        SelectDepartamentViewModel(params[0])
+    }
+    viewModel {
+        SelectUrgentlyStatusViewModel(get())
+    }
+
+    viewModel { params ->
+        SelectSubdivisionViewModel(get())
     }
     viewModel { params ->
-        SelectStatusRequestViewModel(/*params[0], params[1]*/)
+        SelectStatusRequestViewModel(get())
     }
     viewModel {
         DetailRequestViewModel(get())

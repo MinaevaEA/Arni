@@ -2,21 +2,22 @@ package com.arni.presentation.ui.screen.select_subdivision.ui
 
 
 import androidx.lifecycle.viewModelScope
+import com.arni.data.base.DataStatus
+import com.arni.domain.usecase.selects.GetSubDivisionUseCase
 import com.arni.presentation.base.BaseViewModel
-import com.arni.presentation.model.human.RequestStatusHuman
+import com.arni.presentation.model.human.SubdivisionHuman
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class SelectSubdivisionViewModel(
- /*   private val list: List<RequestStatusHuman>,
-    private val index: Int*/
+    private val getSubDivisionUseCase: GetSubDivisionUseCase
 ) : BaseViewModel<SelectSubdivisionState, SelectSubdivisionEvent, SelectSubdivisionAction>(
-    SelectSubdivisionState(/*list.toImmutableList()*/)
+    SelectSubdivisionState()
 ) {
     override fun obtainEvent(event: SelectSubdivisionEvent) {
         when (event) {
 
             SelectSubdivisionEvent.OnBackCLickEvent -> {
-               // publishEvent(EventType.ShowHat(true))
                 action = SelectSubdivisionAction.OnExist
             }
 
@@ -24,14 +25,31 @@ class SelectSubdivisionViewModel(
         }
     }
 
+    private val allSubDivision: MutableList<SubdivisionHuman> = mutableListOf()
+
     init {
-       // publishEvent(EventType.ShowHat(false))
+        viewModelScope.launch {
+            getSubDivisionUseCase.invoke().collectLatest {
+                when (it) {
+                    DataStatus.Loading -> {}
+
+                    is DataStatus.Error -> {
+                        showErrorToast(it.ex)
+                    }
+
+                    is DataStatus.Success -> {
+                        allSubDivision.clear()
+                        allSubDivision.addAll(it.data)
+                        viewState = viewState.copy(listSubdivision = it.data)
+                    }
+                }
+            }
+        }
     }
 
-    private fun selectCause(status: RequestStatusHuman) {
-
+    private fun selectCause() {
         viewModelScope.launch {
-           // Events.publish(EventType.SelectSport(sport, index))
+            // Events.publish(EventType.SelectSport(sport, index))
         }
         action = SelectSubdivisionAction.OnExist
 

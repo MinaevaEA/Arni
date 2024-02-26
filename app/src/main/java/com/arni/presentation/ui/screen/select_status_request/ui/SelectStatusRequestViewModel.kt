@@ -2,22 +2,24 @@ package com.arni.presentation.ui.screen.select_status_request.ui
 
 
 import androidx.lifecycle.viewModelScope
+import com.arni.data.base.DataStatus
+import com.arni.domain.usecase.selects.GetSelectStatusRequestUseCase
 import com.arni.presentation.base.BaseViewModel
 import com.arni.presentation.model.human.RequestStatusHuman
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class SelectStatusRequestViewModel(
- /*   private val list: List<RequestStatusHuman>,
-    private val index: Int*/
+private val getSelectStatusRequestUseCase: GetSelectStatusRequestUseCase
 ) : BaseViewModel<SelectStatusRequestState, SelectStatusRequestEvent, SelectStatusRequestAction>(
-    SelectStatusRequestState(/*list.toImmutableList()*/)
+    SelectStatusRequestState()
 ) {
     override fun obtainEvent(event: SelectStatusRequestEvent) {
         when (event) {
 
             is SelectStatusRequestEvent.SelectStatusRequest -> {
                // publishEvent(EventType.ShowHat(true))
-                selectCause(event.status)
+               // selectCause(event.status)
             }
 
             SelectStatusRequestEvent.OnBackCLickEvent -> {
@@ -27,12 +29,27 @@ class SelectStatusRequestViewModel(
 
         }
     }
-
+    private val allRequestStatus: MutableList<RequestStatusHuman> = mutableListOf()
     init {
-       // publishEvent(EventType.ShowHat(false))
+        viewModelScope.launch {
+            getSelectStatusRequestUseCase.invoke().collectLatest {
+                when (it) {
+                    DataStatus.Loading -> {}
+
+                    is DataStatus.Error -> {
+                        showErrorToast(it.ex)
+                    }
+                    is DataStatus.Success -> {
+                        allRequestStatus.clear()
+                        allRequestStatus.addAll(it.data)
+                        viewState = viewState.copy(listRequestStatus = it.data)
+                    }
+                }
+            }
+        }
     }
 
-    private fun selectCause(status: RequestStatusHuman) {
+    private fun selectCause() {
 
         viewModelScope.launch {
            // Events.publish(EventType.SelectSport(sport, index))
