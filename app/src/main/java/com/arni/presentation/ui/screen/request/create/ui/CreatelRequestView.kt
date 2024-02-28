@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -60,7 +59,7 @@ fun CreateRequestView(
                     TextFieldSelector(
                         label = stringResource(id = R.string.status_order),
                         onClick = { eventConsumer(CreateRequestEvent.onClickSelectStatus) },
-                        text = when (state.item.statusRequest) {
+                        text = when (state.item.statusRequest?.id) {
                             StatusRequests.parse(StatusRequests.WORK) -> "Рабочая"
                             StatusRequests.parse(StatusRequests.DRAFT) -> "Черновик"
                             StatusRequests.parse(StatusRequests.COMPLETED) -> "Завершена"
@@ -108,12 +107,12 @@ fun CreateRequestView(
                     TextFieldSelector(
                         label = stringResource(id = R.string.draft_order),
                         onClick = { eventConsumer(CreateRequestEvent.onClickSelectUrgently) },
-                        text = state.item.urgency ?: ""
+                        text = state.item.urgently?.title ?: ""
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.checking_order),
                         onClick = { eventConsumer(CreateRequestEvent.onClickSelectExecutor) },
-                        text = state.item.nameExecutor ?: ""
+                        text = state.item.nameExecutor?.userName ?: ""
                     )
                     TextFieldInput(
                         label = stringResource(id = R.string.name_patient_order),
@@ -123,12 +122,7 @@ fun CreateRequestView(
                     TextFieldSelector(
                         label = stringResource(id = R.string.status_patient),
                         onClick = { eventConsumer(CreateRequestEvent.onClickSelectStatusPatient) },
-                        text = state.item.statusPatient ?: ""
-                    )
-                    TextFieldInput(
-                        label = stringResource(id = R.string.name_inicial),
-                        enabled = true,
-                        text = state.item.nameExecutor ?: "",
+                        text = state.item.statusPatient?.status ?: ""
                     )
                     TextFieldInput(
                         label = stringResource(id = R.string.comment_order),

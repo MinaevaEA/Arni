@@ -17,7 +17,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.arni.presentation.ui.components.ItemRequest
 import com.arni.presentation.ui.components.SelectorToolbarMainScreen
-import kotlinx.collections.immutable.persistentListOf
 import pro.midev.mec.presentation.ui.style.ArniTheme
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -50,9 +49,9 @@ fun GeneralRequestView(
                 ItemRequest(
                     fromDepartment = item.fromDepartament ?:"",
                     toDepartment = item.toDepartament ?:"",
-                    nameExecutor = item.nameExecutor ?:"",
-                    isStatus = item.statusRequest ?: 0,
-                    Urgency = item.urgency ?:"",
+                    nameExecutor = item.nameExecutor?.userName ?:"",
+                    isStatus = item.statusRequest?.id ?: 0,
+                    Urgency = item.urgently?.title ?:"",
                     onClick = {eventConsumer(GeneralRequestEvent.onClickItem(item, state.human))})
             }
         }

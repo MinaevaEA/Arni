@@ -4,7 +4,6 @@ import androidx.compose.runtime.Immutable
 import com.arni.presentation.base.BaseAction
 import com.arni.presentation.base.BaseEvent
 import com.arni.presentation.base.BaseState
-import com.arni.presentation.model.human.SubdivisionHuman
 import com.arni.presentation.model.human.UserHuman
 import kotlinx.collections.immutable.persistentListOf
 
@@ -17,7 +16,7 @@ data class SelectExecutorState(
 sealed interface SelectExecutorEvent : BaseEvent {
     object OnBackCLickEvent : SelectExecutorEvent
 
-    class SelectSubDivision(val user: UserHuman) :
+    class SelectExecutor(val user: UserHuman) :
         SelectExecutorEvent
 
 }

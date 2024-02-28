@@ -18,7 +18,7 @@ class GetPatientStatusUseCase {
                         status = "Сидячий"
                     ),
                     PatientStatusHuman(
-                        id = 1,
+                        id = 2,
                         status = "Лежачий"
                     ),
                 )

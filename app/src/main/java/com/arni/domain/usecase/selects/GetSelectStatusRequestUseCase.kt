@@ -15,11 +15,11 @@ class GetSelectStatusRequestUseCase {
                         title = "Рабочая"
                     ),
                     RequestStatusHuman(
-                        id = 1,
+                        id = 3,
                         title = "Черновик"
                     ),
                     RequestStatusHuman(
-                        id = 1,
+                        id = 2,
                         title = "Завершена"
                     ),
                 )

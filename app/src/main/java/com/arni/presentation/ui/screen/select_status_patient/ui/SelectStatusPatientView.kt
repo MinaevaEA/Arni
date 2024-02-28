@@ -43,7 +43,7 @@ fun SelectStatusPatientView(
             itemsIndexed(state.listPatientStatus) { index, item ->
                 Row(
                     modifier = Modifier
-                        .clickable { eventConsumer(SelectStatusPatientEvent.SelectSubDivision(item)) },
+                        .clickable { eventConsumer(SelectStatusPatientEvent.SelectStatusPatient(item)) },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(

@@ -8,16 +8,19 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.arni.presentation.model.human.PatientStatusHuman
 import com.arni.presentation.ui.screen.select_status_patient.ui.SelectStatusPatientAction
 import com.arni.presentation.ui.screen.select_status_patient.ui.SelectStatusPatientView
 import com.arni.presentation.ui.screen.select_status_patient.ui.SelectStatusPatientViewModel
+import org.koin.androidx.compose.getViewModel
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 import pro.midev.mec.presentation.ui.style.ArniTheme
 
-class SelectStatusPatientScreen : Screen {
+class SelectStatusPatientScreen(private val list: List<PatientStatusHuman>) : Screen {
     @Composable
     override fun Content() {
-        SelectStatusPatientScreen(viewModel = koinViewModel())
+        SelectStatusPatientScreen(viewModel = getViewModel{ parametersOf(list) })
     }
 }
 
@@ -25,8 +28,6 @@ class SelectStatusPatientScreen : Screen {
 private fun SelectStatusPatientScreen(
     viewModel: SelectStatusPatientViewModel,
 ) {
-
-    val navigator = LocalNavigator.currentOrThrow
     val bottomSheetNavigator = LocalBottomSheetNavigator.current
     val state by viewModel.viewStates.collectAsStateWithLifecycle()
     val action by viewModel.viewActions.collectAsStateWithLifecycle(initialValue = null)

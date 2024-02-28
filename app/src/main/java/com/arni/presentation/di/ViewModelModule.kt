@@ -40,7 +40,7 @@ val viewModelModule = module {
         FilterViewModel()
     }
     viewModel {
-        CreateRequestViewModel()
+        CreateRequestViewModel(get(), get(), get(), get())
     }
     viewModel {
         SelectExecutorViewModel(get())
@@ -60,10 +60,10 @@ val viewModelModule = module {
         SelectSubdivisionViewModel(get())
     }
     viewModel { params ->
-        SelectStatusRequestViewModel(get())
+        SelectStatusRequestViewModel(params[0])
     }
     viewModel {
-        DetailRequestViewModel(get())
+        DetailRequestViewModel(get(), get(),get(),get(),get())
     }
     viewModel {
         TimePickerViewModel(/*params[0], params[1], params[2], params[3], params[4]*/)

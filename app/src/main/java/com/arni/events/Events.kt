@@ -1,5 +1,9 @@
 package com.arni.events
 
+import com.arni.presentation.model.human.PatientStatusHuman
+import com.arni.presentation.model.human.RequestStatusHuman
+import com.arni.presentation.model.human.UrgentlyHuman
+import com.arni.presentation.model.human.UserHuman
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -39,4 +43,9 @@ sealed interface EventType : BaseEventType {
     data class OnYearMonthPicked(val yearMonth: YearMonth) : EventType
     data class OnYearMonthDayPicked(val yearMonthDay: LocalDate, val id: Int) : EventType
     data class ShowTextToast(val text: String) : EventType
+
+    data class OnStatusRequest(val statusRequest: RequestStatusHuman): EventType
+    data class OnExecutor(val executor: UserHuman): EventType
+    data class OnStatusPatient(val statusPatient: PatientStatusHuman): EventType
+    data class OnUrgently(val urgently: UrgentlyHuman): EventType
 }

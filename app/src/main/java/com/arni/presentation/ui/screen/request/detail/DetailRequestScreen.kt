@@ -46,13 +46,12 @@ class DetailRequestScreen(val item: RequestHuman, val human: UserHuman): Android
                 is DetailRequestAction.OpenTimePicker ->bottomSheetNavigator.show(TimePickerScreen(/* act.id,act.initial)*/))
                 is DetailRequestAction.OpenYearMonthDayPicker -> bottomSheetNavigator.show(YearMonthDayPickerScreen())
                 is DetailRequestAction.openRequestStatusScreen -> bottomSheetNavigator.show(
-                    SelectStatusRequestScreen()
-                )
-               // is DetailRequestAction.openDepartamentScreen -> bottomSheetNavigator.show(SelectDepartamentScreen())
+                    SelectStatusRequestScreen(act.list))
+                is DetailRequestAction.openDepartamentScreen -> bottomSheetNavigator.show(SelectDepartamentScreen(act.listDepartamentHuman))
                 is DetailRequestAction.openSubDivisionScreen -> bottomSheetNavigator.show(SelectSubdivisionScreen())
-                is DetailRequestAction.openUrgentlyScreen -> bottomSheetNavigator.show(SelectUrgentlyStatusScreen())
-                is DetailRequestAction.openExecutorScreen -> bottomSheetNavigator.show(SelectExecutorScreen())
-                is DetailRequestAction.openStatusPatientScreen -> bottomSheetNavigator.show(SelectStatusPatientScreen())
+                is DetailRequestAction.openUrgentlyScreen -> bottomSheetNavigator.show(SelectUrgentlyStatusScreen(act.list))
+                is DetailRequestAction.openExecutorScreen -> bottomSheetNavigator.show(SelectExecutorScreen(act.list))
+                is DetailRequestAction.openStatusPatientScreen -> bottomSheetNavigator.show(SelectStatusPatientScreen(act.list))
                 else -> {}
             }
         }

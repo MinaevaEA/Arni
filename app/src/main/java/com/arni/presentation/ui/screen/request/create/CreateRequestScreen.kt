@@ -43,13 +43,13 @@ class CreateRequestScreen: AndroidScreen() {
                 is CreateRequestAction.OpenTimePicker ->bottomSheetNavigator.show(TimePickerScreen(/* act.id,act.initial)*/))
                 is CreateRequestAction.OpenYearMonthDayPicker -> bottomSheetNavigator.show(YearMonthDayPickerScreen())
                 is CreateRequestAction.openRequestStatusScreen -> bottomSheetNavigator.show(
-                    SelectStatusRequestScreen()
+                    SelectStatusRequestScreen(act.list)
                 )
                 is CreateRequestAction.openDepartamentScreen -> bottomSheetNavigator.show(SelectDepartamentScreen(act.listDepartamentHuman))
                 is CreateRequestAction.openSubDivisionScreen -> bottomSheetNavigator.show(SelectSubdivisionScreen())
-                is CreateRequestAction.openUrgentlyScreen -> bottomSheetNavigator.show(SelectUrgentlyStatusScreen())
-                is CreateRequestAction.openExecutorScreen -> bottomSheetNavigator.show(SelectExecutorScreen())
-                is CreateRequestAction.openStatusPatientScreen -> bottomSheetNavigator.show(SelectStatusPatientScreen())
+                is CreateRequestAction.openUrgentlyScreen -> bottomSheetNavigator.show(SelectUrgentlyStatusScreen(act.list))
+                is CreateRequestAction.openExecutorScreen -> bottomSheetNavigator.show(SelectExecutorScreen(act.list))
+                is CreateRequestAction.openStatusPatientScreen -> bottomSheetNavigator.show(SelectStatusPatientScreen(act.list))
                 else -> {}
             }
         }

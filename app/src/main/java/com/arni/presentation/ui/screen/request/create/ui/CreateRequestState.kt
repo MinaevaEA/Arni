@@ -5,8 +5,11 @@ import com.arni.presentation.base.BaseAction
 import com.arni.presentation.base.BaseEvent
 import com.arni.presentation.base.BaseState
 import com.arni.presentation.model.human.DepartamentHuman
+import com.arni.presentation.model.human.PatientStatusHuman
 import com.arni.presentation.model.human.RequestHuman
+import com.arni.presentation.model.human.RequestStatusHuman
 import com.arni.presentation.model.human.SubdivisionHuman
+import com.arni.presentation.model.human.UrgentlyHuman
 import com.arni.presentation.model.human.UserHuman
 import java.time.LocalDate
 import java.time.LocalTime
@@ -15,6 +18,7 @@ import java.time.LocalTime
 data class CreateRequestState(
     val detail: String,
     val isEnabledButton: Boolean = true,
+    val isVisibleHat: Boolean = true,
     val item: RequestHuman = RequestHuman.getDefault(),
     val human: UserHuman = UserHuman.getDefault(),
     val subdivisionHuman: SubdivisionHuman = SubdivisionHuman.getDefault()
@@ -52,10 +56,10 @@ sealed interface CreateRequestAction : BaseAction {
         val initial: LocalDate,
     ) : CreateRequestAction
 
-    object openRequestStatusScreen: CreateRequestAction
+    class openRequestStatusScreen(val list: List<RequestStatusHuman>): CreateRequestAction
     object openSubDivisionScreen: CreateRequestAction
     class openDepartamentScreen(val listDepartamentHuman: List<DepartamentHuman>): CreateRequestAction
-    object openUrgentlyScreen: CreateRequestAction
-    object openExecutorScreen: CreateRequestAction
-    object openStatusPatientScreen: CreateRequestAction
+    class openUrgentlyScreen(val list: List<UrgentlyHuman>): CreateRequestAction
+    class openExecutorScreen(val list: List<UserHuman>): CreateRequestAction
+    class openStatusPatientScreen(val list: List<PatientStatusHuman>): CreateRequestAction
 }

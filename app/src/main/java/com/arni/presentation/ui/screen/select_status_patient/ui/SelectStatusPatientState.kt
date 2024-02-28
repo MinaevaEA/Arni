@@ -17,7 +17,7 @@ data class SelectStatusPatientState(
 sealed interface SelectStatusPatientEvent : BaseEvent {
     object OnBackCLickEvent : SelectStatusPatientEvent
 
-    class SelectSubDivision(val status: PatientStatusHuman) :
+    class SelectStatusPatient(val status: PatientStatusHuman) :
         SelectStatusPatientEvent
 }
 

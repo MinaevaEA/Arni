@@ -8,16 +8,20 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.arni.presentation.model.human.RequestStatusHuman
 import com.arni.presentation.ui.screen.select_status_request.ui.SelectRequestStatusView
 import com.arni.presentation.ui.screen.select_status_request.ui.SelectStatusRequestAction
 import com.arni.presentation.ui.screen.select_status_request.ui.SelectStatusRequestViewModel
-import org.koin.androidx.compose.koinViewModel
+import org.koin.androidx.compose.getViewModel
+import org.koin.core.parameter.parametersOf
 import pro.midev.mec.presentation.ui.style.ArniTheme
 
-class SelectStatusRequestScreen : Screen {
+class SelectStatusRequestScreen(
+    private val list: List<RequestStatusHuman>
+) : Screen {
     @Composable
     override fun Content() {
-        SelectStatusRequestScreen(viewModel = koinViewModel())
+        SelectStatusRequestScreen(viewModel = getViewModel { parametersOf(list) })
     }
 }
 

@@ -6,16 +6,19 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
+import com.arni.presentation.model.human.UrgentlyHuman
 import com.arni.presentation.ui.screen.select_urgently_status.ui.SelectUrgentlyStatusAction
 import com.arni.presentation.ui.screen.select_urgently_status.ui.SelectUrgentlyStatusView
 import com.arni.presentation.ui.screen.select_urgently_status.ui.SelectUrgentlyStatusViewModel
+import org.koin.androidx.compose.getViewModel
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 import pro.midev.mec.presentation.ui.style.ArniTheme
 
-class SelectUrgentlyStatusScreen() : Screen {
+class SelectUrgentlyStatusScreen(private val list: List<UrgentlyHuman>) : Screen {
     @Composable
     override fun Content() {
-        SelectUrgentlyStatusScreen(viewModel = koinViewModel())
+        SelectUrgentlyStatusScreen(viewModel = getViewModel{ parametersOf(list) })
     }
 }
 

@@ -1,7 +1,12 @@
 package com.arni.domain.usecase.request
 
 import com.arni.data.base.DataStatus
+import com.arni.presentation.enum.StatusRoleHuman
+import com.arni.presentation.model.human.PatientStatusHuman
 import com.arni.presentation.model.human.RequestHuman
+import com.arni.presentation.model.human.RequestStatusHuman
+import com.arni.presentation.model.human.UrgentlyHuman
+import com.arni.presentation.model.human.UserHuman
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -12,80 +17,80 @@ class GetRequestUseCase {
                 listOf(
                     RequestHuman(
                         id = 1,
-                        statusRequest = 2,
+                        statusRequest = RequestStatusHuman(1,""),
                         date = "12.03.2024",
                         fromDepartament = "Отделение 1",
                         toDepartament = "Отделение 2",
                         beginTime = "14:00",
                         endTime = "17:00",
-                        urgency = "Э",
-                        nameExecutor = "Иванов Иван",
+                        urgently = UrgentlyHuman(1, "Э"),
+                        nameExecutor = UserHuman("Ivan", StatusRoleHuman.ADMIN,""),
                         namePatient = "Иванова Ольга",
-                        statusPatient = "Л",
+                        statusPatient = PatientStatusHuman( 1, "Л"),
                         description = "Здесь описание",
                         photo = listOf(),
                         nameDispatcher = "Иванов Иван"
                     ),
                     RequestHuman(
                         id = 1,
-                        statusRequest = 1,
+                        statusRequest = RequestStatusHuman(1,""),
                         date = "1.01.2024",
                         fromDepartament = "Отделение 1",
                         toDepartament = "Отделение 2",
                         beginTime = "14:00",
                         endTime = "17:00",
-                        urgency = "Э",
-                        nameExecutor = "Петров Иван",
+                        urgently = UrgentlyHuman(1, "Э"),
+                        nameExecutor = UserHuman("Ivan", StatusRoleHuman.ADMIN,""),
                         namePatient = "Иванова Ольга",
-                        statusPatient = "Л",
+                        statusPatient = PatientStatusHuman( 1, "Л"),
                         description = "Здесь описание",
                         photo = listOf(),
                         nameDispatcher = "Иванов Иван"
                     ),
                     RequestHuman(
                         id = 1,
-                        statusRequest = 1,
+                        statusRequest = RequestStatusHuman(1,""),
                         date = "12.01.2024",
                         fromDepartament = "Отделение 1",
                         toDepartament = "Отделение 2",
                         beginTime = "14:00",
                         endTime = "17:00",
-                        urgency = "Э",
-                        nameExecutor = "Иванов Иван",
+                        urgently = UrgentlyHuman(1, "Э"),
+                        nameExecutor = UserHuman("Ivan", StatusRoleHuman.ADMIN,""),
                         namePatient = "Иванова Ольга",
-                        statusPatient = "Л",
+                        statusPatient = PatientStatusHuman( 1, "Л"),
                         description = "Здесь описание",
                         photo = listOf(),
                         nameDispatcher = "Иванов Иван"
                     ),
                     RequestHuman(
                         id = 1,
-                        statusRequest = 2,
+                        statusRequest = RequestStatusHuman(1,""),
                         date = "12.01.2024",
                         fromDepartament = "Отделение 1",
                         toDepartament = "Отделение 2",
                         beginTime = "14:00",
                         endTime = "17:00",
-                        urgency = "Э",
-                        nameExecutor = "Иванов Иван",
+                        urgently = UrgentlyHuman(1, "Э"),
+                        nameExecutor = UserHuman("Ivan", StatusRoleHuman.ADMIN,""),
                         namePatient = "Иванова Ольга",
-                        statusPatient = "Л",
+                        statusPatient = PatientStatusHuman( 1, "Л"),
                         description = "Здесь описание",
                         photo = listOf(),
                         nameDispatcher = "Иванов Иван"
                     ),
                     RequestHuman(
                         id = 1,
-                        statusRequest = 3,
+                        statusRequest = RequestStatusHuman(1,""),
                         date = "12.04.2024",
                         fromDepartament = "Отделение 1",
                         toDepartament = "Отделение 2",
                         beginTime = "14:00",
                         endTime = "17:00",
-                        urgency = "Э",
-                        nameExecutor = "Иванов Иван",
+                        urgently = UrgentlyHuman(1, "Э"),
+                        nameExecutor = UserHuman("Ivan", StatusRoleHuman.ADMIN,""),
                         namePatient = "Иванова Ольга",
-                        statusPatient = "Л",
+                        statusPatient = PatientStatusHuman( 1, "Л"),
                         description = "Здесь описание",
                         photo = listOf(),
                         nameDispatcher = "Иванов Иван"
