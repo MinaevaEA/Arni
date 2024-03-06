@@ -162,12 +162,8 @@ fun PhotoLine(
                 }
 
             }
-
-
         }
-
     }
-
 }
 
 
@@ -176,8 +172,6 @@ fun PhotoLine(
 private fun PhotoItemEmptyPreview() {
     ArniTheme() {
         Column(Modifier.background(color = ArniTheme.colors.neutral_0)) {
-
-
             PhotoLine(
                 addPhotoAction = {},
                 deletePhotoAction = {},

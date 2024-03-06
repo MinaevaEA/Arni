@@ -16,27 +16,32 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.arni.R
 import pro.midev.mec.presentation.ui.style.ArniTheme
 
 @Composable
 fun RowScope.PhotoItem(photo: String, index: Int, deletePhotoAction: (Int) -> Unit) {
-    Box(modifier = Modifier
-        .height(164.dp)
-        .weight(1F)) {
-      /*  AsyncImage(
-            model = photo,
-            placeholder = painterResource(R.drawable.ic_next),
+    Box(
+        modifier = Modifier
+            .height(164.dp)
+            .weight(1F)
+    ) {
+        AsyncImage(
+            model = photo/*ImageRequest.Builder(LocalContext.current)
+                .data(photo).build()*/,
+            placeholder = painterResource(R.drawable.ic_message_stroke),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .clip(RoundedCornerShape(24.dp))
                 .fillMaxHeight()
-        )*/
+        )
         Box(
             modifier = Modifier
                 .align(Alignment.TopEnd)

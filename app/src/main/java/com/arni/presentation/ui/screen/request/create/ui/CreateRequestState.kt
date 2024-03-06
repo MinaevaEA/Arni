@@ -16,15 +16,20 @@ import java.time.LocalTime
 
 @Immutable
 data class CreateRequestState(
-    val detail: String,
     val isEnabledButton: Boolean = true,
-    val isVisibleHat: Boolean = true,
     val item: RequestHuman = RequestHuman.getDefault(),
     val human: UserHuman = UserHuman.getDefault(),
-    val subdivisionHuman: SubdivisionHuman = SubdivisionHuman.getDefault()
+    val subdivisionHuman: SubdivisionHuman = SubdivisionHuman.getDefault(),
+    val currentPickFileOption: PickFileOption = PickFileOption.NONE,
 ) : BaseState
+enum class PickFileOption {
+    CAMERA, GALLERY, REMOVE_AVATAR, NONE
+}
 
 sealed interface CreateRequestEvent : BaseEvent {
+    class OnFileChosen(val list: List<String>) : CreateRequestEvent
+    class ChangeFilePickerOption(val option: PickFileOption) : CreateRequestEvent
+    class OnFileDelete(val index: Int) : CreateRequestEvent
 
     object onClickBack : CreateRequestEvent
     object onClickSelectStatus : CreateRequestEvent

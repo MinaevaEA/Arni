@@ -1,5 +1,8 @@
 package com.arni.presentation.model.human
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class RequestHuman(
     val id: Long? = null,
     val statusRequest: RequestStatusHuman? = null,
@@ -14,7 +17,7 @@ data class RequestHuman(
     val nameDispatcher: String? = null,
     val statusPatient: PatientStatusHuman? = null,
     val description: String? = null,
-    val photo: List<String>? = null
+    val photos: List<String>
 ) {
 
     companion object {
@@ -32,7 +35,7 @@ data class RequestHuman(
             namePatient = null,
             statusPatient = null,
             description = null,
-            photo = null,
+            photos = listOf(),
             nameDispatcher = null
         )
     }

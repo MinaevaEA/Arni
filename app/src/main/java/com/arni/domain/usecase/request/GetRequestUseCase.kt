@@ -28,7 +28,7 @@ class GetRequestUseCase {
                         namePatient = "Иванова Ольга",
                         statusPatient = PatientStatusHuman( 1, "Л"),
                         description = "Здесь описание",
-                        photo = listOf(),
+                        photos = listOf(),
                         nameDispatcher = "Иванов Иван"
                     ),
                     RequestHuman(
@@ -44,7 +44,7 @@ class GetRequestUseCase {
                         namePatient = "Иванова Ольга",
                         statusPatient = PatientStatusHuman( 1, "Л"),
                         description = "Здесь описание",
-                        photo = listOf(),
+                        photos = listOf(),
                         nameDispatcher = "Иванов Иван"
                     ),
                     RequestHuman(
@@ -60,7 +60,7 @@ class GetRequestUseCase {
                         namePatient = "Иванова Ольга",
                         statusPatient = PatientStatusHuman( 1, "Л"),
                         description = "Здесь описание",
-                        photo = listOf(),
+                        photos = listOf(),
                         nameDispatcher = "Иванов Иван"
                     ),
                     RequestHuman(
@@ -76,7 +76,7 @@ class GetRequestUseCase {
                         namePatient = "Иванова Ольга",
                         statusPatient = PatientStatusHuman( 1, "Л"),
                         description = "Здесь описание",
-                        photo = listOf(),
+                        photos = listOf(),
                         nameDispatcher = "Иванов Иван"
                     ),
                     RequestHuman(
@@ -92,7 +92,7 @@ class GetRequestUseCase {
                         namePatient = "Иванова Ольга",
                         statusPatient = PatientStatusHuman( 1, "Л"),
                         description = "Здесь описание",
-                        photo = listOf(),
+                        photos = listOf(),
                         nameDispatcher = "Иванов Иван"
                     ),
                 )

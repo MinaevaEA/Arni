@@ -23,8 +23,12 @@ class CreateRequestViewModel(
     private val getSelectUrgentlyUseCase: GetSelectUrgentlyUseCase,
     private val getExecutorUseCase: GetExecutorUseCase
 ) : BaseViewModel<CreateRequestState, CreateRequestEvent, CreateRequestAction>(
-    CreateRequestState(detail = "")
+    CreateRequestState()
 ) {
+    private val allRequestStatus: MutableList<RequestStatusHuman> = mutableListOf()
+    private val allStatusPatient: MutableList<PatientStatusHuman> = mutableListOf()
+    private val allUrgently: MutableList<UrgentlyHuman> = mutableListOf()
+    private val allExecutor: MutableList<UserHuman> = mutableListOf()
     override fun obtainEvent(event: CreateRequestEvent) {
         when (event) {
             is CreateRequestEvent.onClickBack -> action = CreateRequestAction.returnGeneralScreen
@@ -47,12 +51,65 @@ class CreateRequestViewModel(
             CreateRequestEvent.onClickSelectExecutor -> action = CreateRequestAction.openExecutorScreen(allExecutor)
             CreateRequestEvent.onClickSelectStatusPatient -> action =
                 CreateRequestAction.openStatusPatientScreen(allStatusPatient)
+
+            is CreateRequestEvent.ChangeFilePickerOption -> changePickFileOption(event.option)
+            is CreateRequestEvent.OnFileChosen -> addFiles(event.list)
+            is CreateRequestEvent.OnFileDelete -> deleteFiles(event.index)
         }
+    }
+
+    init {
+        subscribeEvent<EventType.OnStatusRequest> {
+            viewState = viewState.copy(item = viewState.item.copy(statusRequest = it.statusRequest))
+        }
+        getRequestStatus()
+
+        subscribeEvent<EventType.OnStatusPatient> {
+            viewState = viewState.copy(item = viewState.item.copy(statusPatient = it.statusPatient))
+        }
+        getPatientStatus()
+        subscribeEvent<EventType.OnUrgently> {
+            viewState = viewState.copy(item = viewState.item.copy(urgently = it.urgently))
+        }
+        getUrgently()
+        subscribeEvent<EventType.OnExecutor> {
+            viewState = viewState.copy(item = viewState.item.copy(nameExecutor = it.executor))
+        }
+        getExecutor()
     }
 
     companion object {
         const val ACT_TIME_ID = 1
         const val ACT_DATE_ID = 2
+    }
+
+    private fun changePickFileOption(option: PickFileOption) {
+        viewModelScope.launch {
+            viewState = viewState.copy(
+                currentPickFileOption = option
+            )
+        }
+    }
+
+    private fun addFiles(files: List<String>) {
+        viewModelScope.launch {
+            viewState = viewState.copy(
+                item = viewState.item.copy(
+                    photos = viewState.item.photos.toMutableList().apply { addAll(files) }.toList()
+                )
+            )
+            checkEnabledButton()
+        }
+    }
+
+    private fun deleteFiles(index: Int) {
+        viewModelScope.launch {
+            viewState = viewState.copy(
+                item = viewState.item.copy(
+                    photos = viewState.item.photos.toMutableList().apply { removeAt(index) }.toList()
+                )
+            )
+        }
     }
 
     private fun checkEnabledButton() {
@@ -70,10 +127,6 @@ class CreateRequestViewModel(
             )
     }
 
-    private val allRequestStatus: MutableList<RequestStatusHuman> = mutableListOf()
-    private val allStatusPatient: MutableList<PatientStatusHuman> = mutableListOf()
-    private val allUrgently: MutableList<UrgentlyHuman> = mutableListOf()
-    private val allExecutor: MutableList<UserHuman> = mutableListOf()
     fun getRequestStatus() {
         viewModelScope.launch {
             getSelectStatusRequestUseCase.invoke().collectLatest {
@@ -149,25 +202,5 @@ class CreateRequestViewModel(
                 }
             }
         }
-    }
-
-    init {
-        subscribeEvent<EventType.OnStatusRequest> {
-            viewState = viewState.copy(item = viewState.item.copy(statusRequest = it.statusRequest))
-        }
-        getRequestStatus()
-
-        subscribeEvent<EventType.OnStatusPatient> {
-            viewState = viewState.copy(item = viewState.item.copy(statusPatient = it.statusPatient))
-        }
-        getPatientStatus()
-        subscribeEvent<EventType.OnUrgently> {
-            viewState = viewState.copy(item = viewState.item.copy(urgently = it.urgently))
-        }
-        getUrgently()
-        subscribeEvent<EventType.OnExecutor> {
-            viewState = viewState.copy(item = viewState.item.copy(nameExecutor = it.executor))
-        }
-        getExecutor()
     }
 }
