@@ -124,7 +124,7 @@ fun SelectorToolbarMainScreen(
                 }
             },
             onClickFilter = { onClickFilter() },
-            onClickSearch = { onClickSearch() },
+           // onClickSearch = { onClickSearch() },
             onClickAddRequest = { onClickAddRequest() }
         )
     }
@@ -221,7 +221,7 @@ fun ToolbarMainScreen(
             )
         }
         Row {
-            ButtonRoundedBase(
+         /*   ButtonRoundedBase(
                 modifier = Modifier
                     .padding(2.dp)
                     .size(36.dp),
@@ -229,7 +229,7 @@ fun ToolbarMainScreen(
                 contentColor = ArniTheme.colors.black_100,
                 backgroundColor = ArniTheme.colors.neutral_100,
                 iconId = R.drawable.ic_search
-            )
+            )*/
             ButtonRoundedBase(
                 modifier = Modifier
                     .padding(2.dp)

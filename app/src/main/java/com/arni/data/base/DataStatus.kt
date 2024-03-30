@@ -74,6 +74,12 @@ sealed interface DataStatus<in T : Any> {
 
 }
 
+fun <T : Any> DataStatus<T>.getOrNull(): T? =
+    when(this) {
+        is DataStatus.Success -> this.data
+        else -> null
+    }
+
 sealed interface CompletableStatus {
 
     object Success : CompletableStatus

@@ -12,7 +12,7 @@ class TokenInterceptor(private val userKeyStorage: UserKeyStorage) : Interceptor
             .also {
                 val token = userKeyStorage.getToken()
                 if (!token.isNullOrEmpty()) {
-                   it.header("Authorization", "Token $token")
+                   it.header("Authorization", "Bearer $token")
                 }
             }
             .build()

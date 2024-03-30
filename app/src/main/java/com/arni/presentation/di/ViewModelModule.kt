@@ -10,10 +10,11 @@ import com.arni.presentation.ui.screen.profile.ui.ProfileViewModel
 import com.arni.presentation.ui.screen.request.create.ui.CreateRequestViewModel
 import com.arni.presentation.ui.screen.request.detail.ui.DetailRequestViewModel
 import com.arni.presentation.ui.screen.request.general.ui.GeneralRequestViewModel
-import com.arni.presentation.ui.screen.select_status_request.ui.SelectStatusRequestViewModel
+import com.arni.presentation.ui.screen.request.select_division.ui.SelectDivisionViewModel
 import com.arni.presentation.ui.screen.select_departament.ui.SelectDepartamentViewModel
 import com.arni.presentation.ui.screen.select_executor.ui.SelectExecutorViewModel
 import com.arni.presentation.ui.screen.select_status_patient.ui.SelectStatusPatientViewModel
+import com.arni.presentation.ui.screen.select_status_request.ui.SelectStatusRequestViewModel
 import com.arni.presentation.ui.screen.select_subdivision.ui.SelectSubdivisionViewModel
 import com.arni.presentation.ui.screen.select_urgently_status.ui.SelectUrgentlyStatusViewModel
 import com.arni.presentation.ui.screen.signIn.ui.SignInViewModel
@@ -34,7 +35,10 @@ val viewModelModule = module {
        ProfileViewModel()
     }
     viewModel {
-        GeneralRequestViewModel(get())
+        GeneralRequestViewModel(get(), get())
+    }
+    viewModel {
+        SelectDivisionViewModel(get())
     }
     viewModel {
         FilterViewModel()

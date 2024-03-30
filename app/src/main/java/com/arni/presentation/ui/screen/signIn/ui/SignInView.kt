@@ -48,27 +48,29 @@ fun SignInView(
         TextFieldInput(
             modifier = Modifier.padding(top = 40.dp),
             label = stringResource(R.string.signIn_login_label),
-            text = state.username,
+            text = state.user.login,
             placeholder = stringResource(R.string.signIn_login_placeholder),
             onValueChange = { eventConsumer(SignInEvent.OnPhoneValueChange(it)) },
             error = "",
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Phone
             ),
-            onEndIconClick = { }
+            onEndIconClick = { },
+            enabled = true
         )
 
         TextFieldInput(
             modifier = Modifier.padding(top = 16.dp),
             label = stringResource(R.string.signIn_password_label),
-            text = state.password,
+            text = state.user.password,
             placeholder = stringResource(id = R.string.signIn_password_placeholder),
             onValueChange = { eventConsumer(SignInEvent.OnPasswordValueChange(it)) },
             error = "",
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password
             ),
-            onEndIconClick = { }
+            onEndIconClick = { },
+            enabled = true
         )
 
         ButtonFillLarge(
@@ -86,6 +88,6 @@ fun SignInView(
 @Preview
 private fun SignInViewPreview() {
     ArniTheme {
-        SignInView(SignInState()){}
+        SignInView(SignInState()) {}
     }
 }

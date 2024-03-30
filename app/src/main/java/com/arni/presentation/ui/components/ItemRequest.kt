@@ -29,7 +29,7 @@ fun ItemRequest(
     fromDepartment: String,
     toDepartment: String,
     nameExecutor: String?,
-    isStatus: Int,
+    isStatus: String,
     Urgency: String,
     onClick: () -> Unit
 ) {
@@ -56,7 +56,7 @@ fun ItemRequest(
                     modifier = Modifier
                         .padding(end = 2.dp)
                         .clip(shape = RoundedCornerShape(15.dp))
-                        .border(
+                     /*   .border(
                             1.dp, color = when (isStatus) {
                                 StatusRequests.parse(StatusRequests.WORK) -> ArniTheme.colors.info
                                 StatusRequests.parse(StatusRequests.DRAFT) -> ArniTheme.colors.error
@@ -67,8 +67,8 @@ fun ItemRequest(
                                     ArniTheme.colors.white_100
                                 }
                             }, shape = RoundedCornerShape(15.dp)
-                        )
-                        .background(
+                        )*/
+                       /* .background(
                             color = when (isStatus) {
                                 StatusRequests.parse(StatusRequests.WORK) -> ArniTheme.colors.info.copy(alpha = 0.2f)
                                 StatusRequests.parse(StatusRequests.DRAFT) -> ArniTheme.colors.error.copy(alpha = 0.2f)
@@ -77,17 +77,17 @@ fun ItemRequest(
                                     ArniTheme.colors.white_100
                                 }
                             }
-                        )
+                        )*/
                 ) {
                     Text(
-                        text = when (isStatus) {
+                        text = isStatus /*when (isStatus) {
                             StatusRequests.parse(StatusRequests.WORK) -> "Рабочая"
                             StatusRequests.parse(StatusRequests.DRAFT) -> "Черновик"
                             StatusRequests.parse(StatusRequests.COMPLETED) -> "Завершена"
                             else -> {
                                 ""
-                            }
-                        }, style = ArniTheme.typography.subhead.bold, color =
+                            }*/
+                        , style = ArniTheme.typography.subhead.bold, /*color =
                         when (isStatus) {
                             StatusRequests.parse(StatusRequests.WORK) -> ArniTheme.colors.info
                             StatusRequests.parse(StatusRequests.DRAFT) -> ArniTheme.colors.error
@@ -95,7 +95,7 @@ fun ItemRequest(
                             else -> {
                                 ArniTheme.colors.white_100
                             }
-                        },
+                        },*/
                         modifier = Modifier.padding(top = 4.dp, bottom = 4.dp, start = 10.dp, end = 10.dp)
                     )
                 }
@@ -160,9 +160,9 @@ private fun ItemEventPreview() {
                     .width(900.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                ItemRequest("Отделение 1", "Отделение 2", "Иванов Иван", 1, "П") {}
-                ItemRequest("Отделение 1", "Отделение 2", "Иванов Иван", 2, "Э") {}
-                ItemRequest("Отделение 1", "Отделение 2", null, 3, "П") {}
+                ItemRequest("Отделение 1", "Отделение 2", "Иванов Иван", "", "П") {}
+                ItemRequest("Отделение 1", "Отделение 2", "Иванов Иван", "", "Э") {}
+                ItemRequest("Отделение 1", "Отделение 2", null, "", "П") {}
             }
         }
     }

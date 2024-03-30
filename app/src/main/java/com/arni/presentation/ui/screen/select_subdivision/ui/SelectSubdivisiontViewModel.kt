@@ -11,14 +11,14 @@ import kotlinx.coroutines.launch
 
 class SelectSubdivisionViewModel(
     private val getSubDivisionUseCase: GetSubDivisionUseCase
-) : BaseViewModel<SelectSubdivisionState, SelectSubdivisionEvent, SelectSubdivisionAction>(
+) : BaseViewModel<SelectSubdivisionState, SelectSubDivisionEvent, SelectSubDivisionAction>(
     SelectSubdivisionState()
 ) {
-    override fun obtainEvent(event: SelectSubdivisionEvent) {
+    override fun obtainEvent(event: SelectSubDivisionEvent) {
         when (event) {
 
-            SelectSubdivisionEvent.OnBackCLickEvent -> {
-                action = SelectSubdivisionAction.OnExist
+            SelectSubDivisionEvent.OnBackCLickEvent -> {
+                action = SelectSubDivisionAction.OnExist
             }
 
             else -> {}
@@ -51,7 +51,7 @@ class SelectSubdivisionViewModel(
         viewModelScope.launch {
             // Events.publish(EventType.SelectSport(sport, index))
         }
-        action = SelectSubdivisionAction.OnExist
+        action = SelectSubDivisionAction.OnExist
 
     }
 }

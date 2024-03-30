@@ -47,7 +47,7 @@ fun SelectUrgentlyStatusView(
                         modifier = Modifier
                             .weight(1F)
                             .padding(vertical = 12.dp, horizontal = 20.dp),
-                        text = item.title ?: "",
+                        text = item.name ?: "",
                         color = ArniTheme.colors.black_100,
                         style = ArniTheme.typography.body.regular
                     )

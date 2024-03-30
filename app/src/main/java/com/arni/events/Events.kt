@@ -1,8 +1,11 @@
 package com.arni.events
 
-import com.arni.presentation.model.human.PatientStatusHuman
+import com.arni.presentation.model.human.DivisionHuman
+import com.arni.presentation.model.human.ExecutorHuman
+import com.arni.presentation.model.human.PatientHuman
 import com.arni.presentation.model.human.RequestStatusHuman
-import com.arni.presentation.model.human.UrgentlyHuman
+import com.arni.presentation.model.human.StatusPatientHuman
+import com.arni.presentation.model.human.UrgencyHuman
 import com.arni.presentation.model.human.UserHuman
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -45,7 +48,8 @@ sealed interface EventType : BaseEventType {
     data class ShowTextToast(val text: String) : EventType
 
     data class OnStatusRequest(val statusRequest: RequestStatusHuman): EventType
-    data class OnExecutor(val executor: UserHuman): EventType
-    data class OnStatusPatient(val statusPatient: PatientStatusHuman): EventType
-    data class OnUrgently(val urgently: UrgentlyHuman): EventType
+    data class OnExecutor(val executor: List<ExecutorHuman>): EventType
+    data class OnStatusPatient(val statusPatient: StatusPatientHuman): EventType
+    data class OnUrgently(val urgently: UrgencyHuman): EventType
+    data class OnDivision(val division: DivisionHuman): EventType
 }

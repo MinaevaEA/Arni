@@ -4,12 +4,13 @@ import androidx.compose.runtime.Immutable
 import com.arni.presentation.base.BaseAction
 import com.arni.presentation.base.BaseEvent
 import com.arni.presentation.base.BaseState
-import com.arni.presentation.model.human.DepartamentHuman
-import com.arni.presentation.model.human.PatientStatusHuman
+import com.arni.presentation.model.human.DepartmentHuman
+import com.arni.presentation.model.human.PatientHuman
 import com.arni.presentation.model.human.RequestHuman
 import com.arni.presentation.model.human.RequestStatusHuman
+import com.arni.presentation.model.human.StatusPatientHuman
 import com.arni.presentation.model.human.SubdivisionHuman
-import com.arni.presentation.model.human.UrgentlyHuman
+import com.arni.presentation.model.human.UrgencyHuman
 import com.arni.presentation.model.human.UserHuman
 import java.time.LocalDate
 import java.time.LocalTime
@@ -34,7 +35,7 @@ sealed interface CreateRequestEvent : BaseEvent {
     object onClickBack : CreateRequestEvent
     object onClickSelectStatus : CreateRequestEvent
     object onClickSelectsubDivision : CreateRequestEvent
-     class onClickSelectDepartament(val listDepartamentHuman: List<DepartamentHuman>) : CreateRequestEvent
+     class onClickSelectDepartament(val listDepartamentHuman: List<DepartmentHuman>) : CreateRequestEvent
     object onClickSelectUrgently : CreateRequestEvent
     object onClickSelectExecutor : CreateRequestEvent
     object onClickSelectStatusPatient : CreateRequestEvent
@@ -63,8 +64,8 @@ sealed interface CreateRequestAction : BaseAction {
 
     class openRequestStatusScreen(val list: List<RequestStatusHuman>): CreateRequestAction
     object openSubDivisionScreen: CreateRequestAction
-    class openDepartamentScreen(val listDepartamentHuman: List<DepartamentHuman>): CreateRequestAction
-    class openUrgentlyScreen(val list: List<UrgentlyHuman>): CreateRequestAction
+    class openDepartamentScreen(val listDepartamentHuman: List<DepartmentHuman>): CreateRequestAction
+    class openUrgentlyScreen(val list: List<UrgencyHuman>): CreateRequestAction
     class openExecutorScreen(val list: List<UserHuman>): CreateRequestAction
-    class openStatusPatientScreen(val list: List<PatientStatusHuman>): CreateRequestAction
+    class openStatusPatientScreen(val list: List<StatusPatientHuman>): CreateRequestAction
 }

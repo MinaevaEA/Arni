@@ -47,6 +47,7 @@
     <string name="ready">Готово</string>
 
     <string name="add_status">Выберите статус</string>
+    <string name="add_division">Выберите отделение</string>
     <string name="add_subdivision">Выберите подразделение</string>
     <string name="add_departament">Выберите отделение</string>
     <string name="add_executor">Выберите исполнителя</string>
@@ -56,5 +57,6 @@
     <string name="open_gallery">Открыть галерею</string>
     <string name="make_photo">Сделать фото</string>
     <string name="select_action">Выберите действие</string>
+    <string name="search">Поиск</string>
 
 </resources>

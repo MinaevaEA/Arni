@@ -8,12 +8,13 @@ import com.arni.domain.usecase.selects.GetSelectStatusRequestUseCase
 import com.arni.domain.usecase.selects.GetSelectUrgentlyUseCase
 import com.arni.events.EventType
 import com.arni.presentation.base.BaseViewModel
-import com.arni.presentation.model.human.PatientStatusHuman
 import com.arni.presentation.model.human.RequestHuman
 import com.arni.presentation.model.human.RequestStatusHuman
-import com.arni.presentation.model.human.UrgentlyHuman
+import com.arni.presentation.model.human.StatusPatientHuman
+import com.arni.presentation.model.human.UrgencyHuman
 import com.arni.presentation.model.human.UserHuman
 import com.arni.presentation.ui.screen.request.create.ui.CreateRequestViewModel
+import com.arni.presentation.ui.screen.request.create.ui.PickFileOption
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -43,6 +44,9 @@ class DetailRequestViewModel(
             DetailRequestEvent.onClickSelectUrgently -> action = DetailRequestAction.openUrgentlyScreen(allUrgently)
             DetailRequestEvent.onClickSelectExecutor -> action = DetailRequestAction.openExecutorScreen(allExecutor)
             DetailRequestEvent.onClickSelectStatusPatient -> action = DetailRequestAction.openStatusPatientScreen(allStatusPatient)
+            is DetailRequestEvent.ChangeFilePickerOption -> changePickFileOption(act.option)
+            is DetailRequestEvent.OnFileChosen -> addFiles(act.list)
+            is DetailRequestEvent.OnFileDelete -> deleteFiles(act.index)
         }
     }
     fun openEnabledRequest(enabled: Boolean){
@@ -55,6 +59,34 @@ class DetailRequestViewModel(
             viewState = viewState.copy(item = item)
         }
     }
+    private fun changePickFileOption(option: PickFileOption) {
+        viewModelScope.launch {
+            viewState = viewState.copy(
+                currentPickFileOption = option
+            )
+        }
+    }
+
+    private fun addFiles(files: List<String>) {
+        viewModelScope.launch {
+          /*  viewState = viewState.copy(
+                item = viewState.item.copy(
+                    photos = viewState.item.photos.toMutableList().apply { addAll(files) }.toList()
+                )
+            )*/
+            checkEnabledButton()
+        }
+    }
+
+    private fun deleteFiles(index: Int) {
+        viewModelScope.launch {
+            /*viewState = viewState.copy(
+                item = viewState.item.copy(
+                    photos = viewState.item.photos.toMutableList().apply { removeAt(index) }.toList()
+                )
+            )*/
+        }
+    }
 
     private fun checkEnabledButton() {
         viewState =
@@ -63,16 +95,16 @@ class DetailRequestViewModel(
                         && viewState.item.date != null
                         //todo уточнить откуда будет приходить подразделение
                         && viewState.human.subdivision != null
-                        && viewState.item.fromDepartament != null
-                        && viewState.item.toDepartament != null
-                        && viewState.item.urgently != null
-                        && !viewState.item.namePatient.isNullOrBlank() != null
+                        && viewState.item.departamentFrom != null
+                        && viewState.item.departamentTo != null
+                        && viewState.item.urgency != null
+                        && viewState.item.patients != null
                         && viewState.item.statusPatient != null
             )
     }
     private val allRequestStatus: MutableList<RequestStatusHuman> = mutableListOf()
-    private val allStatusPatient: MutableList<PatientStatusHuman> = mutableListOf()
-    private val allUrgently: MutableList<UrgentlyHuman> = mutableListOf()
+    private val allStatusPatient: MutableList<StatusPatientHuman> = mutableListOf()
+    private val allUrgently: MutableList<UrgencyHuman> = mutableListOf()
     private val allExecutor: MutableList<UserHuman> = mutableListOf()
     fun getRequestStatus() {
         viewModelScope.launch {
@@ -162,11 +194,11 @@ class DetailRequestViewModel(
         }
         getPatientStatus()
         subscribeEvent<EventType.OnUrgently> {
-            viewState = viewState.copy(item = viewState.item.copy(urgently = it.urgently))
+            viewState = viewState.copy(item = viewState.item.copy(urgency = it.urgently))
         }
         getUrgently()
         subscribeEvent<EventType.OnExecutor> {
-            viewState = viewState.copy(item = viewState.item.copy(nameExecutor = it.executor))
+            viewState = viewState.copy(item = viewState.item.copy(executors = it.executor))
         }
         getExecutor()
     }

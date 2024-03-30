@@ -5,11 +5,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.arni.presentation.model.human.DepartamentHuman
+import com.arni.presentation.model.human.DepartmentHuman
 import com.arni.presentation.ui.screen.select_departament.ui.SelectDepartamentAction
 import com.arni.presentation.ui.screen.select_departament.ui.SelectDepartamentView
 import com.arni.presentation.ui.screen.select_departament.ui.SelectDepartamentViewModel
@@ -18,7 +17,7 @@ import org.koin.core.parameter.parametersOf
 import pro.midev.mec.presentation.ui.style.ArniTheme
 
 class SelectDepartamentScreen(
-    private val list: List<DepartamentHuman>
+    private val list: List<DepartmentHuman>
 ) : Screen {
     @Composable
     override fun Content() {

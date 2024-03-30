@@ -1,6 +1,7 @@
 package com.arni.domain.di
 
 import com.arni.domain.usecase.auth.AuthUseCase
+import com.arni.domain.usecase.request.DictionaryUseCase
 import com.arni.domain.usecase.request.GetRequestUseCase
 import com.arni.domain.usecase.selects.GetExecutorUseCase
 import com.arni.domain.usecase.selects.GetPatientStatusUseCase
@@ -15,7 +16,10 @@ val useCaseModule = module {
         AuthUseCase(get(), get())
     }
     factory {
-        GetRequestUseCase()
+        DictionaryUseCase(get())
+    }
+    factory {
+        GetRequestUseCase(get())
     }
     factory {
         GetSubDivisionUseCase()

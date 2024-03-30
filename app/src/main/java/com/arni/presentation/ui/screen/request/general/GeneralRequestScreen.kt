@@ -15,6 +15,7 @@ import com.arni.presentation.ui.screen.request.detail.DetailRequestScreen
 import com.arni.presentation.ui.screen.request.general.ui.GeneralRequestAction
 import com.arni.presentation.ui.screen.request.general.ui.GeneralRequestView
 import com.arni.presentation.ui.screen.request.general.ui.GeneralRequestViewModel
+import com.arni.presentation.ui.screen.request.select_division.SelectDivisionScreen
 import org.koin.androidx.compose.koinViewModel
 import pro.midev.mec.presentation.ui.style.ArniTheme
 
@@ -43,7 +44,10 @@ private fun GeneralCheckingScreen(
             is GeneralRequestAction.OpenScreenAddRequest -> navigator.push(CreateRequestScreen())
             GeneralRequestAction.ExitScreen -> navigator.pop()
             is GeneralRequestAction.OpenScreenFilter -> bottomSheetNavigator.show(FilterScreen())
-            null -> Unit
+            is GeneralRequestAction.OpenListDivision -> bottomSheetNavigator
+                .show(SelectDivisionScreen(act.listDivision))
+
+            else -> {}
         }
     }
 

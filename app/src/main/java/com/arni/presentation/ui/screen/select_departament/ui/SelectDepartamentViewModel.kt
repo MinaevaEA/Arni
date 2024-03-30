@@ -3,11 +3,11 @@ package com.arni.presentation.ui.screen.select_departament.ui
 
 import androidx.lifecycle.viewModelScope
 import com.arni.presentation.base.BaseViewModel
-import com.arni.presentation.model.human.DepartamentHuman
+import com.arni.presentation.model.human.DepartmentHuman
 import kotlinx.coroutines.launch
 
 class SelectDepartamentViewModel(
-    private val list: List<DepartamentHuman>
+    private val list: List<DepartmentHuman>
 ) : BaseViewModel<SelectDepartamentState, SelectDepartamentEvent, SelectDepartamentAction>(
     SelectDepartamentState(listDepartament = list)
 ) {

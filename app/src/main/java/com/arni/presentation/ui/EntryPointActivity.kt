@@ -22,6 +22,8 @@ import com.arni.data.local.keystorage.UserKeyStorage
 import com.arni.ext.launchIO
 import com.arni.ext.withUI
 import com.arni.presentation.ext.LocalGlobalNavigator
+import com.arni.presentation.ui.screen.main.MainScreen
+import com.arni.presentation.ui.screen.request.general.GeneralRequestScreen
 import org.koin.core.component.KoinComponent
 import com.arni.presentation.ui.screen.signIn.SignInScreen
 import com.arni.remote.exceptions.ArniRemoteException
@@ -36,14 +38,13 @@ class EntryPointActivity : FragmentActivity(), KoinComponent {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
         start()
-
-        println("!!!!!!!!!!!!!!!!!!!!!!!!!! EntryPointActivity!!")
     }
 
     private fun start() {
         lifecycleScope.launchIO {
             withUI {
-                openScreen(SignInScreen())
+                //openScreen(SignInScreen())
+                openScreen(MainScreen())
             }
         }
     }

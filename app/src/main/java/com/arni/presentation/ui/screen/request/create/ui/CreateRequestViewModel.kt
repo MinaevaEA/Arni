@@ -8,9 +8,10 @@ import com.arni.domain.usecase.selects.GetSelectStatusRequestUseCase
 import com.arni.domain.usecase.selects.GetSelectUrgentlyUseCase
 import com.arni.events.EventType
 import com.arni.presentation.base.BaseViewModel
-import com.arni.presentation.model.human.PatientStatusHuman
+import com.arni.presentation.model.human.PatientHuman
 import com.arni.presentation.model.human.RequestStatusHuman
-import com.arni.presentation.model.human.UrgentlyHuman
+import com.arni.presentation.model.human.StatusPatientHuman
+import com.arni.presentation.model.human.UrgencyHuman
 import com.arni.presentation.model.human.UserHuman
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -26,8 +27,8 @@ class CreateRequestViewModel(
     CreateRequestState()
 ) {
     private val allRequestStatus: MutableList<RequestStatusHuman> = mutableListOf()
-    private val allStatusPatient: MutableList<PatientStatusHuman> = mutableListOf()
-    private val allUrgently: MutableList<UrgentlyHuman> = mutableListOf()
+    private val allStatusPatient: MutableList<StatusPatientHuman> = mutableListOf()
+    private val allUrgently: MutableList<UrgencyHuman> = mutableListOf()
     private val allExecutor: MutableList<UserHuman> = mutableListOf()
     override fun obtainEvent(event: CreateRequestEvent) {
         when (event) {
@@ -69,11 +70,11 @@ class CreateRequestViewModel(
         }
         getPatientStatus()
         subscribeEvent<EventType.OnUrgently> {
-            viewState = viewState.copy(item = viewState.item.copy(urgently = it.urgently))
+            viewState = viewState.copy(item = viewState.item.copy(urgency = it.urgently))
         }
         getUrgently()
         subscribeEvent<EventType.OnExecutor> {
-            viewState = viewState.copy(item = viewState.item.copy(nameExecutor = it.executor))
+            viewState = viewState.copy(item = viewState.item.copy(executors = it.executor))
         }
         getExecutor()
     }
@@ -95,7 +96,7 @@ class CreateRequestViewModel(
         viewModelScope.launch {
             viewState = viewState.copy(
                 item = viewState.item.copy(
-                    photos = viewState.item.photos.toMutableList().apply { addAll(files) }.toList()
+                   // photos = viewState.item.photos.toMutableList().apply { addAll(files) }.toList()
                 )
             )
             checkEnabledButton()
@@ -106,7 +107,7 @@ class CreateRequestViewModel(
         viewModelScope.launch {
             viewState = viewState.copy(
                 item = viewState.item.copy(
-                    photos = viewState.item.photos.toMutableList().apply { removeAt(index) }.toList()
+                   // photos = viewState.item.photos.toMutableList().apply { removeAt(index) }.toList()
                 )
             )
         }
@@ -119,10 +120,10 @@ class CreateRequestViewModel(
                         && viewState.item.date != null
                         //todo уточнить откуда будет приходить подразделение
                         && viewState.human.subdivision != null
-                        && viewState.item.fromDepartament != null
-                        && viewState.item.toDepartament != null
-                        && viewState.item.urgently != null
-                        && !viewState.item.namePatient.isNullOrBlank() != null
+                        && viewState.item.departamentFrom != null
+                        && viewState.item.departamentTo != null
+                        && viewState.item.urgency != null
+                        && viewState.item.patients != null
                         && viewState.item.statusPatient != null
             )
     }

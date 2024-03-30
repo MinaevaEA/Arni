@@ -7,6 +7,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
@@ -21,6 +22,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
@@ -28,6 +30,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.arni.R
+import com.arni.presentation.ext.clearFocusOnKeyboardDismiss
 import com.arni.presentation.ui.style.typography.mecFontFamily
 import pro.midev.mec.presentation.ui.style.ArniTheme
 
@@ -262,6 +266,85 @@ fun TextFieldSelector(
                 },
                 style = ArniTheme.typography.body.regular,
             )
+        }
+    }
+}
+
+@Composable
+fun SearchInput(
+    modifier: Modifier = Modifier,
+    text: String = "",
+    onClearClick: () -> Unit = {},
+    onValueChange: (value: String) -> Unit = {},
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    singleLine: Boolean = true
+) {
+
+    val hasFocus = remember { mutableStateOf(false) }
+
+    Column(
+        verticalArrangement = Arrangement.Top, modifier = modifier
+    ) {
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+                .background(
+                    color = ArniTheme.colors.neutral_100,
+                    shape = RoundedCornerShape(12.dp),
+                )
+                .padding(horizontal = 12.dp)
+        ) {
+            BasicTextField(
+                value = text,
+                onValueChange = onValueChange,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(vertical = 8.dp)
+                    .clearFocusOnKeyboardDismiss(hasFocus),
+                textStyle = ArniTheme.typography.body.regular,
+                cursorBrush = SolidColor(ArniTheme.colors.black_100),
+                decorationBox = { innerTextField ->
+                    TextFieldDecorationBox(value = text, innerTextField = innerTextField, placeholder = {
+                        AnimatedVisibility(!hasFocus.value) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Start,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.search),
+                                    style = ArniTheme.typography.body.regular,
+                                    color = ArniTheme.colors.black_100
+                                )
+                            }
+                        }
+                    })
+                },
+                keyboardOptions = keyboardOptions,
+                visualTransformation = visualTransformation,
+                singleLine = singleLine
+            )
+
+            Spacer(
+                modifier = Modifier.width(4.dp)
+            )
+
+            AnimatedVisibility(
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .clickable {
+                        onClearClick()
+                    }, visible = text.isNotEmpty()
+            ) {
+                Icon(
+                    modifier = Modifier.size(22.dp),
+                    painter = painterResource(R.drawable.ic_cancel_rounded),
+                    contentDescription = "",
+                    tint = ArniTheme.colors.black_100
+                )
+            }
+
         }
     }
 }

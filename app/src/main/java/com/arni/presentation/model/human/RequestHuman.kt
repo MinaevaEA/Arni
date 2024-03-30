@@ -1,42 +1,54 @@
 package com.arni.presentation.model.human
 
 import androidx.compose.runtime.Immutable
+import kotlinx.parcelize.Parcelize
+import java.io.Serializable
 
-@Immutable
+@Parcelize
 data class RequestHuman(
-    val id: Long? = null,
-    val statusRequest: RequestStatusHuman? = null,
-    val date: String? = null,
-    val fromDepartament: String? = null,
-    val toDepartament: String? = null,
-    val beginTime: String? = null,
-    val endTime: String? = null,
-    val urgently: UrgentlyHuman? = null,
-    val nameExecutor: UserHuman? = null,
-    val namePatient: String? = null,
+    val guid: String,
+    val statusRequest: RequestStatusHuman,
+    val date: String,
+    val number: String,
+    val departamentFrom: DepartmentHuman,
+    val departamentTo: DepartmentHuman,
+    val startDate: String,
+    val endDate: String,
+    val urgency: UrgencyHuman,
+    val executors: List<ExecutorHuman>,
+    val patients: List<PatientHuman>,
     val nameDispatcher: String? = null,
-    val statusPatient: PatientStatusHuman? = null,
+    val statusPatient: StatusPatientHuman,
     val description: String? = null,
-    val photos: List<String>
-) {
+    // val photos: List<String>,
+    val division: DivisionRequestHuman,
+    val dispatcher: DispatcherHuman,
+    val initiator: InitiatorHuman,
+    val comment: String,
+
+    ) : Serializable {
 
     companion object {
-
         fun getDefault() = RequestHuman(
-            id = null,
-            statusRequest = null,
-            date = null,
-            fromDepartament = null,
-            toDepartament = null,
-            beginTime = null,
-            endTime = null,
-            urgently = null,
-            nameExecutor = null,
-            namePatient = null,
-            statusPatient = null,
-            description = null,
-            photos = listOf(),
-            nameDispatcher = null
+            guid = "",
+            statusRequest = RequestStatusHuman("", ""),
+            date = "",
+            number = "",
+            departamentFrom = DepartmentHuman("", ""),
+            departamentTo = DepartmentHuman("", ""),
+            startDate = "",
+            endDate = "",
+            urgency = UrgencyHuman("", ""),
+            executors = listOf(),
+            patients = listOf(),
+            nameDispatcher = "",
+            statusPatient = StatusPatientHuman("", ""),
+            description = "",
+            // val photos: List<String>,
+            division = DivisionRequestHuman("", ""),
+            dispatcher = DispatcherHuman("", ""),
+            initiator = InitiatorHuman("", ""),
+            comment = "",
         )
     }
 }

@@ -4,12 +4,12 @@ import androidx.compose.runtime.Immutable
 import com.arni.presentation.base.BaseAction
 import com.arni.presentation.base.BaseEvent
 import com.arni.presentation.base.BaseState
+import com.arni.presentation.model.human.AuthHuman
 
 
 @Immutable
 data class SignInState(
-    val username: String = "",
-    val password: String = "",
+    val user: AuthHuman = AuthHuman("", "")
 ) : BaseState
 
 sealed interface SignInEvent : BaseEvent {

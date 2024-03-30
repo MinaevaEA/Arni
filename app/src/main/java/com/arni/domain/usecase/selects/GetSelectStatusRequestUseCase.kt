@@ -11,16 +11,16 @@ class GetSelectStatusRequestUseCase {
             DataStatus.Success(
                 listOf(
                     RequestStatusHuman(
-                        id = 1,
-                        title = "Рабочая"
+                        guid = "",
+                        name = "Рабочая"
                     ),
                     RequestStatusHuman(
-                        id = 3,
-                        title = "Черновик"
+                        guid = "",
+                        name = "Черновик"
                     ),
                     RequestStatusHuman(
-                        id = 2,
-                        title = "Завершена"
+                        guid = "",
+                        name = "Завершена"
                     ),
                 )
             )

@@ -1,8 +1,15 @@
 package com.arni.presentation.model.human
 
 import com.arni.presentation.enum.StatusRoleHuman
+import kotlinx.parcelize.Parcelize
+import java.io.Serializable
 
-data class UserHuman(val userName: String, val role: StatusRoleHuman = StatusRoleHuman.ADMIN, val subdivision: String?) {
+@Parcelize
+data class UserHuman(
+    val userName: String,
+    val role: StatusRoleHuman = StatusRoleHuman.ADMIN,
+    val subdivision: String?
+) : Serializable {
 
     companion object {
 

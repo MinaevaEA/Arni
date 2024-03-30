@@ -37,8 +37,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.lifecycle.ScreenLifecycleOwner
-import cafe.adriel.voyager.core.lifecycle.rememberScreenLifecycleOwner
 import com.arni.R
 import com.arni.presentation.enum.StatusRequests
 import com.arni.presentation.ui.components.AddFilesBS
@@ -56,7 +54,6 @@ fun CreateRequestView(
     state: CreateRequestState, eventConsumer: (CreateRequestEvent) -> Unit
 ) {
     val listState = rememberLazyListState()
-    println("!!!!!!!!!!!!!!!!!!!!!!!! CreateRequestView")
     val context = LocalContext.current
     var cameraImageUri by remember {
         mutableStateOf<Uri?>(null)
@@ -64,22 +61,20 @@ fun CreateRequestView(
     val uri = ComposeFileProvider.getImageUri(context)
     val pickPhotoLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(6)) {
-            println("!!!!!!!!!!!!!!!!!!!!!!!! rememberLauncherForActivityResult")
             it.forEach {
                 context.contentResolver.takePersistableUriPermission(it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
-            eventConsumer(
+         /*   eventConsumer(
                 CreateRequestEvent.OnFileChosen(
                     it.take(6 - state.item.photos.size).map { uri ->
                         uri.toString()
                     }.toList()
                 )
-            )
+            )*/
         }
     val cameraLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture(),
         onResult = { success ->
-            println("!!!!!!!!!!!!!!!!!!!!!!!! cameraLauncher")
             if (success)
                 eventConsumer.invoke(CreateRequestEvent.OnFileChosen(listOf(cameraImageUri.toString())))
         }
@@ -192,10 +187,10 @@ fun CreateRequestView(
                     TextFieldSelector(
                         label = stringResource(id = R.string.status_order),
                         onClick = { eventConsumer(CreateRequestEvent.onClickSelectStatus) },
-                        text = when (state.item.statusRequest?.id) {
-                            StatusRequests.parse(StatusRequests.WORK) -> "Рабочая"
+                        text = when (state.item.statusRequest?.guid) {
+                       /*     StatusRequests.parse(StatusRequests.WORK) -> "Рабочая"
                             StatusRequests.parse(StatusRequests.DRAFT) -> "Черновик"
-                            StatusRequests.parse(StatusRequests.COMPLETED) -> "Завершена"
+                            StatusRequests.parse(StatusRequests.COMPLETED) -> "Завершена"*/
                             else -> {
                                 ""
                             }
@@ -220,42 +215,42 @@ fun CreateRequestView(
                     TextFieldSelector(
                         label = stringResource(id = R.string.from_local),
                         onClick = { eventConsumer(CreateRequestEvent.onClickSelectDepartament(state.subdivisionHuman.departaments)) },
-                        text = state.item.fromDepartament ?: ""
+                        text = state.item.departamentFrom.name ?: ""
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.to_local),
                         onClick = { eventConsumer(CreateRequestEvent.onClickSelectDepartament(state.subdivisionHuman.departaments)) },
-                        text = state.item.toDepartament ?: ""
+                        text = state.item.departamentTo.name ?: ""
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.begin_date),
                         onClick = { eventConsumer(CreateRequestEvent.onClickSelectorTime) },
-                        text = state.item.beginTime ?: ""
+                        text = state.item.startDate ?: ""
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.end_date),
                         onClick = { eventConsumer(CreateRequestEvent.onClickSelectorTime) },
-                        text = state.item.endTime ?: ""
+                        text = state.item.endDate ?: ""
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.draft_order),
                         onClick = { eventConsumer(CreateRequestEvent.onClickSelectUrgently) },
-                        text = state.item.urgently?.title ?: ""
+                        text = state.item.urgency?.name ?: ""
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.checking_order),
                         onClick = { eventConsumer(CreateRequestEvent.onClickSelectExecutor) },
-                        text = state.item.nameExecutor?.userName ?: ""
+                        text = /*state.item.executors?.forEach { it.name } ?:*/ ""
                     )
                     TextFieldInput(
                         label = stringResource(id = R.string.name_patient_order),
                         enabled = true,
-                        text = state.item.namePatient ?: ""
+                        text = /*state.item.patients ?:*/ ""
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.status_patient),
                         onClick = { eventConsumer(CreateRequestEvent.onClickSelectStatusPatient) },
-                        text = state.item.statusPatient?.status ?: ""
+                        text = state.item.statusPatient?.name ?: ""
                     )
                     TextFieldInput(
                         label = stringResource(id = R.string.comment_order),
@@ -268,7 +263,7 @@ fun CreateRequestView(
                         color = ArniTheme.colors.neutral_300,
                         modifier = Modifier.padding(bottom = 4.dp)
                     )
-                    PhotoLine(
+                  /*  PhotoLine(
                         addPhotoAction = {
                             showSelectMediaOptionBs.value = true
                         },
@@ -276,7 +271,7 @@ fun CreateRequestView(
                             eventConsumer(CreateRequestEvent.OnFileDelete(it))
                         },
                         photos = state.item.photos
-                    )
+                    )*/
                 }
             }
         }

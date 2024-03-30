@@ -4,11 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Text
@@ -25,7 +22,7 @@ import pro.midev.mec.presentation.ui.style.ArniTheme
 @Composable
 fun SelectSubdivisionView(
     state: SelectSubdivisionState,
-    eventConsumer: (SelectSubdivisionEvent) -> Unit
+    eventConsumer: (SelectSubDivisionEvent) -> Unit
 ) {
 
     Column(
@@ -35,7 +32,7 @@ fun SelectSubdivisionView(
     ) {
 
         TextTitleToolbar(onBackPressed = {
-            eventConsumer.invoke(SelectSubdivisionEvent.OnBackCLickEvent)
+            eventConsumer.invoke(SelectSubDivisionEvent.OnBackCLickEvent)
         }, title = stringResource(id = R.string.add_subdivision))
 
         LazyColumn(modifier = Modifier) {
@@ -43,7 +40,7 @@ fun SelectSubdivisionView(
             itemsIndexed(state.listSubdivision) { index, item ->
                 Row(
                     modifier = Modifier
-                        .clickable { eventConsumer(SelectSubdivisionEvent.SelectSubDivision(item)) },
+                        .clickable { eventConsumer(SelectSubDivisionEvent.SelectSubDivision(item)) },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(

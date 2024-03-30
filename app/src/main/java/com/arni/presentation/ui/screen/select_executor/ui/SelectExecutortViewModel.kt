@@ -5,12 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.arni.events.EventType
 import com.arni.events.Events
 import com.arni.presentation.base.BaseViewModel
-import com.arni.presentation.model.human.RequestStatusHuman
-import com.arni.presentation.model.human.UserHuman
+import com.arni.presentation.model.human.ExecutorHuman
 import kotlinx.coroutines.launch
 
 class SelectExecutorViewModel(
-private val list: List<UserHuman>
+    private val list: List<ExecutorHuman>
 ) : BaseViewModel<SelectExecutorState, SelectExecutorEvent, SelectExecutorAction>(
     SelectExecutorState(listExecutor = list)
 ) {
@@ -26,12 +25,11 @@ private val list: List<UserHuman>
         }
     }
 
-    private fun selectCause(executor: UserHuman) {
+    private fun selectCause(executor: List<ExecutorHuman>) {
         viewModelScope.launch {
             Events.publish(EventType.OnExecutor(executor))
         }
         action = SelectExecutorAction.OnExist
-
     }
 }
 

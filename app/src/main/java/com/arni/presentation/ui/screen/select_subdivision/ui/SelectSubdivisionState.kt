@@ -12,14 +12,14 @@ data class SelectSubdivisionState(
     val listSubdivision: List<SubdivisionHuman> = persistentListOf()
 ) : BaseState
 
-sealed interface SelectSubdivisionEvent : BaseEvent {
-    object OnBackCLickEvent : SelectSubdivisionEvent
+sealed interface SelectSubDivisionEvent : BaseEvent {
+    object OnBackCLickEvent : SelectSubDivisionEvent
 
     class SelectSubDivision(val subdivisionHuman: SubdivisionHuman) :
-        SelectSubdivisionEvent
+        SelectSubDivisionEvent
 }
 
-sealed interface SelectSubdivisionAction : BaseAction {
+sealed interface SelectSubDivisionAction : BaseAction {
 
-    object OnExist : SelectSubdivisionAction
+    object OnExist : SelectSubDivisionAction
 }

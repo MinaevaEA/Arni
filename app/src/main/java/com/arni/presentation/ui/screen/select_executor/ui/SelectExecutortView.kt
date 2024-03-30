@@ -40,14 +40,14 @@ fun SelectExecutorView(
             itemsIndexed(state.listExecutor) { index, item ->
                 Row(
                     modifier = Modifier
-                        .clickable { eventConsumer(SelectExecutorEvent.SelectExecutor(item)) },
+                        .clickable { eventConsumer(SelectExecutorEvent.SelectExecutor(listOf(item))) },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         modifier = Modifier
                             .weight(1F)
                             .padding(vertical = 12.dp, horizontal = 20.dp),
-                        text = item.userName,
+                        text = item.name,
                         color = ArniTheme.colors.black_100,
                         style = ArniTheme.typography.body.regular
                     )
