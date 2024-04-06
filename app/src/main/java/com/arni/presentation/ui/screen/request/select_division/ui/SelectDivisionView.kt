@@ -33,14 +33,14 @@ fun SelectDivisionView(
 
         TextTitleToolbar(onBackPressed = {
             eventConsumer.invoke(SelectDivisionEvent.OnBackCLickEvent)
-        }, title = stringResource(id = R.string.add_division))
+        }, title = stringResource(id = R.string.add_subdivision))
 
         LazyColumn(modifier = Modifier) {
 
             itemsIndexed(state.listDivision) { index, item ->
                 Row(
                     modifier = Modifier
-                        .clickable { eventConsumer(SelectDivisionEvent.SelectDivision(item)) },
+                        .clickable { eventConsumer(SelectDivisionEvent.SelectDivision(item, state.listRequestID)) },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(

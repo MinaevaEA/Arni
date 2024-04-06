@@ -6,9 +6,9 @@ enum class StatusRequests {
     companion object {
         fun parse(type: StatusRequests) = when (type) {
             //TODO как будут приходить статусы с бэка
-            WORK -> 1
-            COMPLETED -> 2
-            DRAFT -> 3
+            WORK -> "Рабочая"
+            COMPLETED -> "Завершена"
+            DRAFT -> "Черновик"
         }
     }
 }

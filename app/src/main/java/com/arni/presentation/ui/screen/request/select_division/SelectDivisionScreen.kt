@@ -15,10 +15,10 @@ import org.koin.core.parameter.parametersOf
 import pro.midev.mec.presentation.ui.style.ArniTheme
 
 
-class SelectDivisionScreen(val list: List<DivisionHuman>) : Screen {
+class SelectDivisionScreen(val list: List<DivisionHuman>, val listID: String) : Screen {
     @Composable
     override fun Content() {
-        SelectStatusRequestScreen(viewModel = koinViewModel { parametersOf(list) })
+        SelectStatusRequestScreen(viewModel = koinViewModel { parametersOf(list, listID) })
     }
 }
 

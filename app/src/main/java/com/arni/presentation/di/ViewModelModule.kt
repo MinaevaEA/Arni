@@ -38,7 +38,7 @@ val viewModelModule = module {
         GeneralRequestViewModel(get(), get())
     }
     viewModel {
-        SelectDivisionViewModel(get())
+        SelectDivisionViewModel(get(), get())
     }
     viewModel {
         FilterViewModel()

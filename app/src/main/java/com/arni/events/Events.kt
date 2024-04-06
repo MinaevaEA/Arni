@@ -51,5 +51,5 @@ sealed interface EventType : BaseEventType {
     data class OnExecutor(val executor: List<ExecutorHuman>): EventType
     data class OnStatusPatient(val statusPatient: StatusPatientHuman): EventType
     data class OnUrgently(val urgently: UrgencyHuman): EventType
-    data class OnDivision(val division: DivisionHuman): EventType
+    data class OnDivision(val division: DivisionHuman, val listID: String): EventType
 }

@@ -2,7 +2,6 @@ package com.arni.data.di
 
 import com.arni.remote.Api
 import com.arni.remote.utils.ApiLogger
-import com.arni.remote.utils.BasicAuthInterceptor
 import com.arni.remote.utils.HeadersInterceptor
 import com.arni.remote.utils.NetworkConnectionInterceptor
 import com.arni.remote.utils.TokenInterceptor
@@ -48,7 +47,6 @@ val remoteStorageModule = module {
             .connectTimeout(40, TimeUnit.SECONDS)
             .readTimeout(40, TimeUnit.SECONDS)
             .addInterceptor(HeadersInterceptor())
-            .addInterceptor(BasicAuthInterceptor(get()))
             .addInterceptor(NetworkConnectionInterceptor(androidContext()))
             .addInterceptor(TokenInterceptor(get()))
             .also {

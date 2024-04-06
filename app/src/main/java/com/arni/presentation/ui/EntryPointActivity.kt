@@ -1,5 +1,6 @@
 package com.arni.presentation.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.setContent
@@ -40,10 +41,13 @@ class EntryPointActivity : FragmentActivity(), KoinComponent {
         start()
     }
 
+    @SuppressLint("SuspiciousIndentation")
     private fun start() {
         lifecycleScope.launchIO {
             withUI {
-                //openScreen(SignInScreen())
+                if (userKeyStorage.getToken().isNullOrEmpty())
+                openScreen(SignInScreen())
+                else
                 openScreen(MainScreen())
             }
         }

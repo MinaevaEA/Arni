@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.arni.data.base.DataStatus
 import com.arni.domain.usecase.auth.AuthUseCase
 import com.arni.presentation.base.BaseViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -40,9 +41,10 @@ class SignInViewModel(val authUseCase: AuthUseCase) :
     fun signIn() {
         viewModelScope.launch {
             try {
-
-                authUseCase.invoke(viewState.user)
-                    .collectLatest { result ->
+                //TODO вернуть потом обратно
+            viewModelScope.async { authUseCase.invoke(viewState.user) }.await()
+                action = SignInAction.OpenNextScreen
+                /*   { result ->
                         when (result) {
                             is DataStatus.Success -> action =
                                 SignInAction.OpenNextScreen
@@ -55,7 +57,7 @@ class SignInViewModel(val authUseCase: AuthUseCase) :
 
                             is DataStatus.Loading -> viewState = viewState.copy()
                         }
-                    }
+                    }*/
             } catch (e: InvocationTargetException) {
                 Timber.tag("1111111111").d(e.cause)
             }

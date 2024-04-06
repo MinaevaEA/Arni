@@ -45,7 +45,7 @@ private fun GeneralCheckingScreen(
             GeneralRequestAction.ExitScreen -> navigator.pop()
             is GeneralRequestAction.OpenScreenFilter -> bottomSheetNavigator.show(FilterScreen())
             is GeneralRequestAction.OpenListDivision -> bottomSheetNavigator
-                .show(SelectDivisionScreen(act.listDivision))
+                .show(SelectDivisionScreen(act.listDivision, act.listID))
 
             else -> {}
         }

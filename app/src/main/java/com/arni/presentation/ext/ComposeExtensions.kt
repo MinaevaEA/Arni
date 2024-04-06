@@ -1,5 +1,6 @@
 package com.arni.presentation.ext
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
@@ -8,6 +9,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.isImeVisible
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
@@ -37,6 +39,7 @@ fun Modifier.condition(
     if (condition) it.modifier() else it
 }
 
+@SuppressLint("ModifierFactoryUnreferencedReceiver")
 fun Modifier.noRippleClickable(onClick: () -> Unit): Modifier = composed {
     clickable(indication = null,
         interactionSource = remember { MutableInteractionSource() }) {
@@ -138,3 +141,8 @@ fun AnimatePath(
         )
     }
 }
+val LazyListState.isLastItemVisible: Boolean
+    get() = layoutInfo.visibleItemsInfo.lastOrNull()?.index == layoutInfo.totalItemsCount - 1
+
+val LazyListState.isFirstItemVisible: Boolean
+    get() = firstVisibleItemIndex == 0

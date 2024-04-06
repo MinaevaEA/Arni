@@ -14,12 +14,12 @@ sealed interface GeneralRequestState : BaseState
 object Empty : GeneralRequestState
 
 data class Content(
-    val tasks: ListRequestHuman = ListRequestHuman.getDefault(),
+    val tasks: ListRequestHuman,
     val dictionaryHuman: DictionaryHuman = DictionaryHuman.getDefault(),
     val selectDivision: DivisionHuman = DivisionHuman.getDefault(),
     val human: UserHuman = UserHuman.getDefault(),
     val isCreateRequest: Boolean = false,
-    val searchText: String = ""
+    val searchText: String = "",
 ) : GeneralRequestState {
     open fun clearSearchText(): GeneralRequestState = this
 
@@ -30,10 +30,11 @@ sealed interface GeneralRequestEvent : BaseEvent {
 
     object OnClickAddRequest : GeneralRequestEvent
     object OnClickFilter : GeneralRequestEvent
+    class loadNextRequest(val divisionID: String,val listRequestHuman: ListRequestHuman) : GeneralRequestEvent
     class OnSearchEvent(val searchText: String) : GeneralRequestEvent
     object OnClearSearchEvent : GeneralRequestEvent
     object OnBackBtnClick : GeneralRequestEvent
-    class onClickDivision(val listDivision: List<DivisionHuman>) : GeneralRequestEvent
+    class onClickDivision(val listDivision: List<DivisionHuman>, val listId: String) : GeneralRequestEvent
 
     data class onClickItem(val item: RequestHuman, val human: UserHuman) : GeneralRequestEvent
 }
@@ -43,6 +44,6 @@ sealed interface GeneralRequestAction : BaseAction {
     object OpenScreenAddRequest : GeneralRequestAction
     object OpenScreenFilter : GeneralRequestAction
     object OpenScreenList : GeneralRequestAction
-    data class OpenListDivision(val listDivision: List<DivisionHuman>) : GeneralRequestAction
+    data class OpenListDivision(val listDivision: List<DivisionHuman>, val listID: String) : GeneralRequestAction
     object ExitScreen : GeneralRequestAction
 }

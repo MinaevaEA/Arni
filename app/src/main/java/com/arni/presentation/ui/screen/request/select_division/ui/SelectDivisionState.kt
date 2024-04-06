@@ -9,13 +9,14 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Immutable
 data class SelectDivisionState(
-    val listDivision: List<DivisionHuman> = persistentListOf()
+    val listDivision: List<DivisionHuman> = persistentListOf(),
+    val listRequestID: String = ""
 ) : BaseState
 
 sealed interface SelectDivisionEvent : BaseEvent {
     object OnBackCLickEvent : SelectDivisionEvent
 
-    class SelectDivision(val divisionHuman: DivisionHuman) :
+    class SelectDivision(val divisionHuman: DivisionHuman, val listRequestID: String) :
         SelectDivisionEvent
 }
 

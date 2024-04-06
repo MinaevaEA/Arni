@@ -9,30 +9,30 @@ import com.arni.presentation.model.human.DivisionHuman
 import kotlinx.coroutines.launch
 
 class SelectDivisionViewModel(
-    private val list: List<DivisionHuman>
+    private val list: List<DivisionHuman>,
+    private val listID: String
 ) : BaseViewModel<SelectDivisionState, SelectDivisionEvent, SelectDivisionAction>(
     SelectDivisionState()
 ) {
     override fun obtainEvent(event: SelectDivisionEvent) {
         when (event) {
 
-            SelectDivisionEvent.OnBackCLickEvent -> {
-                action = SelectDivisionAction.OnExist
-            }
+           is SelectDivisionEvent.OnBackCLickEvent -> action = SelectDivisionAction.OnExist
 
-            is SelectDivisionEvent.SelectDivision -> selectCause(event.divisionHuman)
+
+            is SelectDivisionEvent.SelectDivision -> selectCause(event.divisionHuman, event.listRequestID)
         }
     }
 
     init {
         viewModelScope.launch {
-            viewState = viewState.copy(listDivision = list)
+            viewState = viewState.copy(listDivision = list, listRequestID = listID)
         }
     }
 
-    private fun selectCause(divisionHuman: DivisionHuman) {
+    private fun selectCause(divisionHuman: DivisionHuman, listID: String) {
         viewModelScope.launch {
-            Events.publish(EventType.OnDivision(divisionHuman))
+            Events.publish(EventType.OnDivision(divisionHuman, listID))
         }
         action = SelectDivisionAction.OnExist
     }

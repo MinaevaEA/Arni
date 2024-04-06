@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.arni.R
@@ -56,7 +57,7 @@ fun ItemRequest(
                     modifier = Modifier
                         .padding(end = 2.dp)
                         .clip(shape = RoundedCornerShape(15.dp))
-                     /*   .border(
+                        .border(
                             1.dp, color = when (isStatus) {
                                 StatusRequests.parse(StatusRequests.WORK) -> ArniTheme.colors.info
                                 StatusRequests.parse(StatusRequests.DRAFT) -> ArniTheme.colors.error
@@ -67,8 +68,8 @@ fun ItemRequest(
                                     ArniTheme.colors.white_100
                                 }
                             }, shape = RoundedCornerShape(15.dp)
-                        )*/
-                       /* .background(
+                        )
+                        .background(
                             color = when (isStatus) {
                                 StatusRequests.parse(StatusRequests.WORK) -> ArniTheme.colors.info.copy(alpha = 0.2f)
                                 StatusRequests.parse(StatusRequests.DRAFT) -> ArniTheme.colors.error.copy(alpha = 0.2f)
@@ -77,17 +78,17 @@ fun ItemRequest(
                                     ArniTheme.colors.white_100
                                 }
                             }
-                        )*/
+                        )
                 ) {
                     Text(
-                        text = isStatus /*when (isStatus) {
+                        text = when (isStatus) {
                             StatusRequests.parse(StatusRequests.WORK) -> "Рабочая"
                             StatusRequests.parse(StatusRequests.DRAFT) -> "Черновик"
                             StatusRequests.parse(StatusRequests.COMPLETED) -> "Завершена"
                             else -> {
                                 ""
-                            }*/
-                        , style = ArniTheme.typography.subhead.bold, /*color =
+                            }
+                        }, style = ArniTheme.typography.subhead.bold, color =
                         when (isStatus) {
                             StatusRequests.parse(StatusRequests.WORK) -> ArniTheme.colors.info
                             StatusRequests.parse(StatusRequests.DRAFT) -> ArniTheme.colors.error
@@ -95,7 +96,7 @@ fun ItemRequest(
                             else -> {
                                 ArniTheme.colors.white_100
                             }
-                        },*/
+                        },
                         modifier = Modifier.padding(top = 4.dp, bottom = 4.dp, start = 10.dp, end = 10.dp)
                     )
                 }
@@ -116,18 +117,27 @@ fun ItemRequest(
             }
             Row {
                 Text(
+                    modifier = Modifier.padding(top = 3.dp, bottom = 3.dp, end = 10.dp),
                     text = fromDepartment,
                     style = ArniTheme.typography.subhead.bold,
                     color = ArniTheme.colors.black_100,
-                    modifier = Modifier.padding(top = 3.dp, bottom = 3.dp, end = 10.dp)
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+
                 )
-                Icon(modifier = Modifier.padding(top = 8.dp),painter = painterResource(id = R.drawable.ic_next), contentDescription = "")
-                    Text(
-                        text = toDepartment,
-                        style = ArniTheme.typography.subhead.bold,
-                        color = ArniTheme.colors.black_100,
-                        modifier = Modifier.padding(top = 3.dp, bottom = 3.dp, start = 10.dp, end = 12.dp)
-                    )
+                Icon(
+                    modifier = Modifier.padding(top = 8.dp),
+                    painter = painterResource(id = R.drawable.ic_next),
+                    contentDescription = ""
+                )
+                Text(
+                    text = toDepartment,
+                    style = ArniTheme.typography.subhead.bold,
+                    color = ArniTheme.colors.black_100,
+                    modifier = Modifier.padding(top = 3.dp, bottom = 3.dp, start = 10.dp, end = 12.dp),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
 
             }
             Row(
@@ -137,10 +147,12 @@ fun ItemRequest(
             ) {
                 Row {
                     Text(
-                        text = nameExecutor ?: "Исполнитель не назначен",
+                        text = if (!nameExecutor.isNullOrEmpty()) nameExecutor else "Исполнитель не назначен",
                         style = ArniTheme.typography.subhead.regular,
-                        color = if (nameExecutor == null) ArniTheme.colors.black_100.copy(0.5f) else ArniTheme.colors.black_100,
-                        modifier = Modifier.padding(top = 3.dp, bottom = 3.dp, end = 12.dp)
+                        color = if (nameExecutor.isNullOrEmpty()) ArniTheme.colors.black_100.copy(0.5f) else ArniTheme.colors.black_100,
+                        modifier = Modifier.padding(top = 3.dp, bottom = 3.dp, end = 12.dp),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
             }

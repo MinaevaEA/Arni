@@ -8,9 +8,10 @@ import com.arni.presentation.model.human.ListRequestHuman
 import com.arni.remote.model.response.toDomain
 
 class GetRequestUseCase(private val repository: RequestRepositoryRemote) {
-    suspend operator fun invoke(limit: Int, listId: String, divisionGuid: String
+    suspend operator fun invoke(limit: Int, listId: String? = null, divisionGuid: String, pointRef: String? = null,
+                                pointDate: String? = null
     ): DataStatus<ListRequestHuman> {
-        return when (val requestResponse = repository.getAllRequest(limit, listId, divisionGuid)) {
+        return when (val requestResponse = repository.getAllRequest(limit, listId, divisionGuid, pointRef, pointDate)) {
             is DataStatus.Success -> {
                 requestResponse.mapTo { it.toDomain().toHuman() }
             }

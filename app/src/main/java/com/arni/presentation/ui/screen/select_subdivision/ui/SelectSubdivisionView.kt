@@ -33,7 +33,7 @@ fun SelectSubdivisionView(
 
         TextTitleToolbar(onBackPressed = {
             eventConsumer.invoke(SelectSubDivisionEvent.OnBackCLickEvent)
-        }, title = stringResource(id = R.string.add_subdivision))
+        }, title = stringResource(id = R.string.add_division))
 
         LazyColumn(modifier = Modifier) {
 
