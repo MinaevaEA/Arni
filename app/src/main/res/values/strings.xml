@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Arni</string>
     <string name="signIn_title">Авторизация</string>
-    <string name="signIn_instruction">Введи логин и пароль для входа</string>
-    <string name="signIn_login_label">Логин</string>
-    <string name="signIn_login_placeholder">+7(900)111-111-11</string>
+    <string name="signIn_instruction">Введи телефон и пароль для входа</string>
+    <string name="signIn_login_label">Телефон</string>
+    <string name="signIn_login_placeholder">8(900)111-111-11</string>
     <string name="signIn_password_label">Пароль</string>
     <string name="signIn_password_placeholder">Введи пароль</string>
     <string name="signIn_action_1">Войти</string>

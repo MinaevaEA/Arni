@@ -20,6 +20,8 @@ import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
 import cafe.adriel.voyager.transitions.FadeTransition
 import com.arni.R
 import com.arni.data.local.keystorage.UserKeyStorage
+import com.arni.events.EventType
+import com.arni.events.Events
 import com.arni.ext.launchIO
 import com.arni.ext.withUI
 import com.arni.presentation.ext.LocalGlobalNavigator
@@ -38,6 +40,7 @@ class EntryPointActivity : FragmentActivity(), KoinComponent {
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
+        listenToasts()
         start()
     }
 
@@ -68,6 +71,14 @@ class EntryPointActivity : FragmentActivity(), KoinComponent {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private fun listenToasts() {
+        lifecycleScope.launchIO {
+            Events.subscribe<EventType.ShowErrorToast> { toastData ->
+                withUI { showErrorToast(toastData.ex) }
             }
         }
     }

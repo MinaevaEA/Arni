@@ -1,14 +1,13 @@
 package com.arni.presentation.ui.screen.signIn.ui
 
+import android.util.Patterns
 import androidx.lifecycle.viewModelScope
 import com.arni.data.base.DataStatus
 import com.arni.domain.usecase.auth.AuthUseCase
 import com.arni.presentation.base.BaseViewModel
-import kotlinx.coroutines.async
+import com.arni.remote.exceptions.ArniRemoteException
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
-import java.lang.reflect.InvocationTargetException
 
 
 class SignInViewModel(val authUseCase: AuthUseCase) :
@@ -26,41 +25,53 @@ class SignInViewModel(val authUseCase: AuthUseCase) :
 
 
     private fun changePhone(phone: String) {
-        viewState = viewState.copy(user = viewState.user.copy(login = phone))
+        viewState = viewState.copy(user = viewState.user.copy(phone = phone), phoneError = null)
         validate()
     }
 
     private fun changePassword(password: String) {
-        viewState = viewState.copy(user = viewState.user.copy(password = password))
+        viewState = viewState.copy(user = viewState.user.copy(password = password), passwordError = null)
         validate()
     }
 
     private fun validate() {
+        val phone = viewState.user.phone
+        val password = viewState.user.password
+
+        viewState = viewState.copy(
+            isFormValidated = phone.isNotBlank() && password.isNotBlank()
+                    && Patterns.PHONE.matcher(phone).matches()
+        )
     }
 
     fun signIn() {
         viewModelScope.launch {
-            try {
-                //TODO вернуть потом обратно
-            viewModelScope.async { authUseCase.invoke(viewState.user) }.await()
-                action = SignInAction.OpenNextScreen
-                /*   { result ->
-                        when (result) {
-                            is DataStatus.Success -> action =
-                                SignInAction.OpenNextScreen
+            authUseCase.invoke(viewState.user)
+                .collectLatest { result ->
+                    when (result) {
+                        is DataStatus.Success -> action =
+                            SignInAction.OpenNextScreen
 
-                            is DataStatus.Error -> {
-                                when (result.ex.message) {
+                        is DataStatus.Error -> {
+                            if(result.ex is ArniRemoteException) {
+                                when(result.ex.message) {
+                                    //TODO будет полезна, когда будет проверка на бэке
+                                    "Неверный пароль" -> viewState = viewState
+                                        .copy(passwordError = result.ex.message)
+                                    "Неверный телефон" -> viewState = viewState
+                                        .copy(phoneError = result.ex.message)
                                     else -> showErrorToast(result.ex)
                                 }
+                            } else {
+                                showErrorToast(result.ex)
+                                viewState = viewState.copy(passwordError = "Проверьте телефон")
+                                 viewState = viewState.copy(phoneError = "Проверьте пароль")
                             }
-
-                            is DataStatus.Loading -> viewState = viewState.copy()
                         }
-                    }*/
-            } catch (e: InvocationTargetException) {
-                Timber.tag("1111111111").d(e.cause)
-            }
+
+                        is DataStatus.Loading -> {}
+                    }
+                }
         }
     }
 }

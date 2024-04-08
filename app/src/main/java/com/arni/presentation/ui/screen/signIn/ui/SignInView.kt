@@ -48,10 +48,10 @@ fun SignInView(
         TextFieldInput(
             modifier = Modifier.padding(top = 40.dp),
             label = stringResource(R.string.signIn_login_label),
-            text = state.user.login,
+            text = state.user.phone,
             placeholder = stringResource(R.string.signIn_login_placeholder),
             onValueChange = { eventConsumer(SignInEvent.OnPhoneValueChange(it)) },
-            error = "",
+            error = state.phoneError,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Phone
             ),
@@ -65,7 +65,7 @@ fun SignInView(
             text = state.user.password,
             placeholder = stringResource(id = R.string.signIn_password_placeholder),
             onValueChange = { eventConsumer(SignInEvent.OnPasswordValueChange(it)) },
-            error = "",
+            error = state.passwordError,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password
             ),
@@ -79,7 +79,7 @@ fun SignInView(
                 .padding(top = 32.dp),
             onClick = { eventConsumer(SignInEvent.OnLoginBtnClick) },
             text = stringResource(R.string.signIn_action_1),
-            isEnabled = true
+            isEnabled = state.isFormValidated
         )
     }
 }

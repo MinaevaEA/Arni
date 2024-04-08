@@ -9,7 +9,10 @@ import com.arni.presentation.model.human.AuthHuman
 
 @Immutable
 data class SignInState(
-    val user: AuthHuman = AuthHuman("", "")
+    val user: AuthHuman = AuthHuman("", ""),
+    val isFormValidated: Boolean = false,
+    val phoneError: String? = null,
+    val passwordError: String? = null,
 ) : BaseState
 
 sealed interface SignInEvent : BaseEvent {

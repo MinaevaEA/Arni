@@ -4,11 +4,11 @@ import com.arni.domain.model.AuthDomain
 
 
 data class AuthHuman(
-    val login: String,
+    val phone: String,
     val password: String
 )
 
 fun AuthHuman.toDomain() = AuthDomain(
-    login = login,
+    login = phone,
     password = password
 )

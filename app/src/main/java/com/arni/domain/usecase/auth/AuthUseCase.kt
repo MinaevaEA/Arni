@@ -16,9 +16,9 @@ class AuthUseCase(
     private val remoteRepository: AuthRepositoryRemote,
     private val userKeyStorage: UserKeyStorage
 ) : BaseUseCase {
-    suspend operator fun invoke(user: AuthHuman): DataStatus<TokenHuman> {
-        return when (val tokenResponse =
-            remoteRepository.authorizationUser(user.login, user.password)/*(user.toDomain())*/) {
+    // suspend operator fun invoke(user: AuthHuman): DataStatus<TokenHuman> {
+    /*  return when (val tokenResponse =
+          remoteRepository.authorizationUser(user.login, user.password)*//*(user.toDomain())*//*) {
 
             is DataStatus.Error -> DataStatus.Error(tokenResponse.ex)
             DataStatus.Loading -> {
@@ -28,6 +28,19 @@ class AuthUseCase(
             is DataStatus.Success -> {
                 userKeyStorage.saveToken(tokenResponse.data.token ?: "")
                 DataStatus.Success(tokenResponse.data.toDomain().toHuman())
+            }
+        }*/
+    operator fun invoke(user: AuthHuman): Flow<DataStatus<TokenHuman>> = flow {
+        when (val tokenResponse = remoteRepository.authorizationUser(user.phone, user.password)/*(user.toDomain())*/) {
+
+            is DataStatus.Error -> emit(DataStatus.Error(tokenResponse.ex))
+            DataStatus.Loading -> {
+                emit(DataStatus.Loading)
+            }
+
+            is DataStatus.Success -> {
+                userKeyStorage.saveToken(tokenResponse.data.token ?: "")
+                emit(DataStatus.Success(tokenResponse.data.toDomain().toHuman()))
             }
         }
     }
