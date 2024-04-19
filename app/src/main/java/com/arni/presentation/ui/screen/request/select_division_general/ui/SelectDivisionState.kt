@@ -1,4 +1,4 @@
-package com.arni.presentation.ui.screen.request.select_division.ui
+package com.arni.presentation.ui.screen.request.select_division_general.ui
 
 import androidx.compose.runtime.Immutable
 import com.arni.presentation.base.BaseAction
@@ -14,13 +14,12 @@ data class SelectDivisionState(
 ) : BaseState
 
 sealed interface SelectDivisionEvent : BaseEvent {
-    object OnBackCLickEvent : SelectDivisionEvent
+    object OnBackClickEvent : SelectDivisionEvent
 
     class SelectDivision(val divisionHuman: DivisionHuman, val listRequestID: String) :
         SelectDivisionEvent
 }
 
 sealed interface SelectDivisionAction : BaseAction {
-//TODO разобраться с открытием БШ
     object OnExist : SelectDivisionAction
 }

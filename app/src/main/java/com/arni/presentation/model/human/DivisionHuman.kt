@@ -6,7 +6,7 @@ data class DivisionHuman(
     val name: String,
     val role: String,
     val evecutors: List<ExecutorHuman>,
-    val department: List<DepartmentHuman>,
+    var department: List<DepartmentHuman>,
 ) {
     companion object {
         fun getDefault() = DivisionHuman(

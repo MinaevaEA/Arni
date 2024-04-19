@@ -1,4 +1,4 @@
-package com.arni.domain.usecase.selects
+package com.arni.domain.usecase.selects_delete
 
 import com.arni.data.base.DataStatus
 import com.arni.presentation.model.human.RequestStatusHuman

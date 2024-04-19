@@ -38,6 +38,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.arni.R
+import com.arni.presentation.enum.StatusRequests
 import com.arni.presentation.enum.StatusRoleHuman
 import com.arni.presentation.ui.components.AddFilesBS
 import com.arni.presentation.ui.components.TextFieldInput
@@ -47,6 +48,7 @@ import com.arni.presentation.ui.screen.request.create.ui.PickFileOption
 import com.arni.presentation.util.ComposeFileProvider
 import kotlinx.coroutines.launch
 import pro.midev.mec.presentation.ui.style.ArniTheme
+import java.text.SimpleDateFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -188,63 +190,115 @@ fun DetailRequestView(
                 Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
                     TextFieldSelector(
                         label = stringResource(id = R.string.status_order),
-                        onClick = { eventConsumer(DetailRequestEvent.onClickSelectStatus) },
-                        text = when (state.item.statusRequest?.guid) {
-                            /*       StatusRequests.parse(StatusRequests.WORK) -> "Рабочая"
-                                   StatusRequests.parse(StatusRequests.DRAFT) -> "Черновик"
-                                   StatusRequests.parse(StatusRequests.COMPLETED) -> "Завершена"*/
+                        onClick = { eventConsumer(DetailRequestEvent.onClickSelectStatus(state.dictionary.statusItem)) },
+                        text = when (state.item.statusRequest.name) {
+                            StatusRequests.parse(StatusRequests.WORK) -> "Рабочая"
+                            StatusRequests.parse(StatusRequests.DRAFT) -> "Черновик"
+                            StatusRequests.parse(StatusRequests.COMPLETED) -> "Завершена"
                             else -> {
                                 ""
                             }
                         },
                         enabled = if (state.human.role != StatusRoleHuman.INITIAL) state.enabled else false
                     )
+                    val currentFormat = SimpleDateFormat("yyyy-MM-dd\'T\'HH:mm:ss")
+                    val date = currentFormat.parse(state.item.date)
+                    val targetFormatDate = SimpleDateFormat("dd.MM.yyyy")
+                    val targetFormatTime = SimpleDateFormat("HH:mm")
+                    val currentDate = targetFormatDate.format(date)
+                    val currentTime = targetFormatTime.format(date)
                     TextFieldSelector(
                         label = stringResource(id = R.string.date_order),
                         onClick = { eventConsumer(DetailRequestEvent.onClickSelectorDate) },
-                        text = state.item.date ?: "",
-                        enabled = if (state.human.role == StatusRoleHuman.EXECUTOR || state.human.role == StatusRoleHuman.EXECUTOR_INITIAL) false else state.enabled
+                        text = currentDate ?: "",
+                        enabled = if (state.human.role == StatusRoleHuman.EXECUTOR
+                            || state.human.role == StatusRoleHuman.EXECUTOR_INITIAL
+                        ) false else state.enabled
                     )
 
                     TextFieldSelector(
                         label = stringResource(id = R.string.time_order),
                         onClick = { eventConsumer(DetailRequestEvent.onClickSelectorTime) },
-                        text = state.item.date ?: "",
-                        enabled = if (state.human.role == StatusRoleHuman.EXECUTOR || state.human.role == StatusRoleHuman.EXECUTOR_INITIAL) false else state.enabled
+                        text = currentTime ?: "",
+                        enabled = if (state.human.role == StatusRoleHuman.EXECUTOR
+                            || state.human.role == StatusRoleHuman.EXECUTOR_INITIAL
+                        ) false else state.enabled
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.local_order),
-                        onClick = { eventConsumer(DetailRequestEvent.onClickSelectsubDivision) },
-                        text = state.human.subdivision ?: "",
+                        onClick = {
+                            eventConsumer(
+                                DetailRequestEvent
+                                    .onClickSelectDivision(state.dictionary.division)
+                            )
+                        },
+                        text = state.item.division.name ?: "",
                         enabled =
-                        if (state.human.role == StatusRoleHuman.EXECUTOR || state.human.role == StatusRoleHuman.INITIAL || state.human.role == StatusRoleHuman.EXECUTOR_INITIAL) false else state.enabled
+                        if (state.human.role == StatusRoleHuman.EXECUTOR
+                            || state.human.role == StatusRoleHuman.INITIAL
+                            || state.human.role == StatusRoleHuman.EXECUTOR_INITIAL
+                        ) false else state.enabled
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.from_local),
-                        onClick = { eventConsumer(DetailRequestEvent.onClickSelectDepartament) },
-                        text = state.item.departamentFrom.name ?: "",
-                        enabled = if (state.human.role == StatusRoleHuman.EXECUTOR || state.human.role == StatusRoleHuman.EXECUTOR_INITIAL) false else state.enabled
+                        onClick = {
+                            eventConsumer(
+                                DetailRequestEvent.onClickSelectDepartamentFrom(
+                                    state.divisionHuman.department
+                                )
+                            )
+
+                        },
+                        text = state.item.departamentFrom.name,
+                        enabled = if (state.human.role == StatusRoleHuman.EXECUTOR
+                            || state.human.role == StatusRoleHuman.EXECUTOR_INITIAL
+                        ) false else state.enabled
                     )
 
                     TextFieldSelector(
                         label = stringResource(id = R.string.to_local),
-                        onClick = { eventConsumer(DetailRequestEvent.onClickSelectDepartament) },
+                        onClick = {
+                            eventConsumer(
+                                DetailRequestEvent.onClickSelectDepartamentTo(
+                                    state.divisionHuman.department
+                                )
+                            )
+                        },
                         text = state.item.departamentTo.name ?: "",
-                        enabled = if (state.human.role == StatusRoleHuman.EXECUTOR || state.human.role == StatusRoleHuman.EXECUTOR_INITIAL) false else state.enabled
+                        enabled = if (state.human.role == StatusRoleHuman.EXECUTOR
+                            || state.human.role == StatusRoleHuman.EXECUTOR_INITIAL
+                        ) false else state.enabled
                     )
+                    val dateBegin = currentFormat.parse(state.item.startDate)
+                    val currentDateBegin = dateBegin?.let { targetFormatDate.format(it) }
+                    val currentTimeBegin = dateBegin?.let { targetFormatTime.format(it) }
                     TextFieldSelector(
                         label = stringResource(id = R.string.begin_date),
-                        onClick = { eventConsumer(DetailRequestEvent.onClickSelectorTime) },
-                        text = state.item.startDate ?: "",
+                        onClick = { eventConsumer(DetailRequestEvent.onClickSelectorDate) },
+                        text = currentDateBegin ?: "",
                         enabled = if (state.human.role != StatusRoleHuman.INITIAL) state.enabled else false
                     )
                     TextFieldSelector(
-                        label = stringResource(id = R.string.end_date),
+                        label = stringResource(id = R.string.begin_time),
                         onClick = { eventConsumer(DetailRequestEvent.onClickSelectorTime) },
-                        text = state.item.endDate ?: "",
+                        text = currentTimeBegin ?: "",
                         enabled = if (state.human.role != StatusRoleHuman.INITIAL) state.enabled else false
                     )
-
+                    val dateEnd = currentFormat.parse(state.item.endDate)
+                    val currentDateEnd = dateEnd?.let { targetFormatDate.format(it) }
+                    val currentTimeEnd = dateEnd?.let { targetFormatTime.format(it) }
+                    TextFieldSelector(
+                        label = stringResource(id = R.string.end_date),
+                        onClick = { eventConsumer(DetailRequestEvent.onClickSelectorDate) },
+                        text = currentDateEnd ?: "",
+                        enabled = if (state.human.role != StatusRoleHuman.INITIAL) state.enabled else false
+                    )
+                    TextFieldSelector(
+                        label = stringResource(id = R.string.end_time),
+                        onClick = { eventConsumer(DetailRequestEvent.onClickSelectorTime) },
+                        text = currentTimeEnd ?: "",
+                        enabled = if (state.human.role != StatusRoleHuman.INITIAL) state.enabled else false
+                    )
                     TextFieldInput(
                         label = stringResource(id = R.string.name_dispatcher),
                         text = state.item.nameDispatcher ?: "",
@@ -252,10 +306,12 @@ fun DetailRequestView(
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.draft_order),
-                        onClick = { eventConsumer(DetailRequestEvent.onClickSelectUrgently) },
-                        text = state.item.urgency?.name ?: "",
+                        onClick = { eventConsumer(DetailRequestEvent.onClickSelectUrgently(state.dictionary.urgency)) },
+                        text = state.item.urgency.name ?: "",
                         enabled =
-                        if (state.human.role == StatusRoleHuman.EXECUTOR || state.human.role == StatusRoleHuman.EXECUTOR_INITIAL) false else state.enabled
+                        if (state.human.role == StatusRoleHuman.EXECUTOR
+                            || state.human.role == StatusRoleHuman.EXECUTOR_INITIAL
+                        ) false else state.enabled
                     )
                     TextFieldInput(
                         label = stringResource(id = R.string.name_patient_order),
@@ -265,13 +321,20 @@ fun DetailRequestView(
 
                     TextFieldSelector(
                         label = stringResource(id = R.string.checking_order),
-                        onClick = { eventConsumer(DetailRequestEvent.onClickSelectExecutor) },
+                        onClick = {
+                            eventConsumer(
+                                DetailRequestEvent
+                                    .onClickSelectExecutor(state.divisionHuman.evecutors)
+                            )
+                        },
                         text = /*state.item.executors?. ?:*/ "",
-                        enabled = if (state.human.role == StatusRoleHuman.EXECUTOR || state.human.role == StatusRoleHuman.INITIAL) false else state.enabled
+                        enabled = if (state.human.role == StatusRoleHuman.EXECUTOR
+                            || state.human.role == StatusRoleHuman.INITIAL
+                        ) false else state.enabled
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.status_patient),
-                        onClick = { eventConsumer(DetailRequestEvent.onClickSelectStatusPatient) },
+                        onClick = { eventConsumer(DetailRequestEvent.onClickSelectStatusPatient(state.dictionary.statusPatient)) },
                         text = state.item.statusPatient?.name ?: "",
                         enabled = state.enabled
                     )
@@ -304,6 +367,6 @@ fun DetailRequestView(
 @Preview
 private fun DetailRequestViewPreview() {
     ArniTheme {
-        DetailRequestView(state = DetailRequestState(), eventConsumer = {})
+        DetailRequestView(state = DetailRequestState(listId = ""), eventConsumer = {})
     }
 }

@@ -8,7 +8,7 @@ data class RequestDomain(
     val guid: String,
     val date: String,
     val number: String,
-    val division: DivisionRequestDomain,
+    val division: DivisionDomain,
     val departamentFrom: DepartamentDomain,
     val departamentTo: DepartamentDomain,
     val dateStart: String,

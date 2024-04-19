@@ -8,7 +8,7 @@ data class DivisionResponse(
     @SerializedName("guid")
     val guid: String?,
     val name: String?,
-    val role: String,
+    val role: String?,
     @SerializedName("executorcollection")
     val executors: List<ExecutorResponse>?,
     @SerializedName("departmentcollection")
@@ -25,7 +25,7 @@ data class DivisionResponse(
 fun DivisionResponse.toDomain() = DivisionDomain(
     guid = guid ?: "",
     name = name ?: "",
-    role = role,
+    role = role ?: "",
     executors = executors?.toDomain(),
     department = department?.toDomain()
 )

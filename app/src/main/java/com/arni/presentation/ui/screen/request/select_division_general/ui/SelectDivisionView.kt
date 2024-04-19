@@ -1,4 +1,4 @@
-package com.arni.presentation.ui.screen.select_subdivision.ui
+package com.arni.presentation.ui.screen.request.select_division_general.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,9 +20,9 @@ import com.arni.presentation.ui.components.TextTitleToolbar
 import pro.midev.mec.presentation.ui.style.ArniTheme
 
 @Composable
-fun SelectSubdivisionView(
-    state: SelectSubdivisionState,
-    eventConsumer: (SelectSubDivisionEvent) -> Unit
+fun SelectDivisionView(
+    state: SelectDivisionState,
+    eventConsumer: (SelectDivisionEvent) -> Unit
 ) {
 
     Column(
@@ -31,23 +31,24 @@ fun SelectSubdivisionView(
             .background(color = ArniTheme.colors.neutral_0)
     ) {
 
-        TextTitleToolbar(onBackPressed = {
-            eventConsumer.invoke(SelectSubDivisionEvent.OnBackCLickEvent)
-        }, title = stringResource(id = R.string.add_division))
+        TextTitleToolbar(
+            onBackPressed = { eventConsumer(SelectDivisionEvent.OnBackClickEvent) },
+            title = stringResource(id = R.string.add_subdivision),
+        )
 
         LazyColumn(modifier = Modifier) {
 
-            itemsIndexed(state.listSubdivision) { index, item ->
+            itemsIndexed(state.listDivision) { index, item ->
                 Row(
                     modifier = Modifier
-                        .clickable { eventConsumer(SelectSubDivisionEvent.SelectSubDivision(item)) },
+                        .clickable { eventConsumer(SelectDivisionEvent.SelectDivision(item, state.listRequestID)) },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         modifier = Modifier
                             .weight(1F)
                             .padding(vertical = 12.dp, horizontal = 20.dp),
-                        text = item.title ?: "",
+                        text = item.name ?: "",
                         color = ArniTheme.colors.black_100,
                         style = ArniTheme.typography.body.regular
                     )
@@ -57,13 +58,12 @@ fun SelectSubdivisionView(
     }
 }
 
-
 @Composable
 @Preview
 fun SelectStatusRequestViewPreview() {
     ArniTheme {
-        SelectSubdivisionView(
-            state = SelectSubdivisionState(),
+        SelectDivisionView(
+            state = SelectDivisionState(),
             eventConsumer = {})
     }
 }

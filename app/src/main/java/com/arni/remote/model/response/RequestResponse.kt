@@ -2,6 +2,7 @@ package com.arni.remote.model.response
 
 import com.arni.domain.model.DepartamentDomain
 import com.arni.domain.model.DispatcherDomain
+import com.arni.domain.model.DivisionDomain
 import com.arni.domain.model.DivisionRequestDomain
 import com.arni.domain.model.InitiatorDomain
 import com.arni.domain.model.RequestDomain
@@ -19,7 +20,7 @@ data class RequestResponse(
     @SerializedName("number")
     val number: String?,
     @SerializedName("division")
-    val division: DivisionRequestResponse?,
+    val division: DivisionResponse?,
     @SerializedName("departmentfrom")
     val departamentFrom: DepartamentResponse?,
     @SerializedName("departmentto")
@@ -50,7 +51,7 @@ fun RequestResponse.toDomain() = RequestDomain(
     guid = guid ?: "",
     date = date ?: "",
     number = number ?: "",
-    division = division?.toDomain() ?: DivisionRequestDomain("", ""),
+    division = division?.toDomain() ?: DivisionDomain("", "", "", listOf(), listOf()),
     departamentFrom = departamentFrom?.toDomain() ?: DepartamentDomain("", ""),
     departamentTo = departamentTo?.toDomain() ?: DepartamentDomain("", ""),
     dateStart = dateStart ?: "",
@@ -65,4 +66,5 @@ fun RequestResponse.toDomain() = RequestDomain(
     executor = executor?.toDomain() ?: listOf()
 
 )
+
 fun List<RequestResponse>.toDomain() = map { it.toDomain() }

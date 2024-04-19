@@ -98,11 +98,10 @@ private fun DrawContent(
                     nameExecutor = "${item.executors.joinToString { it.name }}" /*+ item.executors.size*/,
                     isStatus = item.statusRequest.name ?: "",
                     Urgency = item.urgency?.name ?: "",
-                    onClick = { eventConsumer(GeneralRequestEvent.onClickItem(item, state.human)) })
+                    onClick = { eventConsumer(GeneralRequestEvent.onClickItem(state.tasks.listId, item, state.human)) })
             }
             if (scrollContext.isBottom) {
-                eventConsumer(GeneralRequestEvent.loadNextRequest(state.selectDivision.guid, state.tasks))
-                //state.tasks.itemsPage.size
+                eventConsumer(GeneralRequestEvent.loadNextRequest(state.selectDivision, state.tasks))
             }
         }
     }

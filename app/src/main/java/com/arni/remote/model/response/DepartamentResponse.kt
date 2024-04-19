@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 data class DepartamentResponse(
     @SerializedName("guid")
     val guid: String?,
-    val name: String?
+    val name: String?,
 )
 
 

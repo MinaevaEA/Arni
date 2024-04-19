@@ -15,7 +15,7 @@ import com.arni.presentation.ui.screen.request.detail.DetailRequestScreen
 import com.arni.presentation.ui.screen.request.general.ui.GeneralRequestAction
 import com.arni.presentation.ui.screen.request.general.ui.GeneralRequestView
 import com.arni.presentation.ui.screen.request.general.ui.GeneralRequestViewModel
-import com.arni.presentation.ui.screen.request.select_division.SelectDivisionScreen
+import com.arni.presentation.ui.screen.request.select_division_general.SelectDivisionScreen
 import org.koin.androidx.compose.koinViewModel
 import pro.midev.mec.presentation.ui.style.ArniTheme
 
@@ -40,7 +40,8 @@ private fun GeneralCheckingScreen(
 
     LaunchedEffect(action) {
         when (val act = action) {
-            is GeneralRequestAction.OpenScreenDetailInfo -> navigator.push(DetailRequestScreen(act.item, act.user))
+            is GeneralRequestAction.OpenScreenDetailInfo ->
+                navigator.push(DetailRequestScreen(act.listId, act.item, act.user, act.dictionaryHuman, act.division))
             is GeneralRequestAction.OpenScreenAddRequest -> navigator.push(CreateRequestScreen())
             GeneralRequestAction.ExitScreen -> navigator.pop()
             is GeneralRequestAction.OpenScreenFilter -> bottomSheetNavigator.show(FilterScreen())

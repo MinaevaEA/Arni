@@ -1,6 +1,5 @@
 package com.arni.presentation.model.human
 
-import androidx.compose.runtime.Immutable
 import kotlinx.parcelize.Parcelize
 import java.io.Serializable
 
@@ -21,7 +20,7 @@ data class RequestHuman(
     val statusPatient: StatusPatientHuman,
     val description: String? = null,
     // val photos: List<String>,
-    val division: DivisionRequestHuman,
+    val division: DivisionHuman,
     val dispatcher: DispatcherHuman,
     val initiator: InitiatorHuman,
     val comment: String,
@@ -45,7 +44,7 @@ data class RequestHuman(
             statusPatient = StatusPatientHuman("", ""),
             description = "",
             // val photos: List<String>,
-            division = DivisionRequestHuman("", ""),
+            division = DivisionHuman("", "", "", listOf(), listOf()),
             dispatcher = DispatcherHuman("", ""),
             initiator = InitiatorHuman("", ""),
             comment = "",

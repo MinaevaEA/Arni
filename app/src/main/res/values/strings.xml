@@ -14,6 +14,7 @@
     <string name="error_server">Ошибка сервера</string>
     <string name="error_unauthorized">Ошибка авторизации</string>
     <string name="error_undefined">Неизвестная ошибка</string>
+    <string name="server_date_format" translatable="false">yyyy-MM-dd\'T\'HH:mm:ss</string>
 
     //detail screen
     <string name="status_order">Статус заявки*</string>
@@ -22,8 +23,10 @@
     <string name="local_order">Подразделение*</string>
     <string name="from_local">Откуда*</string>
     <string name="to_local">Куда*</string>
-    <string name="begin_date">Начало выполнения</string>
-    <string name="end_date">Конец выполнения</string>
+    <string name="begin_date">Дата начала выполнения</string>
+    <string name="begin_time">Время начала выполнения</string>
+    <string name="end_date">Дата окончания выполнения</string>
+    <string name="end_time">Время окончания выполнения</string>
     <string name="draft_order">Срочность*</string>
     <string name="checking_order">Исполнитель(-и)</string>
     <string name="name_dispatcher">ФИО диспетчера</string>

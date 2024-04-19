@@ -1,5 +1,4 @@
-package com.arni.presentation.ui.screen.request.select_division.ui
-
+package com.arni.presentation.ui.screen.request.select_division_general.ui
 
 import androidx.lifecycle.viewModelScope
 import com.arni.events.EventType
@@ -16,10 +15,7 @@ class SelectDivisionViewModel(
 ) {
     override fun obtainEvent(event: SelectDivisionEvent) {
         when (event) {
-
-           is SelectDivisionEvent.OnBackCLickEvent -> action = SelectDivisionAction.OnExist
-
-
+            is SelectDivisionEvent.OnBackClickEvent -> action = SelectDivisionAction.OnExist
             is SelectDivisionEvent.SelectDivision -> selectCause(event.divisionHuman, event.listRequestID)
         }
     }
@@ -32,7 +28,7 @@ class SelectDivisionViewModel(
 
     private fun selectCause(divisionHuman: DivisionHuman, listID: String) {
         viewModelScope.launch {
-            Events.publish(EventType.OnDivision(divisionHuman, listID))
+            Events.publish(EventType.OnDivisionGeneral(divisionHuman, listID))
         }
         action = SelectDivisionAction.OnExist
     }

@@ -1,4 +1,4 @@
-package com.arni.presentation.ui.screen.select_departament.ui
+package com.arni.presentation.ui.screen.select_division_detail.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,9 +20,9 @@ import com.arni.presentation.ui.components.TextTitleToolbar
 import pro.midev.mec.presentation.ui.style.ArniTheme
 
 @Composable
-fun SelectDepartamentView(
-    state: SelectDepartamentState,
-    eventConsumer: (SelectDepartamentEvent) -> Unit
+fun SelectSubdivisionView(
+    state: SelectSubdivisionState,
+    eventConsumer: (SelectSubDivisionEvent) -> Unit
 ) {
 
     Column(
@@ -32,15 +32,15 @@ fun SelectDepartamentView(
     ) {
 
         TextTitleToolbar(onBackPressed = {
-            eventConsumer.invoke(SelectDepartamentEvent.OnBackCLickEvent)
-        }, title = stringResource(id = R.string.add_departament))
+            eventConsumer.invoke(SelectSubDivisionEvent.OnBackCLickEvent)
+        }, title = stringResource(id = R.string.add_division))
 
         LazyColumn(modifier = Modifier) {
 
-            itemsIndexed(state.listDepartament) { index, item ->
+            itemsIndexed(state.listSubdivision) { index, item ->
                 Row(
                     modifier = Modifier
-                        .clickable { eventConsumer(SelectDepartamentEvent.SelectSubDivision(item)) },
+                        .clickable { eventConsumer(SelectSubDivisionEvent.SelectDivision(item)) },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
@@ -62,6 +62,8 @@ fun SelectDepartamentView(
 @Preview
 fun SelectStatusRequestViewPreview() {
     ArniTheme {
-        SelectDepartamentView(state = SelectDepartamentState(), eventConsumer = {})
+        SelectSubdivisionView(
+            state = SelectSubdivisionState(),
+            eventConsumer = {})
     }
 }

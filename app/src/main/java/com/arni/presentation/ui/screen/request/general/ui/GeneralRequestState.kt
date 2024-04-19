@@ -8,6 +8,7 @@ import com.arni.presentation.model.human.DivisionHuman
 import com.arni.presentation.model.human.ListRequestHuman
 import com.arni.presentation.model.human.RequestHuman
 import com.arni.presentation.model.human.UserHuman
+import com.arni.presentation.ui.screen.pickers.yearmonthday.ui.YearMonthDayPickerState
 
 sealed interface GeneralRequestState : BaseState
 
@@ -30,20 +31,27 @@ sealed interface GeneralRequestEvent : BaseEvent {
 
     object OnClickAddRequest : GeneralRequestEvent
     object OnClickFilter : GeneralRequestEvent
-    class loadNextRequest(val divisionID: String,val listRequestHuman: ListRequestHuman) : GeneralRequestEvent
+    class loadNextRequest(val division: DivisionHuman, val listRequestHuman: ListRequestHuman) : GeneralRequestEvent
     class OnSearchEvent(val searchText: String) : GeneralRequestEvent
     object OnClearSearchEvent : GeneralRequestEvent
     object OnBackBtnClick : GeneralRequestEvent
     class onClickDivision(val listDivision: List<DivisionHuman>, val listId: String) : GeneralRequestEvent
 
-    data class onClickItem(val item: RequestHuman, val human: UserHuman) : GeneralRequestEvent
+    class onClickItem(val listId: String,val item: RequestHuman, val human: UserHuman) : GeneralRequestEvent
 }
 
 sealed interface GeneralRequestAction : BaseAction {
-    data class OpenScreenDetailInfo(val item: RequestHuman, val user: UserHuman) : GeneralRequestAction
+    class OpenScreenDetailInfo(
+        val listId: String,
+        val item: RequestHuman,
+        val user: UserHuman,
+        val dictionaryHuman: DictionaryHuman,
+        val division: DivisionHuman
+    ) : GeneralRequestAction
+
     object OpenScreenAddRequest : GeneralRequestAction
     object OpenScreenFilter : GeneralRequestAction
     object OpenScreenList : GeneralRequestAction
-    data class OpenListDivision(val listDivision: List<DivisionHuman>, val listID: String) : GeneralRequestAction
+    class OpenListDivision(val listDivision: List<DivisionHuman>, val listID: String) : GeneralRequestAction
     object ExitScreen : GeneralRequestAction
 }

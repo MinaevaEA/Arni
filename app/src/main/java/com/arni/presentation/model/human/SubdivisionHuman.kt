@@ -1,6 +1,6 @@
 package com.arni.presentation.model.human
 
-
+//TODO на удаление
 data class SubdivisionHuman(
     val id: Int? = null,
     val title: String? = null,

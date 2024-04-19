@@ -1,4 +1,4 @@
-package com.arni.presentation.ui.screen.request.select_division
+package com.arni.presentation.ui.screen.request.select_division_general
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -7,9 +7,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.arni.presentation.model.human.DivisionHuman
-import com.arni.presentation.ui.screen.request.select_division.ui.SelectDivisionAction
-import com.arni.presentation.ui.screen.request.select_division.ui.SelectDivisionView
-import com.arni.presentation.ui.screen.request.select_division.ui.SelectDivisionViewModel
+import com.arni.presentation.ui.screen.request.select_division_general.ui.SelectDivisionAction
+import com.arni.presentation.ui.screen.request.select_division_general.ui.SelectDivisionView
+import com.arni.presentation.ui.screen.request.select_division_general.ui.SelectDivisionViewModel
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 import pro.midev.mec.presentation.ui.style.ArniTheme

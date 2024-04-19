@@ -1,4 +1,4 @@
-package com.arni.presentation.ui.screen.request.select_division.ui
+package com.arni.presentation.ui.screen.select_departament.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,13 +16,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.arni.R
+import com.arni.presentation.model.human.DepartmentHuman
+import com.arni.presentation.model.human.DivisionHuman
 import com.arni.presentation.ui.components.TextTitleToolbar
 import pro.midev.mec.presentation.ui.style.ArniTheme
 
 @Composable
-fun SelectDivisionView(
-    state: SelectDivisionState,
-    eventConsumer: (SelectDivisionEvent) -> Unit
+fun SelectDepartmentView(
+    departments: List<DepartmentHuman>,
+    onSelect: (DepartmentHuman) -> Unit,
+    onExit: () -> Unit,
 ) {
 
     Column(
@@ -31,23 +34,19 @@ fun SelectDivisionView(
             .background(color = ArniTheme.colors.neutral_0)
     ) {
 
-        TextTitleToolbar(onBackPressed = {
-            eventConsumer.invoke(SelectDivisionEvent.OnBackCLickEvent)
-        }, title = stringResource(id = R.string.add_subdivision))
-
+        TextTitleToolbar(onBackPressed = onExit, title = stringResource(id = R.string.add_departament))
         LazyColumn(modifier = Modifier) {
 
-            itemsIndexed(state.listDivision) { index, item ->
+            itemsIndexed(departments) { _, item ->
                 Row(
-                    modifier = Modifier
-                        .clickable { eventConsumer(SelectDivisionEvent.SelectDivision(item, state.listRequestID)) },
+                    modifier = Modifier.clickable { onSelect(item) },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         modifier = Modifier
                             .weight(1F)
                             .padding(vertical = 12.dp, horizontal = 20.dp),
-                        text = item.name ?: "",
+                        text = item.name,
                         color = ArniTheme.colors.black_100,
                         style = ArniTheme.typography.body.regular
                     )
@@ -61,8 +60,6 @@ fun SelectDivisionView(
 @Preview
 fun SelectStatusRequestViewPreview() {
     ArniTheme {
-        SelectDivisionView(
-            state = SelectDivisionState(),
-            eventConsumer = {})
+        //SelectDepartmentView(state = Loading, eventConsumer = {})
     }
 }

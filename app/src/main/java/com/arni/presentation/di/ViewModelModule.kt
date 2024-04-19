@@ -10,12 +10,12 @@ import com.arni.presentation.ui.screen.profile.ui.ProfileViewModel
 import com.arni.presentation.ui.screen.request.create.ui.CreateRequestViewModel
 import com.arni.presentation.ui.screen.request.detail.ui.DetailRequestViewModel
 import com.arni.presentation.ui.screen.request.general.ui.GeneralRequestViewModel
-import com.arni.presentation.ui.screen.request.select_division.ui.SelectDivisionViewModel
-import com.arni.presentation.ui.screen.select_departament.ui.SelectDepartamentViewModel
+import com.arni.presentation.ui.screen.request.select_division_general.ui.SelectDivisionViewModel
+import com.arni.presentation.ui.screen.select_departament.ui.SelectDepartmentViewModel
 import com.arni.presentation.ui.screen.select_executor.ui.SelectExecutorViewModel
 import com.arni.presentation.ui.screen.select_status_patient.ui.SelectStatusPatientViewModel
 import com.arni.presentation.ui.screen.select_status_request.ui.SelectStatusRequestViewModel
-import com.arni.presentation.ui.screen.select_subdivision.ui.SelectSubdivisionViewModel
+import com.arni.presentation.ui.screen.select_division_detail.ui.SelectSubdivisionViewModel
 import com.arni.presentation.ui.screen.select_urgently_status.ui.SelectUrgentlyStatusViewModel
 import com.arni.presentation.ui.screen.signIn.ui.SignInViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -52,29 +52,25 @@ val viewModelModule = module {
     viewModel {
         SelectStatusPatientViewModel(get())
     }
-
-    viewModel { params ->
-        SelectDepartamentViewModel(params[0])
-    }
     viewModel {
         SelectUrgentlyStatusViewModel(get())
     }
 
     viewModel { params ->
-        SelectSubdivisionViewModel(get())
+        SelectSubdivisionViewModel(get(), get())
     }
     viewModel { params ->
         SelectStatusRequestViewModel(params[0])
     }
     viewModel {
-        DetailRequestViewModel(get(), get(),get(),get(),get())
+        DetailRequestViewModel(get(), get(),get(),get(),get(),get())
     }
     viewModel {
         TimePickerViewModel(/*params[0], params[1], params[2], params[3], params[4]*/)
     }
 
-    viewModel {
-        YearMonthDayPickerViewModel(/*params[0], params[1], params[2], params[3]*/)
+    viewModel {params ->
+        YearMonthDayPickerViewModel(params[0], params[1], params[2], params[3])
     }
 
     viewModel { params ->

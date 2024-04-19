@@ -1,11 +1,15 @@
 package com.arni.remote
 
+import com.arni.remote.model.response.CheckedResponse
 import com.arni.remote.model.response.DataWrapper
 import com.arni.remote.model.response.DictionaryResponse
+import com.arni.remote.model.response.EditRequestResponse
 import com.arni.remote.model.response.ListRequestResponse
 import com.arni.remote.model.response.TokenResponse
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.PUT
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface Api {
@@ -28,4 +32,16 @@ interface Api {
         @Query("pointdate") pointdate: String?
     ): DataWrapper<ListRequestResponse>
 
+    @GET("checkitem")
+    suspend fun getCheck(
+        @Query("listid") listid: String?,
+        @Query("itemref") itemref: String,
+    ): DataWrapper<CheckedResponse>
+
+
+    @PUT("changeitem")
+    suspend fun getChangeItem(
+        @Path("listid") listid: String?,
+        @Path("itemref") itemref: String,
+    ): DataWrapper<EditRequestResponse>
 }

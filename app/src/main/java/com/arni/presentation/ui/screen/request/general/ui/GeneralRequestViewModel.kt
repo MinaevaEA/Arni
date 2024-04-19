@@ -2,10 +2,11 @@ package com.arni.presentation.ui.screen.request.general.ui
 
 import androidx.lifecycle.viewModelScope
 import com.arni.data.base.getOrNull
-import com.arni.domain.usecase.request.DictionaryUseCase
+import com.arni.domain.usecase.request.GetDictionaryUseCase
 import com.arni.domain.usecase.request.GetRequestUseCase
 import com.arni.events.EventType
 import com.arni.presentation.base.BaseViewModel
+import com.arni.presentation.model.human.DictionaryHuman
 import com.arni.presentation.model.human.DivisionHuman
 import com.arni.presentation.model.human.ListRequestHuman
 import com.arni.presentation.model.human.RequestHuman
@@ -14,13 +15,19 @@ import kotlinx.coroutines.launch
 
 class GeneralRequestViewModel(
     private val getRequestUseCase: GetRequestUseCase,
-    private val getDictionaryUseCase: DictionaryUseCase
+    private val getDictionaryUseCase: GetDictionaryUseCase
 ) : BaseViewModel<GeneralRequestState, GeneralRequestEvent, GeneralRequestAction>(Empty) {
 
     override fun obtainEvent(event: GeneralRequestEvent) {
         when (event) {
             is GeneralRequestEvent.onClickItem -> action =
-                GeneralRequestAction.OpenScreenDetailInfo(event.item, event.human)
+                GeneralRequestAction.OpenScreenDetailInfo(
+                    event.listId,
+                    event.item,
+                    event.human,
+                    dictionary,
+                    divisionHuman
+                )
 
             is GeneralRequestEvent.onClickDivision -> action =
                 GeneralRequestAction.OpenListDivision(event.listDivision, event.listId)
@@ -28,14 +35,16 @@ class GeneralRequestViewModel(
             is GeneralRequestEvent.OnClickAddRequest -> action = GeneralRequestAction.OpenScreenAddRequest
             is GeneralRequestEvent.OnBackBtnClick -> action = GeneralRequestAction.ExitScreen
             is GeneralRequestEvent.OnClickFilter -> action = GeneralRequestAction.OpenScreenFilter
-            GeneralRequestEvent.OnClearSearchEvent -> clearSearchText()
+            is GeneralRequestEvent.OnClearSearchEvent -> clearSearchText()
             is GeneralRequestEvent.OnSearchEvent -> search(event.searchText)
-            is GeneralRequestEvent.loadNextRequest -> loadNextRequest(event.divisionID, event.listRequestHuman)
+            is GeneralRequestEvent.loadNextRequest -> loadNextRequest(event.division, event.listRequestHuman)
         }
     }
 
     private var listDivision: MutableList<DivisionHuman> = mutableListOf()
     private var listRequest: MutableList<RequestHuman> = mutableListOf()
+    private var dictionary: DictionaryHuman = DictionaryHuman.getDefault()
+    private var divisionHuman: DivisionHuman = DivisionHuman.getDefault()
 
     init {
         viewModelScope.launch {
@@ -52,9 +61,11 @@ class GeneralRequestViewModel(
                     ).getOrNull()
                 }
             }
+            divisionHuman = allDictionaryHuman?.division?.first() ?: DivisionHuman.getDefault()
             val requestsByDictionary = getRequestsByDictionary.await()
 
             if (allDictionaryHuman != null && requestsByDictionary != null) {
+                dictionary = allDictionaryHuman
                 listDivision.addAll(allDictionaryHuman.division)
                 listRequest.addAll(requestsByDictionary.itemsPage)
                 viewState = Content(
@@ -65,7 +76,7 @@ class GeneralRequestViewModel(
                 )
             }
         }
-        subscribeEvent<EventType.OnDivision> {
+        subscribeEvent<EventType.OnDivisionGeneral> {
             viewModelScope.launch {
                 val getRequestOtherDivision = viewModelScope.async {
                     getRequestUseCase.invoke(
@@ -75,18 +86,19 @@ class GeneralRequestViewModel(
 
                 }
                 val requestsOtherDivision = getRequestOtherDivision.await()
+                divisionHuman = it.division
                 if (requestsOtherDivision != null)
                     viewState = Content(tasks = requestsOtherDivision, selectDivision = it.division)
             }
         }
     }
 
-    private fun loadNextRequest(divisionId: String, listRequestHuman: ListRequestHuman) {
+    private fun loadNextRequest(division: DivisionHuman, listRequestHuman: ListRequestHuman) {
         viewModelScope.launch {
             val partOfList = getRequestUseCase.invoke(
                 limit = 5,
                 listId = listRequestHuman.listId,
-                divisionGuid = divisionId,
+                divisionGuid = division.guid,
                 pointRef = listRequestHuman.itemsPage.last().guid,
                 pointDate = listRequestHuman.itemsPage.last().date
             ).getOrNull()
@@ -100,6 +112,7 @@ class GeneralRequestViewModel(
             is Content -> {
                 copy(tasks = tasks.copy(itemsPage = tasks.itemsPage + addableList))
             }
+
             Empty -> this
         }
 

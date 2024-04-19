@@ -1,64 +1,144 @@
 package com.arni.presentation.ui.screen.request.detail.ui
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.viewModelScope
 import com.arni.data.base.DataStatus
-import com.arni.domain.usecase.selects.GetExecutorUseCase
-import com.arni.domain.usecase.selects.GetPatientStatusUseCase
-import com.arni.domain.usecase.selects.GetSelectStatusRequestUseCase
-import com.arni.domain.usecase.selects.GetSelectUrgentlyUseCase
+import com.arni.data.base.getOrNull
+import com.arni.domain.usecase.GetRequestChangeDetailUseCase
+import com.arni.domain.usecase.GetRequestEditUseCase
 import com.arni.events.EventType
+import com.arni.events.Events
 import com.arni.presentation.base.BaseViewModel
+import com.arni.presentation.model.human.DictionaryHuman
+import com.arni.presentation.model.human.DivisionHuman
 import com.arni.presentation.model.human.RequestHuman
-import com.arni.presentation.model.human.RequestStatusHuman
-import com.arni.presentation.model.human.StatusPatientHuman
-import com.arni.presentation.model.human.UrgencyHuman
-import com.arni.presentation.model.human.UserHuman
 import com.arni.presentation.ui.screen.request.create.ui.CreateRequestViewModel
 import com.arni.presentation.ui.screen.request.create.ui.PickFileOption
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 class DetailRequestViewModel(
-    item: RequestHuman,
-    private val getSelectStatusRequestUseCase: GetSelectStatusRequestUseCase,
-    private val getPatientStatusUseCase: GetPatientStatusUseCase,
-    private val getSelectUrgentlyUseCase: GetSelectUrgentlyUseCase,
-    private val getExecutorUseCase: GetExecutorUseCase
+    val listId: String,
+    val item: RequestHuman,
+    dictionary: DictionaryHuman,
+    divisionHuman: DivisionHuman,
+    val getRequestChangeDetailUseCase: GetRequestChangeDetailUseCase,
+    val getRequestEditUseCase: GetRequestEditUseCase
 ) : BaseViewModel<DetailRequestState, DetailRequestEvent, DetailRequestAction>(
-    DetailRequestState(item = item)
+    DetailRequestState(item = item, dictionary = dictionary, divisionHuman = divisionHuman, listId = listId)
 ) {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun obtainEvent(event: DetailRequestEvent) {
         when (val act = event) {
             is DetailRequestEvent.onClickBackList -> action = DetailRequestAction.returnScreenList
             is DetailRequestEvent.onClickToolbarButton -> openEnabledRequest(act.enabled)
             DetailRequestEvent.onClickSelectorTime -> action = DetailRequestAction.OpenTimePicker(
                 CreateRequestViewModel.ACT_TIME_ID,
-                LocalTime.now(), true)
-            DetailRequestEvent.onClickSelectorDate -> action = DetailRequestAction.OpenYearMonthDayPicker(
-                CreateRequestViewModel.ACT_DATE_ID, LocalDate.now())
-            DetailRequestEvent.onClickSelectStatus -> action = DetailRequestAction.openRequestStatusScreen(allRequestStatus)
-            DetailRequestEvent.onClickSelectsubDivision -> action = DetailRequestAction.openSubDivisionScreen
-            DetailRequestEvent.onClickSelectDepartament -> action = DetailRequestAction.openDepartamentScreen(listOf())
-            DetailRequestEvent.onClickSelectUrgently -> action = DetailRequestAction.openUrgentlyScreen(allUrgently)
-            DetailRequestEvent.onClickSelectExecutor -> action = DetailRequestAction.openExecutorScreen(allExecutor)
-            DetailRequestEvent.onClickSelectStatusPatient -> action = DetailRequestAction.openStatusPatientScreen(allStatusPatient)
+                LocalTime.now(), true
+            )
+
+            DetailRequestEvent.onClickSelectorDate -> action =
+                DetailRequestAction.OpenYearMonthDayPicker(
+                    ARG_START_DATE,
+                    LocalDate.parse(viewState.item.startDate, DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+                    minDate = LocalDate.of(2010, 12, 31),
+                    maxDate = LocalDate.of(2080, 12, 31),
+                    aaa = "",
+
+                    )
+
+            is DetailRequestEvent.onClickSelectStatus ->
+                action = DetailRequestAction.openRequestStatusScreen(act.listStatus)
+
+            is DetailRequestEvent.onClickSelectDivision ->
+                action = DetailRequestAction.openDivisionScreen(act.listDivision)
+
+            is DetailRequestEvent.onClickSelectDepartamentFrom ->
+                action = DetailRequestAction.openDepartamentScreenFrom(act.listDepartmentHuman)
+
+            is DetailRequestEvent.onClickSelectDepartamentTo ->
+                action = DetailRequestAction.openDepartamentScreenTo(act.listDepartmentHuman)
+
+            is DetailRequestEvent.onClickSelectUrgently ->
+                action = DetailRequestAction.openUrgentlyScreen(act.listUrgencyHuman)
+
+            is DetailRequestEvent.onClickSelectExecutor ->
+                action = DetailRequestAction.openExecutorScreen(act.listExecutor)
+
+            is DetailRequestEvent.onClickSelectStatusPatient ->
+                action = DetailRequestAction.openStatusPatientScreen(act.listStatusPatient)
+
             is DetailRequestEvent.ChangeFilePickerOption -> changePickFileOption(act.option)
             is DetailRequestEvent.OnFileChosen -> addFiles(act.list)
             is DetailRequestEvent.OnFileDelete -> deleteFiles(act.index)
+            is DetailRequestEvent.OnDepartmentFrom -> {
+                viewState = viewState.copy(item = viewState.item.copy(departamentFrom = act.newDepartmentHuman))
+            }
+
+            is DetailRequestEvent.OnDepartmentTo -> {
+                viewState = viewState.copy(item = viewState.item.copy(departamentTo = act.newDepartmentHuman))
+            }
         }
     }
-    fun openEnabledRequest(enabled: Boolean){
-        viewState = viewState.copy(enabled = enabled)
-        checkEnabledButton()
+
+    fun openEnabledRequest(enabled: Boolean) {
+        if (enabled) {
+            viewModelScope.launch {
+                val isChange = viewModelScope.async {
+                    getRequestChangeDetailUseCase.invoke(
+                        listId = listId,
+                        requestGuid = item.guid
+                    ).getOrNull()
+                }
+                val change = isChange.await()
+                if (change?.anotheritemver == false) {
+                    viewState = viewState.copy(enabled = enabled)
+                    checkEnabledButton()
+                }
+                //TODO доработать сообщение об ошибке
+                else {
+                    showErrorToast(Exception())
+                    action = DetailRequestAction.returnScreenList
+                }
+            }
+        } else {
+            viewModelScope.launch {
+                getRequestEditUseCase.invoke(listId, item.guid).collectLatest { result ->
+                    when (result) {
+                        is DataStatus.Success ->{
+                            viewState = viewState.copy(item = result.data.item)
+                            action = DetailRequestAction.returnScreenList
+                            showErrorToast(Exception("Заявка изменена"))
+                        }
+                        is DataStatus.Error ->{}
+                        is DataStatus.Loading -> {}
+                    }
+                }
+            }
+        }
     }
 
     init {
         viewModelScope.launch {
             viewState = viewState.copy(item = item)
         }
+
+        viewModelScope.launch {
+            subscribeEvent<EventType.OnYearMonthDayPicked> {
+                if (it.id == ARG_START_DATE) {
+                    changeCurrentFromYearMonthDay(it.yearMonthDay)
+                } else {
+                    changeCurrentToYearMonthDay(it.yearMonthDay)
+                }
+            }
+        }
     }
+
     private fun changePickFileOption(option: PickFileOption) {
         viewModelScope.launch {
             viewState = viewState.copy(
@@ -67,13 +147,21 @@ class DetailRequestViewModel(
         }
     }
 
+    private fun changeCurrentToYearMonthDay(newYearMonthDay: LocalDate) {
+        // viewState = viewState.setEndDate(newYearMonthDay)
+    }
+
+    private fun changeCurrentFromYearMonthDay(newYearMonthDay: LocalDate) {
+        //viewState = viewState.setStartDate(newYearMonthDay)
+    }
+
     private fun addFiles(files: List<String>) {
         viewModelScope.launch {
-          /*  viewState = viewState.copy(
-                item = viewState.item.copy(
-                    photos = viewState.item.photos.toMutableList().apply { addAll(files) }.toList()
-                )
-            )*/
+            /*  viewState = viewState.copy(
+                  item = viewState.item.copy(
+                      photos = viewState.item.photos.toMutableList().apply { addAll(files) }.toList()
+                  )
+              )*/
             checkEnabledButton()
         }
     }
@@ -102,104 +190,39 @@ class DetailRequestViewModel(
                         && viewState.item.statusPatient != null
             )
     }
-    private val allRequestStatus: MutableList<RequestStatusHuman> = mutableListOf()
-    private val allStatusPatient: MutableList<StatusPatientHuman> = mutableListOf()
-    private val allUrgently: MutableList<UrgencyHuman> = mutableListOf()
-    private val allExecutor: MutableList<UserHuman> = mutableListOf()
-    fun getRequestStatus() {
-        viewModelScope.launch {
-            getSelectStatusRequestUseCase.invoke().collectLatest {
-                when (it) {
-                    DataStatus.Loading -> {}
-
-                    is DataStatus.Error -> {
-                        showErrorToast(it.ex)
-                    }
-
-                    is DataStatus.Success -> {
-                        allRequestStatus.clear()
-                        allRequestStatus.addAll(it.data)
-                    }
-                }
-            }
-        }
-    }
-
-    fun getPatientStatus() {
-        viewModelScope.launch {
-            getPatientStatusUseCase.invoke().collectLatest {
-                when (it) {
-                    DataStatus.Loading -> {}
-
-                    is DataStatus.Error -> {
-                        showErrorToast(it.ex)
-                    }
-
-                    is DataStatus.Success -> {
-                        allStatusPatient.clear()
-                        allStatusPatient.addAll(it.data)
-                    }
-                }
-            }
-        }
-    }
-
-    fun getUrgently() {
-        viewModelScope.launch {
-            getSelectUrgentlyUseCase.invoke().collectLatest {
-                when (it) {
-                    DataStatus.Loading -> {}
-
-                    is DataStatus.Error -> {
-                        showErrorToast(it.ex)
-                    }
-
-                    is DataStatus.Success -> {
-                        allUrgently.clear()
-                        allUrgently.addAll(it.data)
-                    }
-                }
-            }
-        }
-    }
-
-
-    fun getExecutor() {
-        viewModelScope.launch {
-            getExecutorUseCase.invoke().collectLatest {
-                when (it) {
-                    DataStatus.Loading -> {}
-
-                    is DataStatus.Error -> {
-                        showErrorToast(it.ex)
-                    }
-
-                    is DataStatus.Success -> {
-                        allExecutor.clear()
-                        allExecutor.addAll(it.data)
-                    }
-                }
-            }
-        }
-    }
 
     init {
         subscribeEvent<EventType.OnStatusRequest> {
             viewState = viewState.copy(item = viewState.item.copy(statusRequest = it.statusRequest))
         }
-        getRequestStatus()
+
 
         subscribeEvent<EventType.OnStatusPatient> {
             viewState = viewState.copy(item = viewState.item.copy(statusPatient = it.statusPatient))
         }
-        getPatientStatus()
+
         subscribeEvent<EventType.OnUrgently> {
             viewState = viewState.copy(item = viewState.item.copy(urgency = it.urgently))
         }
-        getUrgently()
+
         subscribeEvent<EventType.OnExecutor> {
             viewState = viewState.copy(item = viewState.item.copy(executors = it.executor))
         }
-        getExecutor()
+        subscribeEvent<EventType.OnDivision> {
+            viewState = viewState.copy(
+                divisionHuman = it.division,
+                item = viewState.item.copy(
+                    division = it.division,
+                    departamentFrom = viewState.item.departamentFrom.copy(name = ""),
+                    departamentTo = viewState.item.departamentTo.copy(name = "")
+                )
+            )
+        }
+    }
+
+    companion object {
+        const val ARG_START_DATE = 1
+        const val ARG_END_DATE = 2
     }
 }
+

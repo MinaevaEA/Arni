@@ -79,3 +79,4 @@ fun <T : Any> InfiniteSpinner(
         }
     }
 }
+

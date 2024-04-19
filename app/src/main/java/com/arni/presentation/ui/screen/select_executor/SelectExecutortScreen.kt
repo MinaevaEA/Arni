@@ -8,6 +8,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.arni.presentation.model.human.ExecutorHuman
 import com.arni.presentation.model.human.UserHuman
 import com.arni.presentation.ui.screen.select_executor.ui.SelectExecutorAction
 import com.arni.presentation.ui.screen.select_executor.ui.SelectExecutorView
@@ -16,7 +17,7 @@ import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
 import pro.midev.mec.presentation.ui.style.ArniTheme
 
-class SelectExecutorScreen(val list: List<UserHuman>) : Screen {
+class SelectExecutorScreen(val list: List<ExecutorHuman>) : Screen {
     @Composable
     override fun Content() {
         SelectExecutorScreen(viewModel = getViewModel { parametersOf(list) })
