@@ -13,6 +13,7 @@ data class SignInState(
     val isFormValidated: Boolean = false,
     val phoneError: String? = null,
     val passwordError: String? = null,
+    val isLoading: Boolean = false
 ) : BaseState
 
 sealed interface SignInEvent : BaseEvent {

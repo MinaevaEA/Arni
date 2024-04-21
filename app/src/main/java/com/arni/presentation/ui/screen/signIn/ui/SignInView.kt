@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.arni.R
 import com.arni.presentation.ui.components.ButtonFillLarge
 import com.arni.presentation.ui.components.TextFieldInput
+import com.arni.presentation.ui.screen.state_machine.LoadingStateView
 import pro.midev.mec.presentation.ui.style.ArniTheme
 
 @Composable
@@ -72,6 +73,9 @@ fun SignInView(
             onEndIconClick = { },
             enabled = true
         )
+        if (state.isLoading){
+            LoadingStateView()
+        }
 
         ButtonFillLarge(
             modifier = Modifier

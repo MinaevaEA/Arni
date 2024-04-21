@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.arni.data.base.DataStatus
 import com.arni.domain.usecase.auth.AuthUseCase
 import com.arni.presentation.base.BaseViewModel
+import com.arni.presentation.ui.screen.state_machine.LoadingStateView
 import com.arni.remote.exceptions.ArniRemoteException
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -49,9 +50,10 @@ class SignInViewModel(val authUseCase: AuthUseCase) :
             authUseCase.invoke(viewState.user)
                 .collectLatest { result ->
                     when (result) {
-                        is DataStatus.Success -> action =
-                            SignInAction.OpenNextScreen
-
+                        is DataStatus.Success -> {
+                            action = SignInAction.OpenNextScreen
+                            viewState = viewState.copy(isLoading = false)
+                        }
                         is DataStatus.Error -> {
                             if(result.ex is ArniRemoteException) {
                                 when(result.ex.message) {
@@ -69,7 +71,9 @@ class SignInViewModel(val authUseCase: AuthUseCase) :
                             }
                         }
 
-                        is DataStatus.Loading -> {}
+                        is DataStatus.Loading -> {
+                           viewState = viewState.copy(isLoading = true)
+                        }
                     }
                 }
         }
