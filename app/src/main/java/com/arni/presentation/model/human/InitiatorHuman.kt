@@ -1,5 +1,6 @@
 package com.arni.presentation.model.human
 
+import com.arni.remote.model.request.InitiatorRequest
 import kotlinx.parcelize.Parcelize
 import java.io.Serializable
 
@@ -16,3 +17,7 @@ data class InitiatorHuman(
         )
     }
 }
+fun InitiatorHuman.toRequest() = InitiatorRequest(
+    guid = guid,
+    name = name
+)

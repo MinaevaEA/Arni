@@ -1,5 +1,6 @@
 package com.arni.presentation.model.human
 
+import com.arni.remote.model.request.StatusPatientRequest
 import kotlinx.parcelize.Parcelize
 import java.io.Serializable
 
@@ -16,3 +17,7 @@ data class StatusPatientHuman(
         )
     }
 }
+fun StatusPatientHuman.toRequest() = StatusPatientRequest(
+    guid = guid,
+    name = name
+)

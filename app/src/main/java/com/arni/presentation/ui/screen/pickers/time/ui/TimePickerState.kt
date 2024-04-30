@@ -8,17 +8,16 @@ import kotlinx.collections.immutable.persistentListOf
 
 
 data class TimePickerState(
-    val hoursList: ImmutableList<Int> = persistentListOf(),
-    val minutesList: ImmutableList<Int> = persistentListOf(),
+    val hoursList: List<Int> = listOf(),
+    val minutesList: List<Int> = listOf(),
 ) : BaseState
 
 sealed interface TimePickerEvent : BaseEvent {
-    object OnCreate: TimePickerEvent
     data class OnHourSelected(val hour: Int) : TimePickerEvent
 
     data class OnMinuteSelected(val minute: Int): TimePickerEvent
     object OnBackPressed : TimePickerEvent
-    object OnConfirm : TimePickerEvent
+    class OnConfirm(val idTime: Int) : TimePickerEvent
 }
 
 sealed interface TimePickerAction : BaseAction {

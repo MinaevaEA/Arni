@@ -32,10 +32,10 @@ val viewModelModule = module {
         SignInViewModel(get())
     }
     viewModel {
-       ProfileViewModel()
+        ProfileViewModel()
     }
     viewModel {
-        GeneralRequestViewModel(get(), get())
+        GeneralRequestViewModel(get(), get(), get())
     }
     viewModel {
         SelectDivisionViewModel(get(), get())
@@ -44,7 +44,7 @@ val viewModelModule = module {
         FilterViewModel()
     }
     viewModel {
-        CreateRequestViewModel(get(), get(), get(), get())
+        CreateRequestViewModel(get(), get(), get())
     }
     viewModel {
         SelectExecutorViewModel(get())
@@ -63,14 +63,14 @@ val viewModelModule = module {
         SelectStatusRequestViewModel(params[0])
     }
     viewModel {
-        DetailRequestViewModel(get(), get(),get(),get(),get(),get())
+        DetailRequestViewModel(get(), get(), get(), get(), get(), get())
     }
-    viewModel {
-        TimePickerViewModel(/*params[0], params[1], params[2], params[3], params[4]*/)
+    viewModel { params ->
+        TimePickerViewModel(params[0], params[1], params[2])
     }
 
-    viewModel {params ->
-        YearMonthDayPickerViewModel(params[0], params[1], params[2], params[3])
+    viewModel { params ->
+        YearMonthDayPickerViewModel(params[0], params[1], params[2])
     }
 
     viewModel { params ->

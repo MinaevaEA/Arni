@@ -39,14 +39,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.arni.R
 import com.arni.presentation.enum.StatusRequests
+import com.arni.presentation.enum.StatusRoleHuman
 import com.arni.presentation.ui.components.AddFilesBS
+import com.arni.presentation.ui.components.CheckBoxMy
 import com.arni.presentation.ui.components.PhotoLine
 import com.arni.presentation.ui.components.TextFieldInput
 import com.arni.presentation.ui.components.TextFieldSelector
 import com.arni.presentation.ui.components.TextTitleToolbar
+import com.arni.presentation.ui.screen.request.detail.ui.DetailRequestEvent
 import com.arni.presentation.util.ComposeFileProvider
 import kotlinx.coroutines.launch
 import pro.midev.mec.presentation.ui.style.ArniTheme
+import java.text.SimpleDateFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -64,13 +68,13 @@ fun CreateRequestView(
             it.forEach {
                 context.contentResolver.takePersistableUriPermission(it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
-         /*   eventConsumer(
-                CreateRequestEvent.OnFileChosen(
-                    it.take(6 - state.item.photos.size).map { uri ->
-                        uri.toString()
-                    }.toList()
-                )
-            )*/
+            /*   eventConsumer(
+                   CreateRequestEvent.OnFileChosen(
+                       it.take(6 - state.item.photos.size).map { uri ->
+                           uri.toString()
+                       }.toList()
+                   )
+               )*/
         }
     val cameraLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture(),
@@ -187,91 +191,115 @@ fun CreateRequestView(
                     TextFieldSelector(
                         label = stringResource(id = R.string.status_order),
                         onClick = { eventConsumer(CreateRequestEvent.onClickSelectStatus) },
-                        text = when (state.item.statusRequest?.guid) {
-                       /*     StatusRequests.parse(StatusRequests.WORK) -> "Рабочая"
+                        text = when (state.item?.statusRequest?.name) {
+                            StatusRequests.parse(StatusRequests.WORK) -> "Рабочая"
                             StatusRequests.parse(StatusRequests.DRAFT) -> "Черновик"
-                            StatusRequests.parse(StatusRequests.COMPLETED) -> "Завершена"*/
+                            StatusRequests.parse(StatusRequests.COMPLETED) -> "Завершена"
                             else -> {
                                 ""
                             }
                         }
                     )
+                    val currentFormat = SimpleDateFormat("yyyy-MM-dd\'T\'HH:mm:ss")
+                    val date = currentFormat.parse(state.item.date)
+                    val targetFormatDate = SimpleDateFormat("dd.MM.yyyy HH:mm")
+                    val targetFormatTime = SimpleDateFormat("HH:mm")
+                    val currentDate = targetFormatDate.format(date)
+                    val currentTime = targetFormatTime.format(date)
                     TextFieldSelector(
                         label = stringResource(id = R.string.date_order),
                         onClick = { eventConsumer(CreateRequestEvent.onClickSelectorDate) },
-                        text = state.item.date ?: ""
+                        text = currentDate ?: ""
                     )
+
                     TextFieldSelector(
                         label = stringResource(id = R.string.time_order),
                         onClick = { eventConsumer(CreateRequestEvent.onClickSelectorTime) },
-                        text = state.item.date ?: ""
+                        text = currentTime ?: ""
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.local_order),
-                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectsubDivision) },
-                        //todo откуда берется подразделение
-                        text = state.human.subdivision ?: ""
+                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectDivision(state.dictionary.division)) },
+                        text = state.item.division.name ?: ""
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.from_local),
-                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectDepartament(state.subdivisionHuman.departaments)) },
+                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectDepartamentFrom(state.divisionHuman.department)) },
                         text = state.item.departamentFrom.name ?: ""
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.to_local),
-                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectDepartament(state.subdivisionHuman.departaments)) },
+                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectDepartamentTo(state.divisionHuman.department)) },
                         text = state.item.departamentTo.name ?: ""
                     )
+                    /*   //val dateBegin = currentFormat.parse(state.item.startDate)
+                       val currentDateBegin = state.item.startDate.let { targetFormatDate.format(it) }
+                       val currentTimeBegin = state.item.startDate?.let { targetFormatTime.format(it) }*/
                     TextFieldSelector(
                         label = stringResource(id = R.string.begin_date),
                         onClick = { eventConsumer(CreateRequestEvent.onClickSelectorTime) },
                         text = state.item.startDate ?: ""
                     )
                     TextFieldSelector(
+                        label = stringResource(id = R.string.begin_time),
+                        onClick = { /*eventConsumer(DetailRequestEvent.onClickSelectorTimeBegin)*/ },
+                        text = state.item.startDate  ?: "",
+                        enabled = true
+                    )
+                    TextFieldSelector(
                         label = stringResource(id = R.string.end_date),
                         onClick = { eventConsumer(CreateRequestEvent.onClickSelectorTime) },
-                        text = state.item.endDate ?: ""
+                        text = state.item.startDate ?: ""
+                    )
+                    TextFieldSelector(
+                        label = stringResource(id = R.string.end_time),
+                        onClick = { /*eventConsumer(DetailRequestEvent.onClickSelectorTimeEnd)*/ },
+                        text = state.item.startDate ?: "",
+                        enabled = true
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.draft_order),
-                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectUrgently) },
-                        text = state.item.urgency?.name ?: ""
+                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectUrgently(state.dictionary.urgency)) },
+                        text = state.item.urgency.name ?: ""
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.checking_order),
-                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectExecutor) },
-                        text = /*state.item.executors?.forEach { it.name } ?:*/ ""
+                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectExecutor((state.divisionHuman.executors))) },
+                        text = "${state.item.executors?.joinToString { it.name }}"
                     )
                     TextFieldInput(
                         label = stringResource(id = R.string.name_patient_order),
                         enabled = true,
-                        text = /*state.item.patients ?:*/ ""
+                        text = state.item.patients.joinToString { it.name },
+                        onValueChange = {eventConsumer(CreateRequestEvent.onChangePatient(it))}
                     )
-                    TextFieldSelector(
-                        label = stringResource(id = R.string.status_patient),
-                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectStatusPatient) },
-                        text = state.item.statusPatient?.name ?: ""
-                    )
-                    TextFieldInput(
-                        label = stringResource(id = R.string.comment_order),
-                        enabled = true,
-                        text = state.item.description ?: ""
-                    )
-                    //todo компонент фото
-                    Text(
-                        text = stringResource(id = R.string.photo), style = ArniTheme.typography.subhead.regular,
-                        color = ArniTheme.colors.neutral_300,
-                        modifier = Modifier.padding(bottom = 4.dp)
-                    )
-                  /*  PhotoLine(
-                        addPhotoAction = {
-                            showSelectMediaOptionBs.value = true
-                        },
-                        deletePhotoAction = {
-                            eventConsumer(CreateRequestEvent.OnFileDelete(it))
-                        },
-                        photos = state.item.photos
-                    )*/
+                     TextFieldSelector(
+                         label = stringResource(id = R.string.status_patient),
+                         onClick = { eventConsumer(CreateRequestEvent.onClickSelectStatusPatient(state.dictionary.statusPatient)) },
+                         text = state.item.statusPatient.name ?: ""
+                     )
+                      TextFieldInput(
+                          label = stringResource(id = R.string.comment_order),
+                          enabled = true,
+                          text = state.item.comment ?: "",
+                          onValueChange = {eventConsumer(CreateRequestEvent.onChangeDescription(it)) }
+
+                      )
+                    /*       //todo компонент фото
+                           Text(
+                               text = stringResource(id = R.string.photo), style = ArniTheme.typography.subhead.regular,
+                               color = ArniTheme.colors.neutral_300,
+                               modifier = Modifier.padding(bottom = 4.dp)
+                           )*/
+                    /*  PhotoLine(
+                          addPhotoAction = {
+                              showSelectMediaOptionBs.value = true
+                          },
+                          deletePhotoAction = {
+                              eventConsumer(CreateRequestEvent.OnFileDelete(it))
+                          },
+                          photos = state.item.photos
+                      )*/
                 }
             }
         }
@@ -283,6 +311,6 @@ fun CreateRequestView(
 @Preview
 private fun DetailRequestViewPreview() {
     ArniTheme {
-        CreateRequestView(state = CreateRequestState(), eventConsumer = {})
+        CreateRequestView(state = CreateRequestState(""), eventConsumer = {})
     }
 }

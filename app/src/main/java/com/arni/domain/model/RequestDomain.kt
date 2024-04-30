@@ -6,6 +6,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class RequestDomain(
     val guid: String,
+    val markdelete: Boolean,
     val date: String,
     val number: String,
     val division: DivisionDomain,
@@ -25,6 +26,7 @@ data class RequestDomain(
 
 fun RequestDomain.toHuman() = RequestHuman(
     guid = guid,
+    markdelete = markdelete,
     date = date,
     number = number,
     division = division.toHuman(),

@@ -74,7 +74,7 @@ val remoteStorageModule = module {
     single {
         get<Retrofit.Builder>()
             // TODO ссылка на сервер
-            .baseUrl("https://1c.internal-inra.ru:12000/KA_BF_KUZ/hs/dispatcher/v1/")
+            .baseUrl("https://1c.internal-inra.ru:12000/KA_BF_kuz/hs/dispatcher/v1/")
             .build()
     }
 

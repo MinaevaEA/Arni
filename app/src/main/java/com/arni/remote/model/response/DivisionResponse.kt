@@ -1,9 +1,10 @@
 package com.arni.remote.model.response
 
 import com.arni.domain.model.DivisionDomain
+import com.arni.domain.model.DivisionRequestDomain
 import com.google.gson.annotations.SerializedName
 
-//TODO модель только для словаря
+//TODO модель только для заявок
 data class DivisionResponse(
     @SerializedName("guid")
     val guid: String?,
@@ -13,14 +14,6 @@ data class DivisionResponse(
     val executors: List<ExecutorResponse>?,
     @SerializedName("departmentcollection")
     val department: List<DepartamentResponse>?,
- /*   @SerializedName("statusitemcollection")
-    val statusItem:List<StatusItemResponse>,
-    @SerializedName("initiator")
-    val initiatorResponse: InitiatorResponse,
-    @SerializedName("urgencycollection")
-    val urgency:List<UrgencyResponse>,
-    @SerializedName("statuspatientcollection")
-    val statusPatient:List<UrgencyResponse>,*/
 )
 fun DivisionResponse.toDomain() = DivisionDomain(
     guid = guid ?: "",

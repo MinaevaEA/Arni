@@ -6,15 +6,17 @@ import com.arni.presentation.model.human.DivisionHuman
 data class DivisionDomain(
     val guid: String,
     val name: String,
-    val role: String,
-    val executors: List<ExecutorDomain>?,
-    val department: List<DepartamentDomain>?,
+    val role: String? = "",
+    val executors: List<ExecutorDomain>? = listOf(),
+    val department: List<DepartamentDomain>? = listOf(),
 )
+
 fun DivisionDomain.toHuman() = DivisionHuman(
     guid = guid,
     name = name,
-    role = role,
-    evecutors = executors?.toHuman() ?: listOf(),
+    role = role ?: "",
+    executors = executors?.toHuman() ?: listOf(),
     department = department?.toHuman() ?: listOf()
 )
+
 fun List<DivisionDomain>.toHuman() = map { it.toHuman() }

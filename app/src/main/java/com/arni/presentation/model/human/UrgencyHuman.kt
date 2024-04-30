@@ -1,5 +1,6 @@
 package com.arni.presentation.model.human
 
+import com.arni.remote.model.request.UrgencyRequest
 import kotlinx.parcelize.Parcelize
 import java.io.Serializable
 
@@ -16,3 +17,8 @@ data class UrgencyHuman(
         )
     }
 }
+
+fun UrgencyHuman.toRequest() = UrgencyRequest(
+    guid = guid,
+    name = name
+)

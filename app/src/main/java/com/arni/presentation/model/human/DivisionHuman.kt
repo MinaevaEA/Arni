@@ -1,11 +1,13 @@
 package com.arni.presentation.model.human
 
+import com.arni.remote.model.request.DivisionRequest
+
 
 data class DivisionHuman(
     val guid: String,
     val name: String,
     val role: String,
-    val evecutors: List<ExecutorHuman>,
+    val executors: List<ExecutorHuman>,
     var department: List<DepartmentHuman>,
 ) {
     companion object {
@@ -13,8 +15,15 @@ data class DivisionHuman(
             guid = "",
             name = "",
             role = "",
-            evecutors = listOf(),
+            executors = listOf(),
             department = listOf()
         )
     }
 }
+fun DivisionHuman.toRequest() = DivisionRequest(
+    guid = guid,
+    name = name,
+    role = role,
+    executors = executors.toRequest(),
+    department = department.toRequest()
+)

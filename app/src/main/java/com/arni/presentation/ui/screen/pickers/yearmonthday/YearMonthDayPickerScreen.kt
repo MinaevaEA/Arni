@@ -9,8 +9,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
+import com.arni.presentation.model.human.DepartmentHuman
 import com.arni.presentation.ui.screen.pickers.yearmonthday.ui.YearMonthDayPickerAction
-import com.arni.presentation.ui.screen.pickers.yearmonthday.ui.YearMonthDayPickerEvent
+import com.arni.presentation.ui.screen.pickers.yearmonthday.ui.YearMonthDayPickerState
 import com.arni.presentation.ui.screen.pickers.yearmonthday.ui.YearMonthDayPickerView
 import com.arni.presentation.ui.screen.pickers.yearmonthday.ui.YearMonthDayPickerViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -19,26 +20,25 @@ import pro.midev.mec.presentation.ui.style.ArniTheme
 import java.time.LocalDate
 
 class YearMonthDayPickerScreen(
- /*   private val id: Int,
-    private val initial: LocalDate? = null,
-    private val min: LocalDate? = null,
-    private val max: LocalDate? = null*/
+    private val selectDate: LocalDate? = null,
+    private val minDate: LocalDate? = null,
+    private val maxDate: LocalDate? = null,
+    private val idDate: Int = 0,
 ) : Screen {
-
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     override fun Content() {
         YearMonthDayPickerScreen(
-            viewModel = koinViewModel()/*getScreenModel { parametersOf(id, initial, min, max) }*/
+            viewModel = koinViewModel { parametersOf(selectDate, minDate, maxDate)  }, idDate = idDate
         )
     }
-
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 private fun YearMonthDayPickerScreen(
-    viewModel: YearMonthDayPickerViewModel
+    viewModel: YearMonthDayPickerViewModel,
+    idDate: Int = 0,
 ) {
 
     val bottomSheetNavigator = LocalBottomSheetNavigator.current
@@ -46,20 +46,17 @@ private fun YearMonthDayPickerScreen(
     val action by viewModel.viewActions.collectAsStateWithLifecycle(initialValue = null)
 
     LaunchedEffect(action) {
-        when (action) {
-            YearMonthDayPickerAction.Dismiss -> bottomSheetNavigator.hide()
-            null -> Unit
-        }
+    when (action) {
+        YearMonthDayPickerAction.Dismiss -> bottomSheetNavigator.hide()
+        null -> Unit
     }
-
-    LaunchedEffect(true) {
-        viewModel.obtainEvent(YearMonthDayPickerEvent.OnCreate)
     }
 
     ArniTheme {
         YearMonthDayPickerView(
             state = state,
-            eventConsumer = viewModel::obtainEvent
+            eventConsumer = viewModel::obtainEvent,
+            idDate = idDate
         )
     }
 }

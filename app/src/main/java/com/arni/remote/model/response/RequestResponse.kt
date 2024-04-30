@@ -3,7 +3,6 @@ package com.arni.remote.model.response
 import com.arni.domain.model.DepartamentDomain
 import com.arni.domain.model.DispatcherDomain
 import com.arni.domain.model.DivisionDomain
-import com.arni.domain.model.DivisionRequestDomain
 import com.arni.domain.model.InitiatorDomain
 import com.arni.domain.model.RequestDomain
 import com.arni.domain.model.StatusItemDomain
@@ -15,6 +14,8 @@ import com.google.gson.annotations.SerializedName
 data class RequestResponse(
     @SerializedName("guid")
     val guid: String?,
+    @SerializedName("markdelete")
+    val markdelete: Boolean,
     @SerializedName("date")
     val date: String?,
     @SerializedName("number")
@@ -49,6 +50,7 @@ data class RequestResponse(
 
 fun RequestResponse.toDomain() = RequestDomain(
     guid = guid ?: "",
+    markdelete = markdelete,
     date = date ?: "",
     number = number ?: "",
     division = division?.toDomain() ?: DivisionDomain("", "", "", listOf(), listOf()),

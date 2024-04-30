@@ -5,27 +5,40 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.androidx.AndroidScreen
+import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.arni.presentation.model.human.DictionaryHuman
+import com.arni.presentation.model.human.DivisionHuman
+import com.arni.presentation.model.human.RequestHuman
+import com.arni.presentation.model.human.UserHuman
 import com.arni.presentation.ui.screen.pickers.time.TimePickerScreen
 import com.arni.presentation.ui.screen.pickers.yearmonthday.YearMonthDayPickerScreen
 import com.arni.presentation.ui.screen.request.create.ui.CreateRequestAction
+import com.arni.presentation.ui.screen.request.create.ui.CreateRequestEvent
 import com.arni.presentation.ui.screen.request.create.ui.CreateRequestView
 import com.arni.presentation.ui.screen.request.create.ui.CreateRequestViewModel
-import com.arni.presentation.ui.screen.select_departament.SelectDepartamentScreen
+import com.arni.presentation.ui.screen.request.detail.ui.DetailRequestAction
+import com.arni.presentation.ui.screen.request.detail.ui.DetailRequestEvent
+import com.arni.presentation.ui.screen.select_departament.SelectDepartmentScreen
+import com.arni.presentation.ui.screen.select_division_detail.SelectDivisionDetailScreen
 import com.arni.presentation.ui.screen.select_executor.SelectExecutorScreen
 import com.arni.presentation.ui.screen.select_status_patient.SelectStatusPatientScreen
 import com.arni.presentation.ui.screen.select_status_request.SelectStatusRequestScreen
-import com.arni.presentation.ui.screen.select_subdivision.SelectSubdivisionScreen
 import com.arni.presentation.ui.screen.select_urgently_status.SelectUrgentlyStatusScreen
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 import pro.midev.mec.presentation.ui.style.ArniTheme
 
-class CreateRequestScreen: AndroidScreen() {
+class CreateRequestScreen(
+    val listId: String,
+    val dictionaryHuman: DictionaryHuman,
+    val divisionHuman: DivisionHuman
+): Screen {
     @Composable
     override fun Content() {
-       CreateRequestScreen(viewModel = koinViewModel())
+       CreateRequestScreen(viewModel = koinViewModel { parametersOf(listId, dictionaryHuman, divisionHuman) })
     }
 
     @Composable
@@ -39,14 +52,27 @@ class CreateRequestScreen: AndroidScreen() {
 
         LaunchedEffect(action) {
             when (val act = action) {
+                is CreateRequestAction.OpenTimePickerRequest -> {
+                    bottomSheetNavigator.show(TimePickerScreen(act.initial, act.minDate,act.maxDate, act.id))
+                }
                 CreateRequestAction.returnGeneralScreen -> navigator.pop()
-                is CreateRequestAction.OpenTimePicker ->bottomSheetNavigator.show(TimePickerScreen(/* act.id,act.initial)*/))
-                is CreateRequestAction.OpenYearMonthDayPicker -> bottomSheetNavigator.show(YearMonthDayPickerScreen())
+                is CreateRequestAction.OpenYearMonthDayPickerRequest -> {
+                    bottomSheetNavigator.show(YearMonthDayPickerScreen(act.selectDate, act.maxDate, act.minDate, act.id))}
                 is CreateRequestAction.openRequestStatusScreen -> bottomSheetNavigator.show(
                     SelectStatusRequestScreen(act.list)
                 )
-                is CreateRequestAction.openDepartamentScreen -> bottomSheetNavigator.show(SelectDepartamentScreen(act.listDepartamentHuman))
-                is CreateRequestAction.openSubDivisionScreen -> bottomSheetNavigator.show(SelectSubdivisionScreen())
+                is CreateRequestAction.openDepartamentScreenFrom -> bottomSheetNavigator.show(
+                    SelectDepartmentScreen(departments = act.listDepartmentHuman, onSelect = {
+                        viewModel.obtainEvent(CreateRequestEvent.OnDepartmentFrom(it))
+                    })
+                )
+                is CreateRequestAction.openUrgentlyScreen -> bottomSheetNavigator.show(SelectUrgentlyStatusScreen(act.list))
+                is CreateRequestAction.openDepartamentScreenTo -> bottomSheetNavigator.show(
+                    SelectDepartmentScreen(departments = act.listDepartmentHuman, onSelect = {
+                        viewModel.obtainEvent(CreateRequestEvent.OnDepartmentTo(it))
+                    })
+                )
+                is CreateRequestAction.openDivisionScreen -> bottomSheetNavigator.show(SelectDivisionDetailScreen(act.listDivision))
                 is CreateRequestAction.openUrgentlyScreen -> bottomSheetNavigator.show(SelectUrgentlyStatusScreen(act.list))
                 is CreateRequestAction.openExecutorScreen -> bottomSheetNavigator.show(SelectExecutorScreen(act.list))
                 is CreateRequestAction.openStatusPatientScreen -> bottomSheetNavigator.show(SelectStatusPatientScreen(act.list))

@@ -3,6 +3,7 @@ package com.arni.domain.di
 import com.arni.domain.usecase.GetRequestChangeDetailUseCase
 import com.arni.domain.usecase.GetRequestEditUseCase
 import com.arni.domain.usecase.auth.AuthUseCase
+import com.arni.domain.usecase.request.GetChangeRequestUseCase
 import com.arni.domain.usecase.request.GetDictionaryUseCase
 import com.arni.domain.usecase.request.GetRequestUseCase
 import com.arni.domain.usecase.selects_delete.GetExecutorUseCase
@@ -29,6 +30,9 @@ val useCaseModule = module {
     }
     factory {
         GetRequestUseCase(get())
+    }
+    factory {
+        GetChangeRequestUseCase(get())
     }
     factory {
         GetSubDivisionUseCase()

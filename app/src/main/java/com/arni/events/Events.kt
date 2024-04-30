@@ -41,9 +41,13 @@ sealed interface EventType : BaseEventType {
 
     data class ChangeVisibilityBottomMenu(val isVisible: Boolean) : EventType
     data class ShowErrorToast(val ex: Exception) : EventType
-    data class OnTimePicked(val time: LocalTime, val id: Int) : EventType
+    data class OnTimeRequestPicked(val time: LocalTime) : EventType
+    data class OnTimeBeginPicked(val time: LocalTime) : EventType
+    data class OnTimeEndPicked(val time: LocalTime) : EventType
     data class OnYearMonthPicked(val yearMonth: YearMonth) : EventType
-    data class OnYearMonthDayPicked(val yearMonthDay: LocalDate, val id: Int) : EventType
+    data class OnYearMonthDayRequestPicked(val yearMonthDay: LocalDate) : EventType
+    data class OnYearMonthDayBeginPicked(val yearMonthDay: LocalDate) : EventType
+    data class OnYearMonthDayEndPicked(val yearMonthDay: LocalDate) : EventType
     data class ShowTextToast(val text: String) : EventType
 
     data class OnStatusRequest(val statusRequest: RequestStatusHuman) : EventType
@@ -55,6 +59,6 @@ sealed interface EventType : BaseEventType {
     class OnDivision(val division: DivisionHuman) : EventType
     class OnDepatmentFrom(val depatmentFrom: DepartmentHuman) : EventType
     class OnDepatmentTo(val depatmentTo: DepartmentHuman) : EventType
-    class OnChangeAllDepartment(depatmentTo: DepartmentHuman) : EventType
+    class OnChangeAllDepartment(val depatmentTo: DepartmentHuman) : EventType
     class OnUpdateDetailDepartment(val depatments: List<DepartmentHuman>) : EventType
 }

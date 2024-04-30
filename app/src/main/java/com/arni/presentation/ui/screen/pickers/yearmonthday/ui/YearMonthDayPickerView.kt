@@ -20,17 +20,28 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.arni.presentation.ui.components.InfiniteSpinner
 import com.arni.presentation.ui.screen.pickers.yearmonth.components.ButtonsBar
-import com.arni.presentation.util.CalendarUtils
 import kotlinx.collections.immutable.toPersistentList
 import pro.midev.mec.presentation.ui.style.ArniTheme
-import java.time.LocalDate
 
+
+@Composable
+@RequiresApi(Build.VERSION_CODES.O)
+fun YearMonthDayPickerView(
+    idDate: Int,
+    state: YearMonthDayPickerState,
+    eventConsumer: (YearMonthDayPickerEvent) -> Unit,
+) {
+ /*   when (state) {
+        is Content -> DrawContent(state = state, eventConsumer = eventConsumer)
+        Empty -> { }
+    }*/
+/*}
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun YearMonthDayPickerView(
-    state: YearMonthDayPickerState,
+fun DrawContent(
+    state: Content,
     eventConsumer: (YearMonthDayPickerEvent) -> Unit
-) {
+) {*/
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -44,7 +55,7 @@ fun YearMonthDayPickerView(
                 eventConsumer(YearMonthDayPickerEvent.OnBackPressed)
             },
             onReadyBtnClick = {
-                eventConsumer(YearMonthDayPickerEvent.OnConfirm)
+                eventConsumer(YearMonthDayPickerEvent.OnConfirm(idDate))
             },
             modifier = Modifier.padding(horizontal = 16.dp)
         )
@@ -61,8 +72,9 @@ fun YearMonthDayPickerView(
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
             InfiniteSpinner(
-                modifier = Modifier.width(50.dp),
-                list = /*state.daysList.map { it.toTimeString() }*/(0..31).toPersistentList(),
+                modifier = Modifier
+                    .width(50.dp),
+                list = state.daysList.map { it.toTimeString() },
                 firstIndex = 0,
                 onSelect = { day ->
                     eventConsumer(YearMonthDayPickerEvent.OnDaySelected(day.toInt()))
@@ -71,16 +83,17 @@ fun YearMonthDayPickerView(
             Spacer(modifier = Modifier.width(24.dp))
             InfiniteSpinner(
                 modifier = Modifier.width(130.dp),
-                list = /*state.monthList.map { CalendarUtils.getStandaloneMonthName(LocalDate.of(1970, it, 1).month) }*/(1..12).toPersistentList(),
+                list = state.monthList,
+                    // DateFormatSymbols(Locale.ENGLISH).months[0] ?: "123"//CalendarUtils.getStandaloneMonthName(it)
                 firstIndex = 0,
                 onSelect = { month ->
-                    eventConsumer(YearMonthDayPickerEvent.OnMonthSelected(CalendarUtils.getMonthToInt("Декабрь")))
+                    eventConsumer(YearMonthDayPickerEvent.OnMonthSelected(month.toInt()))
                 }
             )
             Spacer(modifier = Modifier.width(24.dp))
             InfiniteSpinner(
                 modifier = Modifier.wrapContentWidth(),
-                list = /*tate.yearList.map { it.toTimeString() }*/(1970..2023).toPersistentList(),
+                list = state.yearList,//.map { it.toTimeString() },
                 firstIndex = 0,
                 onSelect = { year ->
                     eventConsumer(YearMonthDayPickerEvent.OnYearSelected(year.toInt()))
@@ -91,6 +104,7 @@ fun YearMonthDayPickerView(
         Spacer(modifier = Modifier.height(32.dp))
     }
 }
+
 
 private fun Int.toTimeString(): String = this.toString().let {
     if (it.length == 1) "0$it" else it
@@ -107,9 +121,11 @@ private fun YearMonthPickerViewPreview() {
                 state = YearMonthDayPickerState(
                     daysList = (0..31).toPersistentList(),
                     monthList = (1..12).toPersistentList(),
-                    yearList = (1970..2023).toPersistentList()
+                    yearList = (1970..2023).toPersistentList(),
+                    1
                 ),
-                eventConsumer = {}
+                eventConsumer = {},
+                idDate = 1
             )
         }
     }

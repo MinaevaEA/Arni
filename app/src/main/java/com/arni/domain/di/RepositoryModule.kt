@@ -1,5 +1,6 @@
 package com.arni.domain.di
 
+import com.arni.domain.repository.ChangeRequestRepositoryRemote
 import com.arni.domain.repository.DictionaryRepositoryRemote
 import com.arni.domain.repository.RequestChangeRepositoryRemote
 import com.arni.domain.repository.RequestEditRepositoryRemote
@@ -17,6 +18,9 @@ val repositoryModule = module {
     }
     single {
         RequestRepositoryRemote(get())
+    }
+    single {
+        ChangeRequestRepositoryRemote(get())
     }
     single {
         RequestChangeRepositoryRemote(get())

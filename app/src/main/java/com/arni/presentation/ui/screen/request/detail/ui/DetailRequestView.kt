@@ -16,10 +16,8 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.IconButton
-import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
@@ -41,6 +39,7 @@ import com.arni.R
 import com.arni.presentation.enum.StatusRequests
 import com.arni.presentation.enum.StatusRoleHuman
 import com.arni.presentation.ui.components.AddFilesBS
+import com.arni.presentation.ui.components.CheckBoxMy
 import com.arni.presentation.ui.components.TextFieldInput
 import com.arni.presentation.ui.components.TextFieldSelector
 import com.arni.presentation.ui.components.TextTitleToolbar
@@ -55,14 +54,14 @@ import java.text.SimpleDateFormat
 fun DetailRequestView(
     state: DetailRequestState, eventConsumer: (DetailRequestEvent) -> Unit
 ) {
-    var showSelectMediaOptionBs = remember {
+    val showSelectMediaOptionBs = remember {
         mutableStateOf(false)
     }
-    val listState = rememberLazyListState()
     val context = LocalContext.current
     var cameraImageUri by remember {
         mutableStateOf<Uri?>(null)
     }
+
     val uri = ComposeFileProvider.getImageUri(context)
     val pickPhotoLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(6)) {
@@ -177,7 +176,7 @@ fun DetailRequestView(
             actionsEnd = {
                 IconButton(
                     enabled = state.isEditRequest && state.isEnabledButton,
-                    onClick = { eventConsumer(DetailRequestEvent.onClickToolbarButton(!state.enabled)) }
+                    onClick = { eventConsumer(DetailRequestEvent.onClickToolbarButton(state.item, !state.enabled)) }
                 ) {
                     Icon(
                         painter = if (!state.enabled) painterResource(R.drawable.ic_chat_pen) else painterResource(R.drawable.ic_check_mark),
@@ -201,6 +200,12 @@ fun DetailRequestView(
                         },
                         enabled = if (state.human.role != StatusRoleHuman.INITIAL) state.enabled else false
                     )
+                    val checkedState = remember(state.item.markdelete) {
+                        mutableStateOf(state.item.markdelete)
+                    }
+                    CheckBoxMy(text = "На удаление", checked = checkedState, onCheckedChange = { selected ->
+                        eventConsumer(DetailRequestEvent.isDelete(selected))
+                    })
                     val currentFormat = SimpleDateFormat("yyyy-MM-dd\'T\'HH:mm:ss")
                     val date = currentFormat.parse(state.item.date)
                     val targetFormatDate = SimpleDateFormat("dd.MM.yyyy")
@@ -209,16 +214,15 @@ fun DetailRequestView(
                     val currentTime = targetFormatTime.format(date)
                     TextFieldSelector(
                         label = stringResource(id = R.string.date_order),
-                        onClick = { eventConsumer(DetailRequestEvent.onClickSelectorDate) },
+                        onClick = { eventConsumer(DetailRequestEvent.onClickSelectorDateRequest) },
                         text = currentDate ?: "",
                         enabled = if (state.human.role == StatusRoleHuman.EXECUTOR
                             || state.human.role == StatusRoleHuman.EXECUTOR_INITIAL
                         ) false else state.enabled
                     )
-
                     TextFieldSelector(
                         label = stringResource(id = R.string.time_order),
-                        onClick = { eventConsumer(DetailRequestEvent.onClickSelectorTime) },
+                        onClick = { eventConsumer(DetailRequestEvent.onClickSelectorTimeRequest) },
                         text = currentTime ?: "",
                         enabled = if (state.human.role == StatusRoleHuman.EXECUTOR
                             || state.human.role == StatusRoleHuman.EXECUTOR_INITIAL
@@ -274,13 +278,13 @@ fun DetailRequestView(
                     val currentTimeBegin = dateBegin?.let { targetFormatTime.format(it) }
                     TextFieldSelector(
                         label = stringResource(id = R.string.begin_date),
-                        onClick = { eventConsumer(DetailRequestEvent.onClickSelectorDate) },
+                        onClick = { eventConsumer(DetailRequestEvent.onClickSelectorDateBegin) },
                         text = currentDateBegin ?: "",
                         enabled = if (state.human.role != StatusRoleHuman.INITIAL) state.enabled else false
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.begin_time),
-                        onClick = { eventConsumer(DetailRequestEvent.onClickSelectorTime) },
+                        onClick = { eventConsumer(DetailRequestEvent.onClickSelectorTimeBegin) },
                         text = currentTimeBegin ?: "",
                         enabled = if (state.human.role != StatusRoleHuman.INITIAL) state.enabled else false
                     )
@@ -289,25 +293,26 @@ fun DetailRequestView(
                     val currentTimeEnd = dateEnd?.let { targetFormatTime.format(it) }
                     TextFieldSelector(
                         label = stringResource(id = R.string.end_date),
-                        onClick = { eventConsumer(DetailRequestEvent.onClickSelectorDate) },
+                        onClick = { eventConsumer(DetailRequestEvent.onClickSelectorDateEnd) },
                         text = currentDateEnd ?: "",
                         enabled = if (state.human.role != StatusRoleHuman.INITIAL) state.enabled else false
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.end_time),
-                        onClick = { eventConsumer(DetailRequestEvent.onClickSelectorTime) },
+                        onClick = { eventConsumer(DetailRequestEvent.onClickSelectorTimeEnd) },
                         text = currentTimeEnd ?: "",
                         enabled = if (state.human.role != StatusRoleHuman.INITIAL) state.enabled else false
                     )
-                    TextFieldInput(
+                    TextFieldSelector(
                         label = stringResource(id = R.string.name_dispatcher),
                         text = state.item.nameDispatcher ?: "",
-                        enabled = if (state.human.role != StatusRoleHuman.INITIAL) state.enabled else false
+                        enabled = if (state.human.role != StatusRoleHuman.INITIAL) state.enabled else false,
+                        onClick = {/*eventConsumer(DetailRequestEvent.onClickDispatchers(state.dictionary.initiator))*/ }
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.draft_order),
                         onClick = { eventConsumer(DetailRequestEvent.onClickSelectUrgently(state.dictionary.urgency)) },
-                        text = state.item.urgency.name ?: "",
+                        text = state.item.urgency.name,
                         enabled =
                         if (state.human.role == StatusRoleHuman.EXECUTOR
                             || state.human.role == StatusRoleHuman.EXECUTOR_INITIAL
@@ -315,8 +320,9 @@ fun DetailRequestView(
                     )
                     TextFieldInput(
                         label = stringResource(id = R.string.name_patient_order),
-                        text = /*state.item.patients ?:*/ "",
-                        enabled = state.enabled
+                        text = state.item.patients.joinToString { it.name },
+                        enabled = state.enabled,
+                        onValueChange = { eventConsumer(DetailRequestEvent.onChangePatient(it)) }
                     )
 
                     TextFieldSelector(
@@ -324,10 +330,10 @@ fun DetailRequestView(
                         onClick = {
                             eventConsumer(
                                 DetailRequestEvent
-                                    .onClickSelectExecutor(state.divisionHuman.evecutors)
+                                    .onClickSelectExecutor(state.divisionHuman.executors)
                             )
                         },
-                        text = /*state.item.executors?. ?:*/ "",
+                        text = "${state.item.executors?.joinToString { it.name }}",
                         enabled = if (state.human.role == StatusRoleHuman.EXECUTOR
                             || state.human.role == StatusRoleHuman.INITIAL
                         ) false else state.enabled
@@ -335,21 +341,21 @@ fun DetailRequestView(
                     TextFieldSelector(
                         label = stringResource(id = R.string.status_patient),
                         onClick = { eventConsumer(DetailRequestEvent.onClickSelectStatusPatient(state.dictionary.statusPatient)) },
-                        text = state.item.statusPatient?.name ?: "",
+                        text = state.item.statusPatient.name,
                         enabled = state.enabled
                     )
                     TextFieldInput(
                         label = stringResource(id = R.string.comment_order),
-                        text = state.item.description ?: "",
-                        enabled = state.enabled
+                        text = state.item.comment ?: "",
+                        enabled = state.enabled,
+                        onValueChange = { eventConsumer(DetailRequestEvent.onChangeDescription(it)) }
                     )
-
-                    Text(
-                        text = stringResource(id = R.string.photo), style =
-                        ArniTheme.typography.subhead.regular,
-                        color = ArniTheme.colors.neutral_300,
-                        modifier = Modifier.padding(bottom = 4.dp)
-                    )
+                    /*    Text(
+                            text = stringResource(id = R.string.photo), style =
+                            ArniTheme.typography.subhead.regular,
+                            color = ArniTheme.colors.neutral_300,
+                            modifier = Modifier.padding(bottom = 4.dp)
+                        )*/
                     /*  PhotoLine(
                           addPhotoAction = {
                               showSelectMediaOptionBs.value = true
@@ -367,6 +373,6 @@ fun DetailRequestView(
 @Preview
 private fun DetailRequestViewPreview() {
     ArniTheme {
-        DetailRequestView(state = DetailRequestState(listId = ""), eventConsumer = {})
+        DetailRequestView(state = DetailRequestState(listId = "123"), eventConsumer = {})
     }
 }

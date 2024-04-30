@@ -24,7 +24,7 @@ android {
         debug {
             debuggable true
 
-            buildConfigField("String", "SERVER_URL", "\"\thttps://1c.internal-inra.ru:12000/KA_BF_KUZ/hs/dispatcher/v1/\"") // todo serverUrl
+            buildConfigField("String", "SERVER_URL", "\"\thttps://1c.internal-inra.ru:12000/KA_BF_kuz/hs/dispatcher/v1/\"") // todo serverUrl
         }
         release {
             minifyEnabled false

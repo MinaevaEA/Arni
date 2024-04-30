@@ -3,6 +3,7 @@ package com.arni.presentation.ui.screen.request.general.ui
 import com.arni.presentation.base.BaseAction
 import com.arni.presentation.base.BaseEvent
 import com.arni.presentation.base.BaseState
+import com.arni.presentation.model.human.CreateRequestHuman
 import com.arni.presentation.model.human.DictionaryHuman
 import com.arni.presentation.model.human.DivisionHuman
 import com.arni.presentation.model.human.ListRequestHuman
@@ -21,6 +22,8 @@ data class Content(
     val human: UserHuman = UserHuman.getDefault(),
     val isCreateRequest: Boolean = false,
     val searchText: String = "",
+    val isRefreshing: Boolean = false,
+    val isLoading: Boolean = false
 ) : GeneralRequestState {
     open fun clearSearchText(): GeneralRequestState = this
 
@@ -29,8 +32,12 @@ data class Content(
 
 sealed interface GeneralRequestEvent : BaseEvent {
 
-    object OnClickAddRequest : GeneralRequestEvent
+    class OnClickAddRequest(val listId: String, val human: UserHuman) : GeneralRequestEvent
     object OnClickFilter : GeneralRequestEvent
+    //class loadChangeRequest(val division: DivisionHuman, val listRequestHuman: ListRequestHuman) : GeneralRequestEvent
+
+    class OnRefresh(val division: DivisionHuman, val listRequestHuman: ListRequestHuman) : GeneralRequestEvent
+
     class loadNextRequest(val division: DivisionHuman, val listRequestHuman: ListRequestHuman) : GeneralRequestEvent
     class OnSearchEvent(val searchText: String) : GeneralRequestEvent
     object OnClearSearchEvent : GeneralRequestEvent
@@ -49,7 +56,11 @@ sealed interface GeneralRequestAction : BaseAction {
         val division: DivisionHuman
     ) : GeneralRequestAction
 
-    object OpenScreenAddRequest : GeneralRequestAction
+     class OpenScreenAddRequest(
+         val listId: String,
+         val dictionaryHuman: DictionaryHuman,
+         val division: DivisionHuman
+     ) : GeneralRequestAction
     object OpenScreenFilter : GeneralRequestAction
     object OpenScreenList : GeneralRequestAction
     class OpenListDivision(val listDivision: List<DivisionHuman>, val listID: String) : GeneralRequestAction

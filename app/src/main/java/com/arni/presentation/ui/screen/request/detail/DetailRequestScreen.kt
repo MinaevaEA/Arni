@@ -56,10 +56,23 @@ class DetailRequestScreen(
         LaunchedEffect(action) {
             when (val act = action) {
                 is DetailRequestAction.returnScreenList -> navigator.pop()
-                is DetailRequestAction.OpenTimePicker -> bottomSheetNavigator.show(TimePickerScreen(/* act.id,act.initial)*/))
-                is DetailRequestAction.OpenYearMonthDayPicker -> {
-                    println("!!!!!!!!!!!!${act.selectDate}")
-                    (action as? DetailRequestAction.OpenYearMonthDayPicker)?.let {bottomSheetNavigator.show(YearMonthDayPickerScreen(it.id,it.selectDate, it.maxDate, it.minDate))}
+                is DetailRequestAction.OpenTimePickerRequest -> {
+                    bottomSheetNavigator.show(TimePickerScreen(act.initial, act.minDate,act.maxDate, act.id))
+                }
+                is DetailRequestAction.OpenTimePickerStart -> {
+                    bottomSheetNavigator.show(TimePickerScreen(act.initial, act.minDate,act.maxDate, act.id))
+                }
+                is DetailRequestAction.OpenTimePickerEnd -> {
+                    bottomSheetNavigator.show(TimePickerScreen(act.initial, act.minDate,act.maxDate, act.id))
+                }
+                is DetailRequestAction.OpenYearMonthDayPickerRequest -> {
+                    bottomSheetNavigator.show(YearMonthDayPickerScreen(act.selectDate, act.maxDate, act.minDate, act.id))
+                }
+                is DetailRequestAction.OpenYearMonthDayPickerStart -> {
+                    bottomSheetNavigator.show(YearMonthDayPickerScreen(act.selectDate, act.maxDate, act.minDate, act.id))
+                }
+                is DetailRequestAction.OpenYearMonthDayPickerEnd -> {
+                    bottomSheetNavigator.show(YearMonthDayPickerScreen(act.selectDate, act.maxDate, act.minDate, act.id))
                 }
                 is DetailRequestAction.openRequestStatusScreen -> bottomSheetNavigator.show(
                     SelectStatusRequestScreen(act.list)

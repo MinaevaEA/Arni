@@ -22,6 +22,7 @@ import pro.midev.mec.presentation.ui.style.ArniTheme
 
 @Composable
 fun TimePickerView(
+    idTime: Int,
     state: TimePickerState,
     eventConsumer: (TimePickerEvent) -> Unit
 ) {
@@ -39,7 +40,7 @@ fun TimePickerView(
                 eventConsumer(TimePickerEvent.OnBackPressed)
             },
             onReadyBtnClick = {
-                eventConsumer(TimePickerEvent.OnConfirm)
+                eventConsumer(TimePickerEvent.OnConfirm(idTime))
             },
             modifier = Modifier.padding(horizontal = 16.dp)
         )
@@ -58,7 +59,7 @@ fun TimePickerView(
             // Часы
             InfiniteSpinner(
                 modifier = Modifier.width(130.dp),
-                list = /*state.hoursList.map { it.toTimeString() }*/(0..23).toPersistentList(),
+                list = state.hoursList,
                 firstIndex = 0,
                 onSelect = { hour ->
                     eventConsumer(TimePickerEvent.OnHourSelected(hour.toInt()))
@@ -68,7 +69,7 @@ fun TimePickerView(
             // Минуты
             InfiniteSpinner(
                 modifier = Modifier.width(50.dp),
-                list = /*state.minutesList.map { it.toTimeString() }*/(0..59).toPersistentList(),
+                list = state.minutesList,
                 firstIndex = 0,
                 onSelect = { minute ->
                     eventConsumer(TimePickerEvent.OnMinuteSelected(minute.toInt()))
@@ -94,7 +95,8 @@ private fun TimePickerViewPreview() {
                     hoursList = (0..23).toPersistentList(),
                     minutesList = (0..59).toPersistentList()
                 ),
-                eventConsumer = {}
+                eventConsumer = {},
+                idTime = 0
             )
         }
     }

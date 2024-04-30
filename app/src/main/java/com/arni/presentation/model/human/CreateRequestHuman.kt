@@ -2,18 +2,20 @@ package com.arni.presentation.model.human
 
 import kotlinx.parcelize.Parcelize
 import java.io.Serializable
+import java.time.LocalDate
+import java.time.LocalTime
 
 @Parcelize
-data class RequestHuman(
+data class CreateRequestHuman(
     val guid: String,
     var markdelete: Boolean,
     val statusRequest: RequestStatusHuman,
-    val date: String,
+    val date: String = "${LocalDate.now()}'T'${LocalTime.now()}",
     val number: String,
     val departamentFrom: DepartmentHuman,
     val departamentTo: DepartmentHuman,
-    val startDate: String,
-    val endDate: String,
+    val startDate: String = "${LocalDate.now()}",
+    val endDate: String = "${LocalDate.now()}'T'${LocalTime.now()}",
     val urgency: UrgencyHuman,
     val executors: List<ExecutorHuman>? = listOf() ,
     val patients: List<PatientHuman>,
@@ -29,16 +31,16 @@ data class RequestHuman(
     ) : Serializable {
 
     companion object {
-        fun getDefault() = RequestHuman(
+        fun getDefault() = CreateRequestHuman(
             guid = "",
             markdelete = false,
             statusRequest = RequestStatusHuman("", ""),
-            date = "",
+            date = "${LocalDate.now()}T${LocalTime.now()}",
             number = "",
             departamentFrom = DepartmentHuman("", ""),
             departamentTo = DepartmentHuman("", ""),
-            startDate = "",
-            endDate = "",
+            startDate = "${LocalDate.now()}T${LocalTime.now()}",
+            endDate = "${LocalDate.now()}'T'${LocalTime.now()}",
             urgency = UrgencyHuman("", ""),
             executors = listOf(),
             patients = listOf(),

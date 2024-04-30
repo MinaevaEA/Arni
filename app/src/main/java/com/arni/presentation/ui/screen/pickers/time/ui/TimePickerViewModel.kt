@@ -11,31 +11,32 @@ import java.time.LocalTime
 
 @SuppressLint("NewApi")
 class TimePickerViewModel(
-/*    private val id: Int = 1,
     private val initial: LocalTime = LocalTime.now(),
     private val min: LocalTime? = LocalTime.now(),
     private val max: LocalTime? = LocalTime.now(),
-    private val isCropMinTime: Boolean*/
 ) : BaseViewModel<TimePickerState, TimePickerEvent, TimePickerAction>(
     TimePickerState()
 ) {
 
-   // private var selectedHour = initial.hour
-  //  private var selectedMinute = initial.minute
+    private var selectedHour = initial.hour
+    private var selectedMinute = initial.minute
+
+    init {
+        initSpinner()
+    }
 
     override fun obtainEvent(event: TimePickerEvent) {
         when (event) {
-          //  TimePickerEvent.OnCreate -> initSpinner()
-         //   is TimePickerEvent.OnHourSelected -> changeHour(event.hour)
-         //   is TimePickerEvent.OnMinuteSelected -> changeMinute(event.minute)
-          //  TimePickerEvent.OnBackPressed -> action = TimePickerAction.Dismiss
-          //  TimePickerEvent.OnConfirm -> confirm()
+            is TimePickerEvent.OnHourSelected -> changeHour(event.hour)
+            is TimePickerEvent.OnMinuteSelected -> changeMinute(event.minute)
+            TimePickerEvent.OnBackPressed -> action = TimePickerAction.Dismiss
+            is TimePickerEvent.OnConfirm -> confirm(event.idTime)
             else -> {}
         }
     }
-/*
+
     private fun initSpinner() {
-        val minHour = if (isCropMinTime && min?.hour != null) min.hour else 0
+        val minHour = if (min?.hour != null) min.hour else 0
         val maxHour = max?.hour ?: 23
         val initialHour = initial.hour
         val firstHoursRange = initialHour..maxHour
@@ -54,10 +55,10 @@ class TimePickerViewModel(
     }
 
     private fun generateMinutesForHour(hour: Int): List<Int> {
-        val minHour = if (isCropMinTime && min?.hour != null) min.hour else 0
+        val minHour = if (min?.hour != null) min.hour else 0
         val maxHour = max?.hour ?: 23
 
-        val minMinute = if (isCropMinTime && min?.minute != null) min.minute else 0
+        val minMinute = if (min?.minute != null) min.minute else 0
         val maxMinute = max?.minute ?: 59
         val initialMinute = initial.minute
         val firstMinutesRange = if (hour == maxHour)
@@ -77,18 +78,16 @@ class TimePickerViewModel(
         selectedMinute = newMinute
     }
 
-    private fun confirm() {
-        val minHour = min?.hour ?: 0
-        val minMinute = min?.minute ?: 0
+    private fun confirm(idTime: Int) {
         viewModelScope.launch {
-            if (!isCropMinTime && (selectedHour < minHour || selectedHour == minHour && selectedMinute < minMinute))
-               // showTextToast("Укажите нежелательное время в будущем")
-            else {
-                publishEvent(EventType.OnTimePicked(LocalTime.of(selectedHour, selectedMinute), id))
-                action = TimePickerAction.Dismiss
+            when (idTime) {
+                1 -> publishEvent(EventType.OnTimeRequestPicked(LocalTime.of(selectedHour, selectedMinute, 1)))
+                2 -> publishEvent(EventType.OnTimeBeginPicked(LocalTime.of(selectedHour, selectedMinute, 1)))
+                3 -> publishEvent(EventType.OnTimeEndPicked(LocalTime.of(selectedHour, selectedMinute, 1)))
             }
         }
-    }*/
+        action = TimePickerAction.Dismiss
+    }
 
 }
 

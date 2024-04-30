@@ -1,5 +1,6 @@
 package com.arni.presentation.model.human
 
+import com.arni.remote.model.request.ExecutorRequest
 import kotlinx.parcelize.Parcelize
 import java.io.Serializable
 
@@ -16,3 +17,10 @@ data class ExecutorHuman(
         )
     }
 }
+
+fun ExecutorHuman.toRequest() = ExecutorRequest(
+    guid = guid,
+    name = name
+)
+
+fun List<ExecutorHuman>.toRequest() = map { it.toRequest() }

@@ -18,19 +18,18 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 
-
-    @Immutable
-    data class DetailRequestState(
-        val item: RequestHuman = RequestHuman.getDefault(),
-        val human: UserHuman = UserHuman.getDefault(),
-        val dictionary: DictionaryHuman = DictionaryHuman.getDefault(),
-        val divisionHuman: DivisionHuman = DivisionHuman.getDefault(),
-        val enabled: Boolean = false,
-        val isEditRequest: Boolean = true,
-        val listId:String,
-        val isEnabledButton: Boolean = true,
-        val currentPickFileOption: PickFileOption = PickFileOption.NONE,
-    ) : BaseState /*{
+@Immutable
+data class DetailRequestState(
+    val item: RequestHuman = RequestHuman.getDefault(),
+    val human: UserHuman = UserHuman.getDefault(),
+    val dictionary: DictionaryHuman = DictionaryHuman.getDefault(),
+    val divisionHuman: DivisionHuman = DivisionHuman.getDefault(),
+    val enabled: Boolean = false,
+    val isEditRequest: Boolean = true,
+    val listId: String,
+    val isEnabledButton: Boolean = true,
+    val currentPickFileOption: PickFileOption = PickFileOption.NONE,
+) : BaseState /*{
         override fun setEndDate(endDate: LocalDate): DetailRequestState {
             return this.copy(
                 item = item.copy(
@@ -53,28 +52,38 @@ import java.time.LocalTime
 }*/
 
 sealed interface DetailRequestEvent : BaseEvent {
+    class onChangeDescription(val text: String) : DetailRequestEvent
+    class isDelete(val isDelete: Boolean) : DetailRequestEvent
     class OnFileChosen(val list: List<String>) : DetailRequestEvent
     class ChangeFilePickerOption(val option: PickFileOption) : DetailRequestEvent
     class OnFileDelete(val index: Int) : DetailRequestEvent
     object onClickBackList : DetailRequestEvent
-    class onClickToolbarButton(val enabled: Boolean) : DetailRequestEvent
+    class onClickToolbarButton(val item: RequestHuman, val enabled: Boolean) : DetailRequestEvent
     class onClickSelectStatus(val listStatus: List<RequestStatusHuman>) : DetailRequestEvent
     class onClickSelectDivision(val listDivision: List<DivisionHuman>) : DetailRequestEvent
     class onClickSelectDepartamentFrom(val listDepartmentHuman: List<DepartmentHuman>) : DetailRequestEvent
     class onClickSelectDepartamentTo(val listDepartmentHuman: List<DepartmentHuman>) : DetailRequestEvent
     class OnDepartmentFrom(val newDepartmentHuman: DepartmentHuman) : DetailRequestEvent
     class OnDepartmentTo(val newDepartmentHuman: DepartmentHuman) : DetailRequestEvent
+    class onChangePatient(val text: String) : DetailRequestEvent
+    class onChangeDataRequest(val text: String) : DetailRequestEvent
     class onClickSelectUrgently(val listUrgencyHuman: List<UrgencyHuman>) : DetailRequestEvent
     class onClickSelectExecutor(val listExecutor: List<ExecutorHuman>) : DetailRequestEvent
     class onClickSelectStatusPatient(val listStatusPatient: List<StatusPatientHuman>) : DetailRequestEvent
-    object onClickSelectorTime : DetailRequestEvent
-    object onClickSelectorDate : DetailRequestEvent
+    object onClickSelectorTimeRequest : DetailRequestEvent
+    object onClickSelectorDateRequest : DetailRequestEvent
+
+    object onClickSelectorTimeBegin : DetailRequestEvent
+    object onClickSelectorDateBegin : DetailRequestEvent
+    object onClickSelectorTimeEnd : DetailRequestEvent
+    object onClickSelectorDateEnd : DetailRequestEvent
 
 
 }
 
 sealed interface DetailRequestAction : BaseAction {
     object returnScreenList : DetailRequestAction
+    class onChangeRequestisDelete(val isDelete: Boolean) : DetailRequestAction
 
     object isCheck : DetailRequestAction
     class openRequestStatusScreen(val list: List<RequestStatusHuman>) : DetailRequestAction
@@ -84,19 +93,48 @@ sealed interface DetailRequestAction : BaseAction {
     class openUrgentlyScreen(val list: List<UrgencyHuman>) : DetailRequestAction
     class openExecutorScreen(val list: List<ExecutorHuman>) : DetailRequestAction
     class openStatusPatientScreen(val list: List<StatusPatientHuman>) : DetailRequestAction
-    class OpenTimePicker(
-        val id: Int,
+    class OpenTimePickerRequest(
         val initial: LocalTime,
-        val isToday: Boolean
+        val minDate: LocalTime,
+        val maxDate: LocalTime,
+        val id: Int
     ) : DetailRequestAction
 
 
-    class OpenYearMonthDayPicker(
-        val id: Int,
+    class OpenYearMonthDayPickerRequest(
         val selectDate: LocalDate,
         val minDate: LocalDate,
         val maxDate: LocalDate,
-        val aaa: String
+        val id: Int
     ) : DetailRequestAction
 
+    class OpenTimePickerStart(
+        val initial: LocalTime,
+        val minDate: LocalTime,
+        val maxDate: LocalTime,
+        val id: Int
+    ) : DetailRequestAction
+
+
+    class OpenYearMonthDayPickerStart(
+        val selectDate: LocalDate,
+        val minDate: LocalDate,
+        val maxDate: LocalDate,
+        val id: Int
+    ) : DetailRequestAction
+
+    class OpenTimePickerEnd(
+        val initial: LocalTime,
+        val minDate: LocalTime,
+        val maxDate: LocalTime,
+        val id: Int
+    ) : DetailRequestAction
+
+
+    class OpenYearMonthDayPickerEnd(
+        val selectDate: LocalDate,
+        val minDate: LocalDate,
+        val maxDate: LocalDate,
+        val id: Int
+    ) : DetailRequestAction
 }

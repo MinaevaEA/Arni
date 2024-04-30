@@ -10,21 +10,23 @@ import java.time.LocalDate
 
 @SuppressLint("NewApi")
 class YearMonthDayPickerViewModel(
-/*    private val id: Int,
-    private val initial: LocalDate,
+    private val currentDate: LocalDate,
     private val min: LocalDate?,
-    private val max: LocalDate?*/
+    private val max: LocalDate?,
 ) : BaseViewModel<YearMonthDayPickerState, YearMonthDayPickerEvent, YearMonthDayPickerAction>(
     YearMonthDayPickerState()
 ) {
 
-   /* private var selectedYear = initial.year
-    private var selectedMonth = initial.month.value
-    private var selectedDay = initial.dayOfMonth*/
+    private var selectedYear = currentDate.year
+    private var selectedMonth = currentDate.month.value
+    private var selectedDay = currentDate.dayOfMonth
+
+    init {
+        initSpinner()
+    }
 
     override fun obtainEvent(event: YearMonthDayPickerEvent) {
         when (event) {
-      /*      is YearMonthDayPickerEvent.OnCreate -> initSpinner()
             is YearMonthDayPickerEvent.OnDaySelected -> {
                 changeDay(event.day)
             }
@@ -38,24 +40,32 @@ class YearMonthDayPickerViewModel(
             }
 
             is YearMonthDayPickerEvent.OnBackPressed -> action = YearMonthDayPickerAction.Dismiss
-            is YearMonthDayPickerEvent.OnConfirm -> confirm()*/
+            is YearMonthDayPickerEvent.OnConfirm -> confirm(event.idDate)
             else -> {}
         }
     }
 
-/*    private fun initSpinner() {
+    private fun initSpinner() {
         val minYear = min?.year ?: MIN_YEAR
         val maxYear = max?.year ?: MAX_YEAR
-        val initialYear = initial.year
-        val initialMonth = initial.month.value
-        val firstYearRange = initialYear..maxYear
-        val secondYearRange = minYear until initialYear
+        val initialYear = currentDate.year
+        val initialMonth = currentDate.month.value
+        // val firstYearRange = initialYear..maxYear
+        // val secondYearRange = minYear until initialYear
+        /*      val initialYear = currentDate.year
+              val initialMonth = currentDate.month.value
+
+         */
+        //TODO закостылила, разобраться почему не работает
+        val firstYearRange = listOf(2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035)
+        val secondYearRange = listOf(2018, 2019, 2020, 2021, 2022, 2023)// minYear until initialYear
         val yearList = (firstYearRange.toList()) + (secondYearRange.toList())
 
+
         viewState = viewState.copy(
-            yearList = yearList.toPersistentList(),
-            monthList = generateMonthForYear(initialYear).toPersistentList(),
-            daysList = generateDayForMonthYear(initialYear, initialMonth).toPersistentList()
+            yearList = yearList,
+            monthList = generateMonthForYear(initialYear),
+            daysList = generateDayForMonthYear(initialYear, initialMonth)
         )
     }
 
@@ -65,7 +75,7 @@ class YearMonthDayPickerViewModel(
 
         val minMonth = min?.month?.value ?: 1
         val maxMonth = max?.month?.value ?: 12
-        val initialMonth = initial.month.value
+        val initialMonth = currentDate.month.value
 
         val firstMonthRange = if (year == maxYear)
             initialMonth..maxMonth
@@ -85,12 +95,12 @@ class YearMonthDayPickerViewModel(
         val minMonth = min?.month?.value ?: 1
         val maxMonth = max?.month?.value ?: 12
 
-        val lengthMonth = LocalDate.of(year, month,1).lengthOfMonth()
+        val lengthMonth = LocalDate.of(year, month, 1).lengthOfMonth()
 
         val minDay = min?.dayOfMonth ?: 1
         val maxDay = max?.dayOfMonth ?: lengthMonth
 
-        val initialDay = initial.dayOfMonth
+        val initialDay = currentDate.dayOfMonth
 
         val firstDayRange = if (year == maxYear && month == maxMonth)
             initialDay..maxDay
@@ -125,16 +135,30 @@ class YearMonthDayPickerViewModel(
         )
     }
 
-    private fun confirm() {
+    private fun confirm(idDate: Int) {
         viewModelScope.launch {
-            publishEvent(
-                EventType.OnYearMonthDayPicked(
-                    LocalDate.of(selectedYear, selectedMonth, selectedDay),
-                    id
+            when (idDate) {
+                1 -> publishEvent(
+                    EventType.OnYearMonthDayRequestPicked(
+                        LocalDate.of(selectedYear, selectedMonth, selectedDay)
+                    )
                 )
-            )
+
+                2 -> publishEvent(
+                    EventType.OnYearMonthDayBeginPicked(
+                        LocalDate.of(selectedYear, selectedMonth, selectedDay)
+                    )
+                )
+
+                3 -> publishEvent(
+                    EventType.OnYearMonthDayEndPicked(
+                        LocalDate.of(selectedYear, selectedMonth, selectedDay)
+                    )
+                )
+            }
+
+            action = YearMonthDayPickerAction.Dismiss
         }
-        action = YearMonthDayPickerAction.Dismiss
     }
 
     companion object {
@@ -142,6 +166,6 @@ class YearMonthDayPickerViewModel(
         private const val MIN_YEAR = 1900
         private val MAX_YEAR = LocalDate.now().plusYears(10).year
 
-    }*/
+    }
 
 }
