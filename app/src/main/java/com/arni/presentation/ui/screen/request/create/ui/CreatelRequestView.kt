@@ -180,7 +180,7 @@ fun CreateRequestView(
             actionsEnd = {
                 IconButton(
                     enabled = state.isEnabledButton,
-                    onClick = { /*eventConsumer(DetailRequestEvent.onClickToolbarButton(!state.enabled))*/ }
+                    onClick = { eventConsumer(CreateRequestEvent.onClickAddRequest(state.item)) }
                 ) {
                     Icon(painter = painterResource(R.drawable.ic_check_mark), contentDescription = "")
                 }
@@ -190,8 +190,8 @@ fun CreateRequestView(
                 Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
                     TextFieldSelector(
                         label = stringResource(id = R.string.status_order),
-                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectStatus) },
-                        text = when (state.item?.statusRequest?.name) {
+                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectStatus(state.dictionary.statusItem)) },
+                        text = when (state.item.statusRequest.name) {
                             StatusRequests.parse(StatusRequests.WORK) -> "Рабочая"
                             StatusRequests.parse(StatusRequests.DRAFT) -> "Черновик"
                             StatusRequests.parse(StatusRequests.COMPLETED) -> "Завершена"
@@ -202,19 +202,19 @@ fun CreateRequestView(
                     )
                     val currentFormat = SimpleDateFormat("yyyy-MM-dd\'T\'HH:mm:ss")
                     val date = currentFormat.parse(state.item.date)
-                    val targetFormatDate = SimpleDateFormat("dd.MM.yyyy HH:mm")
+                    val targetFormatDate = SimpleDateFormat("dd.MM.yyyy")
                     val targetFormatTime = SimpleDateFormat("HH:mm")
                     val currentDate = targetFormatDate.format(date)
                     val currentTime = targetFormatTime.format(date)
                     TextFieldSelector(
                         label = stringResource(id = R.string.date_order),
-                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectorDate) },
+                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectorDateRequest) },
                         text = currentDate ?: ""
                     )
 
                     TextFieldSelector(
                         label = stringResource(id = R.string.time_order),
-                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectorTime) },
+                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectorTimeRequest) },
                         text = currentTime ?: ""
                     )
                     TextFieldSelector(
@@ -224,38 +224,47 @@ fun CreateRequestView(
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.from_local),
-                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectDepartamentFrom(state.divisionHuman.department)) },
+                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectDepartamentFrom(state.divisionHuman.department ?: listOf())) },
                         text = state.item.departamentFrom.name ?: ""
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.to_local),
-                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectDepartamentTo(state.divisionHuman.department)) },
+                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectDepartamentTo(state.divisionHuman.department ?: listOf())) },
                         text = state.item.departamentTo.name ?: ""
                     )
-                    /*   //val dateBegin = currentFormat.parse(state.item.startDate)
-                       val currentDateBegin = state.item.startDate.let { targetFormatDate.format(it) }
-                       val currentTimeBegin = state.item.startDate?.let { targetFormatTime.format(it) }*/
+                       val dateBegin = currentFormat.parse(state.item.startDate)
+                       val currentDateBegin = dateBegin.let { targetFormatDate.format(it) }
+                       val currentTimeBegin = dateBegin?.let { targetFormatTime.format(it) }
                     TextFieldSelector(
                         label = stringResource(id = R.string.begin_date),
-                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectorTime) },
-                        text = state.item.startDate ?: ""
+                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectorDateBegin) },
+                        text = currentDateBegin ?: ""
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.begin_time),
-                        onClick = { /*eventConsumer(DetailRequestEvent.onClickSelectorTimeBegin)*/ },
-                        text = state.item.startDate  ?: "",
+                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectorTimeBegin) },
+                        text = currentTimeBegin  ?: "",
                         enabled = true
                     )
+                    val dateEnd = currentFormat.parse(state.item.endDate)
+                    val currentDateEnd = dateEnd?.let { targetFormatDate.format(it) }
+                    val currentTimeEnd = dateEnd?.let { targetFormatTime.format(it) }
                     TextFieldSelector(
                         label = stringResource(id = R.string.end_date),
-                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectorTime) },
-                        text = state.item.startDate ?: ""
+                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectorDateEnd) },
+                        text = currentDateEnd ?: ""
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.end_time),
-                        onClick = { /*eventConsumer(DetailRequestEvent.onClickSelectorTimeEnd)*/ },
-                        text = state.item.startDate ?: "",
+                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectorTimeEnd) },
+                        text = currentTimeEnd ?: "",
                         enabled = true
+                    )
+                    TextFieldSelector(
+                        label = stringResource(id = R.string.name_dispatcher),
+                        text = state.item.dispatcher.name ?: "",
+                        enabled = true,
+                        onClick = {eventConsumer(CreateRequestEvent.onClickSelectDispatchers(state.divisionHuman.dispatcher ?: listOf())) }
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.draft_order),
@@ -264,7 +273,7 @@ fun CreateRequestView(
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.checking_order),
-                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectExecutor((state.divisionHuman.executors))) },
+                        onClick = { eventConsumer(CreateRequestEvent.onClickSelectExecutor((state.divisionHuman.executors ?: listOf()))) },
                         text = "${state.item.executors?.joinToString { it.name }}"
                     )
                     TextFieldInput(

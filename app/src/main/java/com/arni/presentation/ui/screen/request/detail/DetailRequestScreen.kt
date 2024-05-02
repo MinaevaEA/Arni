@@ -21,6 +21,7 @@ import com.arni.presentation.ui.screen.request.detail.ui.DetailRequestEvent
 import com.arni.presentation.ui.screen.request.detail.ui.DetailRequestView
 import com.arni.presentation.ui.screen.request.detail.ui.DetailRequestViewModel
 import com.arni.presentation.ui.screen.select_departament.SelectDepartmentScreen
+import com.arni.presentation.ui.screen.select_dispatcher.SelectDispatcherScreen
 import com.arni.presentation.ui.screen.select_division_detail.SelectDivisionDetailScreen
 import com.arni.presentation.ui.screen.select_executor.SelectExecutorScreen
 import com.arni.presentation.ui.screen.select_status_patient.SelectStatusPatientScreen
@@ -92,6 +93,7 @@ class DetailRequestScreen(
 
                 is DetailRequestAction.openDivisionScreen -> bottomSheetNavigator.show(SelectDivisionDetailScreen(act.listSubDivision))
                 is DetailRequestAction.openUrgentlyScreen -> bottomSheetNavigator.show(SelectUrgentlyStatusScreen(act.list))
+                is DetailRequestAction.openDispatcherScreen -> bottomSheetNavigator.show(SelectDispatcherScreen(act.list))
                 is DetailRequestAction.openExecutorScreen -> bottomSheetNavigator.show(SelectExecutorScreen(act.list))
                 is DetailRequestAction.openStatusPatientScreen -> bottomSheetNavigator.show(
                     SelectStatusPatientScreen(

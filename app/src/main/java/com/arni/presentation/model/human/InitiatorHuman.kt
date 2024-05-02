@@ -7,7 +7,7 @@ import java.io.Serializable
 
 @Parcelize
 data class InitiatorHuman(
-    val guid: String,
+    val guid: String = "00000000-0000-0000-0000-000000000000",
     val name: String
 ) : Serializable {
     companion object {

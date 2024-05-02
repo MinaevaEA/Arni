@@ -1,7 +1,11 @@
 package com.arni.presentation.ui.screen.request.create.ui
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.viewModelScope
 import com.arni.data.base.DataStatus
+import com.arni.data.base.getOrNull
+import com.arni.domain.usecase.GetRequestAddDetailUseCase
 import com.arni.domain.usecase.selects_delete.GetExecutorUseCase
 import com.arni.domain.usecase.selects_delete.GetPatientStatusUseCase
 import com.arni.domain.usecase.selects_delete.GetSelectStatusRequestUseCase
@@ -28,7 +32,8 @@ import java.time.format.DateTimeFormatter
 class CreateRequestViewModel(
     val listId: String,
     val dictionary: DictionaryHuman,
-    val divisionHuman: DivisionHuman
+    val divisionHuman: DivisionHuman,
+    val getRequestAddDetailUseCase: GetRequestAddDetailUseCase
 ) : BaseViewModel<CreateRequestState, CreateRequestEvent, CreateRequestAction>(
     CreateRequestState(dictionary = dictionary, listId = listId, divisionHuman = divisionHuman)
 ) {
@@ -41,29 +46,73 @@ class CreateRequestViewModel(
     var timeEndCurrent = LocalTime.of(0, 0, 1)
     private val allRequestStatus: MutableList<RequestStatusHuman> = mutableListOf()
     private val allStatusPatient: MutableList<StatusPatientHuman> = mutableListOf()
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun obtainEvent(event: CreateRequestEvent) {
         when (event) {
             is CreateRequestEvent.onClickBack -> action = CreateRequestAction.returnGeneralScreen
-            CreateRequestEvent.onClickSelectorTime -> action = CreateRequestAction.OpenTimePickerRequest(
+            CreateRequestEvent.onClickSelectorTimeRequest -> action = CreateRequestAction.OpenTimePickerRequest(
                 LocalTime.parse(viewState.item.date, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),
                 minDate = LocalTime.of(0, 0, 0),
                 maxDate = LocalTime.of(23, 59, 59),
                 1
             )
 
-            CreateRequestEvent.onClickSelectorDate -> action = CreateRequestAction.OpenYearMonthDayPickerRequest(
+            CreateRequestEvent.onClickSelectorDateRequest -> action = CreateRequestAction.OpenYearMonthDayPickerRequest(
                 LocalDate.parse(viewState.item.date, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),
                 minDate = LocalDate.of(2010, 12, 31),
                 maxDate = LocalDate.of(2080, 12, 31),
                 1
             )
+            CreateRequestEvent.onClickSelectorTimeBegin -> action = CreateRequestAction.OpenTimePickerStart(
+                LocalTime.parse(viewState.item.date, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),
+                minDate = LocalTime.of(0, 0, 0),
+                maxDate = LocalTime.of(23, 59, 59),
+                2
+            )
+
+            CreateRequestEvent.onClickSelectorTimeEnd -> action = CreateRequestAction.OpenTimePickerEnd(
+                LocalTime.parse(viewState.item.date, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),
+                minDate = LocalTime.of(0, 0, 0),
+                maxDate = LocalTime.of(23, 59, 59),
+                3
+            )
+
+            CreateRequestEvent.onClickSelectorDateRequest -> {
+                action = CreateRequestAction.OpenYearMonthDayPickerRequest(
+                    LocalDate.parse(viewState.item.date, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),
+                    minDate = LocalDate.of(2010, 12, 31),
+                    maxDate = LocalDate.of(2080, 12, 31),
+                    1
+                )
+            }
+
+            CreateRequestEvent.onClickSelectorDateBegin -> {
+                action = CreateRequestAction.OpenYearMonthDayPickerStart(
+                    LocalDate.parse(viewState.item.date, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),
+                    minDate = LocalDate.of(2010, 12, 31),
+                    maxDate = LocalDate.of(2080, 12, 31),
+                    2
+                )
+            }
+
+            CreateRequestEvent.onClickSelectorDateEnd -> {
+                action = CreateRequestAction.OpenYearMonthDayPickerEnd(
+                    LocalDate.parse(viewState.item.date, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),
+                    minDate = LocalDate.of(2010, 12, 31),
+                    maxDate = LocalDate.of(2080, 12, 31),
+                    3
+                )
+            }
 
             is CreateRequestEvent.onChangeDescription -> changeComment(event.text)
             is CreateRequestEvent.onClickSelectStatusPatient ->
                 action = CreateRequestAction.openStatusPatientScreen(event.listStatusPatient)
 
-            CreateRequestEvent.onClickSelectStatus -> action =
-                CreateRequestAction.openRequestStatusScreen(allRequestStatus)
+            is CreateRequestEvent.onClickSelectStatus -> action =
+                CreateRequestAction.openRequestStatusScreen(event.statusRequests)
+
+            is CreateRequestEvent.onClickSelectDispatchers ->
+                action = CreateRequestAction.openDispatcherScreen(event.listDispatcherHuman)
 
             is CreateRequestEvent.onClickSelectDivision ->
                 action = CreateRequestAction.openDivisionScreen(event.listDivision)
@@ -94,7 +143,16 @@ class CreateRequestViewModel(
             is CreateRequestEvent.ChangeFilePickerOption -> changePickFileOption(event.option)
             is CreateRequestEvent.OnFileChosen -> addFiles(event.list)
             is CreateRequestEvent.OnFileDelete -> deleteFiles(event.index)
+            is CreateRequestEvent.onClickAddRequest -> addRequest(event.item)
         }
+    }
+
+    fun addRequest(item: CreateRequestHuman){
+        viewModelScope.launch {
+            getRequestAddDetailUseCase.invoke(listId = listId, item = item).getOrNull()
+        }
+        action = CreateRequestAction.returnGeneralScreen
+        viewState = viewState.copy(item = CreateRequestHuman.getDefault())
     }
 
     init {
@@ -110,6 +168,10 @@ class CreateRequestViewModel(
             viewState = viewState.copy(item = viewState.item.copy(urgency = it.urgently))
         }
 
+        subscribeEvent<EventType.OnDispatcher> {
+            viewState = viewState.copy(item = viewState.item.copy(dispatcher = it.dispatcher))
+        }
+
         subscribeEvent<EventType.OnExecutor> {
             viewState = viewState.copy(item = viewState.item.copy(executors = it.executor))
         }
@@ -119,7 +181,8 @@ class CreateRequestViewModel(
                 item = viewState.item.copy(
                     division = it.division,
                     departamentFrom = viewState.item.departamentFrom.copy(name = ""),
-                    departamentTo = viewState.item.departamentTo.copy(name = "")
+                    departamentTo = viewState.item.departamentTo.copy(name = ""),
+                    dispatcher = viewState.item.dispatcher.copy(name = "")
                 )
             )
         }
@@ -128,9 +191,70 @@ class CreateRequestViewModel(
             subscribeEvent<EventType.OnYearMonthDayRequestPicked> {
                 dateCreateRequestCurrent = it.yearMonthDay
                 changeCurrentFromYearMonthDayRequest(newYearMonthDay = it.yearMonthDay)
+
+                subscribeEvent<EventType.OnYearMonthDayRequestPicked> {
+                    dateCreateRequestCurrent = it.yearMonthDay
+                    changeCurrentFromYearMonthDayRequest(newYearMonthDay = it.yearMonthDay)
+                }
+
+                subscribeEvent<EventType.OnYearMonthDayBeginPicked> {
+                    dateBeginCurrent = it.yearMonthDay
+                    changeCurrentFromYearMonthDayBegin(newYearMonthDay = it.yearMonthDay)
+                }
+                subscribeEvent<EventType.OnYearMonthDayEndPicked> {
+                    dateEndCurrent = it.yearMonthDay
+                    changeCurrentFromYearMonthDayEnd(newYearMonthDay = it.yearMonthDay)
+                }
+                subscribeEvent<EventType.OnTimeRequestPicked> {
+                    timeRequestCurrent = it.time
+                    changeCurrentFromTimeRequest(newTime = it.time)
+                }
+                subscribeEvent<EventType.OnTimeBeginPicked> {
+                    timeBeginCurrent = it.time
+                    changeCurrentFromTimeBegin(newTime = it.time)
+                }
+                subscribeEvent<EventType.OnTimeEndPicked> {
+                    timeEndCurrent = it.time
+                    changeCurrentFromTimeEnd(newTime = it.time)
+                }
             }
         }
     }
+    private fun changeCurrentFromYearMonthDayBegin(
+        newYearMonthDay: LocalDate,
+    ) {
+        viewState =
+            viewState.copy(item = viewState.item.copy(startDate = "${newYearMonthDay}" + "T" + "${timeRequestCurrent}"))
+    }
+
+    private fun changeCurrentFromYearMonthDayEnd(
+        newYearMonthDay: LocalDate,
+    ) {
+        viewState =
+            viewState.copy(item = viewState.item.copy(endDate = "${newYearMonthDay}" + "T" + "${timeRequestCurrent}"))
+    }
+
+    private fun changeCurrentFromTimeRequest(
+        newTime: LocalTime? = LocalTime.now()
+    ) {
+        timeRequestCurrent = newTime
+        viewState = viewState.copy(item = viewState.item.copy(date = "${dateCreateRequestCurrent}" + "T" + "${newTime}"))
+    }
+
+    private fun changeCurrentFromTimeBegin(
+        newTime: LocalTime? = LocalTime.now()
+    ) {
+        timeBeginCurrent = newTime
+        viewState = viewState.copy(item = viewState.item.copy(startDate = "${dateBeginCurrent}" + "T" + "${newTime}"))
+    }
+
+    private fun changeCurrentFromTimeEnd(
+        newTime: LocalTime? = LocalTime.now()
+    ) {
+        timeEndCurrent = newTime
+        viewState = viewState.copy(item = viewState.item.copy(endDate = "${dateEndCurrent}" + "T" + "${newTime}"))
+    }
+
 
     private fun changeCurrentFromYearMonthDayRequest(
         newYearMonthDay: LocalDate,

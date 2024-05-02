@@ -12,3 +12,5 @@ fun DispatcherResponse.toDomain() = DispatcherDomain(
     guid = guid ?: "",
     name = name ?: ""
 )
+
+fun List<DispatcherResponse>.toDomain() = map { it.toDomain() }

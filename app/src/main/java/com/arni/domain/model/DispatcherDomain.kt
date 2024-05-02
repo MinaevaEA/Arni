@@ -11,3 +11,4 @@ fun DispatcherDomain.toHuman() = DispatcherHuman(
     guid = guid,
     name = name
 )
+fun List<DispatcherDomain>.toHuman() = map { it.toHuman()}

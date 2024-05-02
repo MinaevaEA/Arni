@@ -15,6 +15,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.security.cert.X509Certificate
 import java.util.concurrent.TimeUnit
+import java.util.logging.Level
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
@@ -41,6 +42,8 @@ val remoteStorageModule = module {
 
 // Create an ssl socket factory with our all-trusting manager
         val sslSocketFactory = sslContext.socketFactory
+        val logs = HttpLoggingInterceptor()
+        logs.level= HttpLoggingInterceptor.Level.BODY
         OkHttpClient.Builder()
             .sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
             .hostnameVerifier{ _, _ -> true }
@@ -49,6 +52,7 @@ val remoteStorageModule = module {
             .addInterceptor(HeadersInterceptor())
             .addInterceptor(NetworkConnectionInterceptor(androidContext()))
             .addInterceptor(TokenInterceptor(get()))
+            .addInterceptor(logs)
             .also {
                 if (BuildConfig.DEBUG) {
                     it.addInterceptor(

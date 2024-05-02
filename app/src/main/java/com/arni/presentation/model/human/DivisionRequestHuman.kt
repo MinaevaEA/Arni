@@ -1,5 +1,7 @@
 package com.arni.presentation.model.human
 
+import com.arni.remote.model.request.DivisionRequest
+import com.arni.remote.model.response.DivisionResponse
 import kotlinx.parcelize.Parcelize
 import java.io.Serializable
 

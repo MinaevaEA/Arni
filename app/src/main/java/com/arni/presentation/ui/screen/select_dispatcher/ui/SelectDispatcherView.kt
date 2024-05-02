@@ -1,4 +1,4 @@
-package com.arni.presentation.ui.screen.select_urgently_status.ui
+package com.arni.presentation.ui.screen.select_dispatcher.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,8 +21,8 @@ import pro.midev.mec.presentation.ui.style.ArniTheme
 
 @Composable
 fun SelectUrgentlyStatusView(
-    state: SelectUrgentlyStatusState,
-    eventConsumer: (SelectUrgentlyStatusEvent) -> Unit
+    state: SelectDispatcherState,
+    eventConsumer: (SelectDispatcherEvent) -> Unit
 ) {
 
     Column(
@@ -32,15 +32,15 @@ fun SelectUrgentlyStatusView(
     ) {
 
         TextTitleToolbar(onBackPressed = {
-            eventConsumer.invoke(SelectUrgentlyStatusEvent.OnBackCLickEvent)
+            eventConsumer.invoke(SelectDispatcherEvent.OnBackCLickEvent)
         }, title = stringResource(id = R.string.add_status_urgensy))
 
         LazyColumn(modifier = Modifier) {
 
-            itemsIndexed(state.listUrgently) { index, item ->
+            itemsIndexed(state.listDispatcher) { index, item ->
                 Row(
                     modifier = Modifier
-                        .clickable { eventConsumer(SelectUrgentlyStatusEvent.SelectUrgently(item)) },
+                        .clickable { eventConsumer(SelectDispatcherEvent.SelectDispatcher(item)) },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
@@ -60,9 +60,8 @@ fun SelectUrgentlyStatusView(
 @Composable
 @Preview
 fun SelectUrgentlyStatusViewPreview() {
-    ArniTheme {
-        SelectUrgentlyStatusView(
-            state = SelectUrgentlyStatusState(),
+    ArniTheme { SelectUrgentlyStatusView(
+            state = SelectDispatcherState(),
             eventConsumer = {})
     }
 }

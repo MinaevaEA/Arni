@@ -1,32 +1,30 @@
 package com.arni.domain.repository
 
 import com.arni.data.base.DataStatus
-import com.arni.presentation.model.human.RequestHuman
+import com.arni.presentation.model.human.CreateRequestHuman
+import com.arni.presentation.model.human.toNewRequest
 import com.arni.presentation.model.human.toRequest
 import com.arni.remote.Api
 import com.arni.remote.model.request.ContainerItemRequest
+import com.arni.remote.model.request.DivisionRequest
 import com.arni.remote.model.request.EditItemRequest
-import com.arni.remote.model.response.CheckedResponse
-import com.arni.remote.model.response.toDataStatus
 
-class RequestEditRepositoryRemote(private val api: Api) : RequestRepository {
-    suspend fun getEditItem(
+class RequestAddRepositoryRemote(private val api: Api) : RequestRepository {
+    suspend fun getAddItem(
         listId: String,
-        requestGuid: String,
-        item: RequestHuman
-    ): DataStatus<CheckedResponse> =
+        item: CreateRequestHuman
+    ): DataStatus<Any> =
         handleRequest {
-            api.getChangeItem(
+            api.addRequest(
                 listId,
-                requestGuid,
                 ContainerItemRequest(
                     item =
                     EditItemRequest(
                         guid = item.guid,
                         date = item.date,
-                        markdelete = item.markdelete,
+                        markdelete = false,
                         number = item.number,
-                        division = item.division.toRequest(),
+                        division = item.division.toNewRequest(),
                         departamentFrom = item.departamentFrom.toRequest(),
                         departamentTo = item.departamentTo.toRequest(),
                         dateStart = item.startDate,

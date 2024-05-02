@@ -23,7 +23,8 @@ data class Content(
     val isCreateRequest: Boolean = false,
     val searchText: String = "",
     val isRefreshing: Boolean = false,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val isUpdateList: Boolean = false
 ) : GeneralRequestState {
     open fun clearSearchText(): GeneralRequestState = this
 
@@ -31,7 +32,7 @@ data class Content(
 }
 
 sealed interface GeneralRequestEvent : BaseEvent {
-
+    class onClickUpdateList(val division: DivisionHuman, val listRequestHuman: ListRequestHuman) : GeneralRequestEvent
     class OnClickAddRequest(val listId: String, val human: UserHuman) : GeneralRequestEvent
     object OnClickFilter : GeneralRequestEvent
     //class loadChangeRequest(val division: DivisionHuman, val listRequestHuman: ListRequestHuman) : GeneralRequestEvent
@@ -44,7 +45,7 @@ sealed interface GeneralRequestEvent : BaseEvent {
     object OnBackBtnClick : GeneralRequestEvent
     class onClickDivision(val listDivision: List<DivisionHuman>, val listId: String) : GeneralRequestEvent
 
-    class onClickItem(val listId: String,val item: RequestHuman, val human: UserHuman) : GeneralRequestEvent
+    class onClickItem(val listId: String, val item: RequestHuman, val human: UserHuman) : GeneralRequestEvent
 }
 
 sealed interface GeneralRequestAction : BaseAction {
@@ -53,14 +54,15 @@ sealed interface GeneralRequestAction : BaseAction {
         val item: RequestHuman,
         val user: UserHuman,
         val dictionaryHuman: DictionaryHuman,
+        val division: DivisionHuman,
+    ) : GeneralRequestAction
+
+    class OpenScreenAddRequest(
+        val listId: String,
+        val dictionaryHuman: DictionaryHuman,
         val division: DivisionHuman
     ) : GeneralRequestAction
 
-     class OpenScreenAddRequest(
-         val listId: String,
-         val dictionaryHuman: DictionaryHuman,
-         val division: DivisionHuman
-     ) : GeneralRequestAction
     object OpenScreenFilter : GeneralRequestAction
     object OpenScreenList : GeneralRequestAction
     class OpenListDivision(val listDivision: List<DivisionHuman>, val listID: String) : GeneralRequestAction

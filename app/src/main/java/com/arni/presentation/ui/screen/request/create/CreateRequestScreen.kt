@@ -1,27 +1,26 @@
 package com.arni.presentation.ui.screen.request.create
 
+import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import cafe.adriel.voyager.androidx.AndroidScreen
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.arni.presentation.model.human.DictionaryHuman
 import com.arni.presentation.model.human.DivisionHuman
-import com.arni.presentation.model.human.RequestHuman
-import com.arni.presentation.model.human.UserHuman
 import com.arni.presentation.ui.screen.pickers.time.TimePickerScreen
 import com.arni.presentation.ui.screen.pickers.yearmonthday.YearMonthDayPickerScreen
 import com.arni.presentation.ui.screen.request.create.ui.CreateRequestAction
 import com.arni.presentation.ui.screen.request.create.ui.CreateRequestEvent
 import com.arni.presentation.ui.screen.request.create.ui.CreateRequestView
 import com.arni.presentation.ui.screen.request.create.ui.CreateRequestViewModel
-import com.arni.presentation.ui.screen.request.detail.ui.DetailRequestAction
-import com.arni.presentation.ui.screen.request.detail.ui.DetailRequestEvent
 import com.arni.presentation.ui.screen.select_departament.SelectDepartmentScreen
+import com.arni.presentation.ui.screen.select_dispatcher.SelectDispatcherScreen
 import com.arni.presentation.ui.screen.select_division_detail.SelectDivisionDetailScreen
 import com.arni.presentation.ui.screen.select_executor.SelectExecutorScreen
 import com.arni.presentation.ui.screen.select_status_patient.SelectStatusPatientScreen
@@ -41,6 +40,8 @@ class CreateRequestScreen(
        CreateRequestScreen(viewModel = koinViewModel { parametersOf(listId, dictionaryHuman, divisionHuman) })
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    @SuppressLint("NotConstructor")
     @Composable
     private fun CreateRequestScreen(
         viewModel: CreateRequestViewModel
@@ -66,12 +67,25 @@ class CreateRequestScreen(
                         viewModel.obtainEvent(CreateRequestEvent.OnDepartmentFrom(it))
                     })
                 )
+                is CreateRequestAction.openDispatcherScreen -> bottomSheetNavigator.show(SelectDispatcherScreen(act.list))
                 is CreateRequestAction.openUrgentlyScreen -> bottomSheetNavigator.show(SelectUrgentlyStatusScreen(act.list))
                 is CreateRequestAction.openDepartamentScreenTo -> bottomSheetNavigator.show(
                     SelectDepartmentScreen(departments = act.listDepartmentHuman, onSelect = {
                         viewModel.obtainEvent(CreateRequestEvent.OnDepartmentTo(it))
                     })
                 )
+                is CreateRequestAction.OpenTimePickerStart -> {
+                    bottomSheetNavigator.show(TimePickerScreen(act.initial, act.minDate,act.maxDate, act.id))
+                }
+                is CreateRequestAction.OpenTimePickerEnd -> {
+                    bottomSheetNavigator.show(TimePickerScreen(act.initial, act.minDate,act.maxDate, act.id))
+                }
+                is CreateRequestAction.OpenYearMonthDayPickerStart -> {
+                    bottomSheetNavigator.show(YearMonthDayPickerScreen(act.selectDate, act.maxDate, act.minDate, act.id))
+                }
+                is CreateRequestAction.OpenYearMonthDayPickerEnd -> {
+                    bottomSheetNavigator.show(YearMonthDayPickerScreen(act.selectDate, act.maxDate, act.minDate, act.id))
+                }
                 is CreateRequestAction.openDivisionScreen -> bottomSheetNavigator.show(SelectDivisionDetailScreen(act.listDivision))
                 is CreateRequestAction.openUrgentlyScreen -> bottomSheetNavigator.show(SelectUrgentlyStatusScreen(act.list))
                 is CreateRequestAction.openExecutorScreen -> bottomSheetNavigator.show(SelectExecutorScreen(act.list))

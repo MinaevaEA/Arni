@@ -203,9 +203,13 @@ fun DetailRequestView(
                     val checkedState = remember(state.item.markdelete) {
                         mutableStateOf(state.item.markdelete)
                     }
-                    CheckBoxMy(text = "На удаление", checked = checkedState, onCheckedChange = { selected ->
-                        eventConsumer(DetailRequestEvent.isDelete(selected))
-                    })
+                    CheckBoxMy(
+                        enabled = state.enabled,
+                        text = "На удаление",
+                        checked = checkedState,
+                        onCheckedChange = { selected ->
+                            eventConsumer(DetailRequestEvent.isDelete(selected))
+                        })
                     val currentFormat = SimpleDateFormat("yyyy-MM-dd\'T\'HH:mm:ss")
                     val date = currentFormat.parse(state.item.date)
                     val targetFormatDate = SimpleDateFormat("dd.MM.yyyy")
@@ -248,7 +252,7 @@ fun DetailRequestView(
                         onClick = {
                             eventConsumer(
                                 DetailRequestEvent.onClickSelectDepartamentFrom(
-                                    state.divisionHuman.department
+                                    state.divisionHuman.department ?: listOf()
                                 )
                             )
 
@@ -264,7 +268,7 @@ fun DetailRequestView(
                         onClick = {
                             eventConsumer(
                                 DetailRequestEvent.onClickSelectDepartamentTo(
-                                    state.divisionHuman.department
+                                    state.divisionHuman.department ?: listOf()
                                 )
                             )
                         },
@@ -305,9 +309,15 @@ fun DetailRequestView(
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.name_dispatcher),
-                        text = state.item.nameDispatcher ?: "",
+                        text = state.item.dispatcher.name ?: "",
                         enabled = if (state.human.role != StatusRoleHuman.INITIAL) state.enabled else false,
-                        onClick = {/*eventConsumer(DetailRequestEvent.onClickDispatchers(state.dictionary.initiator))*/ }
+                        onClick = {
+                            eventConsumer(
+                                DetailRequestEvent.onClickSelectDispatchers(
+                                    state.divisionHuman.dispatcher ?: listOf()
+                                )
+                            )
+                        }
                     )
                     TextFieldSelector(
                         label = stringResource(id = R.string.draft_order),
@@ -330,7 +340,7 @@ fun DetailRequestView(
                         onClick = {
                             eventConsumer(
                                 DetailRequestEvent
-                                    .onClickSelectExecutor(state.divisionHuman.executors)
+                                    .onClickSelectExecutor(state.divisionHuman.executors ?: listOf())
                             )
                         },
                         text = "${state.item.executors?.joinToString { it.name }}",

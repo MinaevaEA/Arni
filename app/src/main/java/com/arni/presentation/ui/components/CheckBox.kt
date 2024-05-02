@@ -12,11 +12,12 @@ import androidx.compose.ui.unit.sp
 fun CheckBoxMy(
     checked: State<Boolean>,
     onCheckedChange: (Boolean) -> Unit,
-    text: String
+    text: String,
+    enabled: Boolean
 ) {
     val checkedValue = checked.value
     Row(verticalAlignment = CenterVertically) {
-        Checkbox(checked = checkedValue, onCheckedChange = onCheckedChange)
-        Text(text,  fontSize = 16.sp)
+        Checkbox(enabled = enabled, checked = checkedValue, onCheckedChange = onCheckedChange)
+        Text(text, fontSize = 16.sp)
     }
 }

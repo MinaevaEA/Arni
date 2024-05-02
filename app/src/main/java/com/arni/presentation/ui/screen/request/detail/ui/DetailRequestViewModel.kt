@@ -3,14 +3,12 @@ package com.arni.presentation.ui.screen.request.detail.ui
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.viewModelScope
-import com.arni.data.base.DataStatus
 import com.arni.data.base.getOrNull
 import com.arni.domain.usecase.GetRequestChangeDetailUseCase
 import com.arni.domain.usecase.GetRequestEditUseCase
 import com.arni.events.EventType
 import com.arni.presentation.base.BaseViewModel
 import com.arni.presentation.model.human.DictionaryHuman
-import com.arni.presentation.model.human.DispatcherHuman
 import com.arni.presentation.model.human.DivisionHuman
 import com.arni.presentation.model.human.PatientHuman
 import com.arni.presentation.model.human.RequestHuman
@@ -113,6 +111,8 @@ class DetailRequestViewModel(
             is DetailRequestEvent.onClickSelectUrgently ->
                 action = DetailRequestAction.openUrgentlyScreen(act.listUrgencyHuman)
 
+            is DetailRequestEvent.onClickSelectDispatchers ->
+                action = DetailRequestAction.openDispatcherScreen(act.listDispatcherHuman)
             is DetailRequestEvent.onClickSelectExecutor ->
                 action = DetailRequestAction.openExecutorScreen(act.listExecutor)
 
@@ -136,7 +136,6 @@ class DetailRequestViewModel(
     }
 
     fun openEnabledRequest(item: RequestHuman, enabled: Boolean) {
-        println("!!!!!!!!!!!enabled $enabled")
         if (enabled) {
             viewModelScope.launch {
                 val isChange = viewModelScope.async {
@@ -158,11 +157,7 @@ class DetailRequestViewModel(
             }
         } else {
             viewModelScope.launch {
-                println("!!!!!!item: ${item.date}")
-                val result = viewModelScope.async {
-                    getRequestEditUseCase.invoke(listId = listId, item.guid, item).getOrNull()
-                }
-                val resultChange = result.await()
+                val resultChange = getRequestEditUseCase.invoke(listId = listId, item.guid, item).getOrNull()//result.await()
                 if (resultChange?.anotheritemver == false) {
                     viewState = viewState.copy(enabled = enabled)
                     action = DetailRequestAction.returnScreenList
@@ -171,7 +166,6 @@ class DetailRequestViewModel(
                     showErrorToast(Exception("Обновите список"))
                 }
             }
-
         }
     }
 
@@ -339,6 +333,9 @@ class DetailRequestViewModel(
         subscribeEvent<EventType.OnUrgently> {
             viewState = viewState.copy(item = viewState.item.copy(urgency = it.urgently))
         }
+        subscribeEvent<EventType.OnDispatcher> {
+            viewState = viewState.copy(item = viewState.item.copy(dispatcher = it.dispatcher))
+        }
 
         subscribeEvent<EventType.OnExecutor> {
             viewState = viewState.copy(item = viewState.item.copy(executors = it.executor))
@@ -349,15 +346,11 @@ class DetailRequestViewModel(
                 item = viewState.item.copy(
                     division = it.division,
                     departamentFrom = viewState.item.departamentFrom.copy(name = ""),
-                    departamentTo = viewState.item.departamentTo.copy(name = "")
+                    departamentTo = viewState.item.departamentTo.copy(name = ""),
+                    dispatcher = viewState.item.dispatcher.copy(name = "")
                 )
             )
         }
-    }
-
-    companion object {
-        const val ARG_START_DATE = 1
-        const val ARG_END_DATE = 2
     }
 }
 

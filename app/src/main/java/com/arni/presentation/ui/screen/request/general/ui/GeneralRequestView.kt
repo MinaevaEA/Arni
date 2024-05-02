@@ -25,12 +25,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.arni.presentation.ext.isFirstItemVisible
 import com.arni.presentation.ext.isLastItemVisible
 import com.arni.presentation.model.human.ListRequestHuman
+import com.arni.presentation.ui.components.ButtonFillLarge
 import com.arni.presentation.ui.components.CustomPullRefreshIndicator
 import com.arni.presentation.ui.components.ItemRequest
 import com.arni.presentation.ui.components.SearchInput
@@ -81,11 +83,34 @@ private fun DrawContent(
             .zIndex(-1F)
             .pullRefreshCustom(ptrState)
     ) {
+        Column {
+            Box(
+                modifier = Modifier
+                    .zIndex(2F)
+                    .align(Alignment.CenterHorizontally)
+                    .background(color = Color.Unspecified)
+            ) {
+                if (state.isUpdateList)
+                    ButtonFillLarge(
+                        Modifier
+                            .align(Alignment.TopCenter),
+                        onClick = {
+                            eventConsumer(
+                                GeneralRequestEvent.onClickUpdateList(
+                                    state.selectDivision,
+                                    state.tasks
+                                )
+                            )
+                        },
+                        text = "Обновить список",
+                        isEnabled = true
+                    )
+            }
+        }
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(ArniTheme.colors.neutral_0)
-                .statusBarsPadding()
                 .navigationBarsPadding()
         ) {
             val listState = rememberLazyListState()
@@ -94,9 +119,14 @@ private fun DrawContent(
                 title = state.selectDivision.name,
                 onClickFilter = { eventConsumer(GeneralRequestEvent.OnClickFilter) },
                 onClickSearch = {},
-                onClickAddRequest = { eventConsumer(GeneralRequestEvent.OnClickAddRequest(
-                    state.tasks.listId,
-                    state.human)) },
+                onClickAddRequest = {
+                    eventConsumer(
+                        GeneralRequestEvent.OnClickAddRequest(
+                            state.tasks.listId,
+                            state.human
+                        )
+                    )
+                },
                 onNameClick = {
                     eventConsumer(
                         GeneralRequestEvent.onClickDivision(
@@ -105,19 +135,20 @@ private fun DrawContent(
                         )
                     )
                 })
-            /*   SearchInput(
+        /*       SearchInput(
                    modifier = Modifier
                        .fillMaxWidth()
-                       .padding(all = 20.dp),
+                       .padding(all = 10.dp),
                    text = state.searchText,
                    onClearClick = { eventConsumer(GeneralRequestEvent.OnClearSearchEvent) },
                    onValueChange = { eventConsumer.invoke(GeneralRequestEvent.OnSearchEvent(it)) }
-               )*/
+               )
+*/
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(ArniTheme.colors.neutral_0)
-                    .padding(start = 5.dp, end = 5.dp, top = 10.dp, bottom = 80.dp),
+                    .padding(start = 5.dp, end = 5.dp, top = 1.dp, bottom = 80.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 state = listState
             ) {
@@ -131,7 +162,6 @@ private fun DrawContent(
                                 state.isRefreshing,
                                 ptrState,
                                 Modifier
-                                    .padding(top = 20.dp)
                                     .align(Alignment.TopCenter)
                             )
                     }
@@ -167,7 +197,7 @@ private fun DrawContent(
 @Preview
 private fun GeneralRequestViewPreview() {
     ArniTheme {
-        GeneralRequestView(Content(ListRequestHuman("", listOf()))) {}
+        GeneralRequestView(Content(ListRequestHuman("", itemsPage = listOf(), found = false))) {}
     }
 }
 

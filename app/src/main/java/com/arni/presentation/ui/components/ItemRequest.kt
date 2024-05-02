@@ -184,18 +184,15 @@ fun ItemRequest(
 @Preview(showBackground = true, widthDp = 500, heightDp = 1500)
 private fun ItemEventPreview() {
     ArniTheme {
-        Row {
-            Column(
-                Modifier
-                    .padding(top = 24.dp)
-                    .height(1900.dp)
-                    .width(900.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                ItemRequest("Отделение 1", "Отделение 2", "Иванов Иван", "", false, "П") {}
-                ItemRequest("Отделение 1", "Отделение 2", "Иванов Иван", "", true, "Э") {}
-                ItemRequest("Отделение 1", "Отделение 2", null, "", false, "П") {}
-            }
+        Column(
+            Modifier
+                .height(1900.dp)
+                .width(900.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            ItemRequest("Отделение 1", "Отделение 2", "Иванов Иван", "", false, "П") {}
+            ItemRequest("Отделение 1", "Отделение 2", "Иванов Иван", "", true, "Э") {}
+            ItemRequest("Отделение 1", "Отделение 2", null, "", false, "П") {}
         }
     }
 }

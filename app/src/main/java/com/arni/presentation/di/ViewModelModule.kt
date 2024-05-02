@@ -11,7 +11,7 @@ import com.arni.presentation.ui.screen.request.create.ui.CreateRequestViewModel
 import com.arni.presentation.ui.screen.request.detail.ui.DetailRequestViewModel
 import com.arni.presentation.ui.screen.request.general.ui.GeneralRequestViewModel
 import com.arni.presentation.ui.screen.request.select_division_general.ui.SelectDivisionViewModel
-import com.arni.presentation.ui.screen.select_departament.ui.SelectDepartmentViewModel
+import com.arni.presentation.ui.screen.select_dispatcher.ui.SelectDispatcherViewModel
 import com.arni.presentation.ui.screen.select_executor.ui.SelectExecutorViewModel
 import com.arni.presentation.ui.screen.select_status_patient.ui.SelectStatusPatientViewModel
 import com.arni.presentation.ui.screen.select_status_request.ui.SelectStatusRequestViewModel
@@ -44,7 +44,7 @@ val viewModelModule = module {
         FilterViewModel()
     }
     viewModel {
-        CreateRequestViewModel(get(), get(), get())
+        CreateRequestViewModel(get(), get(), get(), get())
     }
     viewModel {
         SelectExecutorViewModel(get())
@@ -54,6 +54,10 @@ val viewModelModule = module {
     }
     viewModel {
         SelectUrgentlyStatusViewModel(get())
+    }
+
+    viewModel {
+        SelectDispatcherViewModel(get())
     }
 
     viewModel { params ->

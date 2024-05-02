@@ -93,7 +93,7 @@ class EntryPointActivity : FragmentActivity(), KoinComponent {
                 else -> getString(R.string.error_undefined)
             }
 
-            else -> getString(R.string.error_undefined)
+            else -> getString(R.string.update)
         }
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }

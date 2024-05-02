@@ -46,7 +46,7 @@ data class RequestHuman(
             statusPatient = StatusPatientHuman("", ""),
             description = "",
             // val photos: List<String>,
-            division = DivisionHuman("", "", "", listOf(), listOf()),
+            division = DivisionHuman("", "", "", listOf(), listOf(), listOf()),
             dispatcher = DispatcherHuman("", ""),
             initiator = InitiatorHuman("", ""),
             comment = "",

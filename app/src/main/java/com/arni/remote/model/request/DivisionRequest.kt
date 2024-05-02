@@ -6,7 +6,7 @@ data class DivisionRequest(
     @SerializedName("guid")
     val guid: String?,
     val name: String?,
-    val role: String,
-    val executors: List<ExecutorRequest>,
-    var department: List<DepartmentRequest>,
+    val role: String?,
+    val executors: List<ExecutorRequest>?,
+    var department: List<DepartmentRequest>?,
 )

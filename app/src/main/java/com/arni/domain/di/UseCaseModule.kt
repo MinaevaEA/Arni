@@ -1,5 +1,6 @@
 package com.arni.domain.di
 
+import com.arni.domain.usecase.GetRequestAddDetailUseCase
 import com.arni.domain.usecase.GetRequestChangeDetailUseCase
 import com.arni.domain.usecase.GetRequestEditUseCase
 import com.arni.domain.usecase.auth.AuthUseCase
@@ -23,6 +24,9 @@ val useCaseModule = module {
     }
     factory {
         GetRequestChangeDetailUseCase(get())
+    }
+    factory {
+        GetRequestAddDetailUseCase(get())
     }
 
     factory {

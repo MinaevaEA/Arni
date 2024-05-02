@@ -7,6 +7,8 @@ data class EditItemRequest(
     val guid: String?,
     @SerializedName("date")
     val date: String?,
+    @SerializedName("markdelete")
+    val markdelete: Boolean,
     @SerializedName("number")
     val number: String?,
     @SerializedName("division")

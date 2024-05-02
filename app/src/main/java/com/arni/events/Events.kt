@@ -1,6 +1,7 @@
 package com.arni.events
 
 import com.arni.presentation.model.human.DepartmentHuman
+import com.arni.presentation.model.human.DispatcherHuman
 import com.arni.presentation.model.human.DivisionHuman
 import com.arni.presentation.model.human.ExecutorHuman
 import com.arni.presentation.model.human.RequestStatusHuman
@@ -54,6 +55,7 @@ sealed interface EventType : BaseEventType {
     data class OnExecutor(val executor: List<ExecutorHuman>) : EventType
     data class OnStatusPatient(val statusPatient: StatusPatientHuman) : EventType
     data class OnUrgently(val urgently: UrgencyHuman) : EventType
+    data class OnDispatcher(val dispatcher: DispatcherHuman) : EventType
     class OnDivisionGeneral(val division: DivisionHuman, val listID: String) : EventType
     class OnListID(val listID: String) : EventType
     class OnDivision(val division: DivisionHuman) : EventType

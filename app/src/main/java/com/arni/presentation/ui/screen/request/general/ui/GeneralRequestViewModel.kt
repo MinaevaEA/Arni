@@ -41,11 +41,12 @@ class GeneralRequestViewModel(
                 dictionary, divisionHuman
             )
 
+            is GeneralRequestEvent.onClickUpdateList -> loadAllChangeRequest(event.division, event.listRequestHuman)
             is GeneralRequestEvent.OnBackBtnClick -> action = GeneralRequestAction.ExitScreen
             is GeneralRequestEvent.OnClickFilter -> action = GeneralRequestAction.OpenScreenFilter
             is GeneralRequestEvent.OnClearSearchEvent -> clearSearchText()
             is GeneralRequestEvent.OnSearchEvent -> search(event.searchText)
-            is GeneralRequestEvent.loadNextRequest -> loadNextRequest(event.division, event.listRequestHuman)
+            is GeneralRequestEvent.loadNextRequest -> loadNextRequestPagination(event.division, event.listRequestHuman)
             //is GeneralRequestEvent.loadChangeRequest -> loadAllChangeRequest(event.division, event.listRequestHuman)
             is GeneralRequestEvent.OnRefresh -> refresh(event.division, event.listRequestHuman)
         }
@@ -67,7 +68,7 @@ class GeneralRequestViewModel(
                 val division = allDictionaryHuman?.division
                 division?.first()?.guid?.let {
                     getRequestUseCase.invoke(
-                        limit = 7,
+                        limit = 20,
                         divisionGuid = it
                     ).getOrNull()
                 }
@@ -87,11 +88,10 @@ class GeneralRequestViewModel(
             }
             launch {
                 while (true) {
-                    delay(5000)
+                    delay(50000)
                     allDictionaryHuman?.division?.first()?.let { division ->
                         requestsByDictionary?.let { dictionary ->
-                            loadAllChangeRequest(division, dictionary)
-                            println("!!!!!!!!!!!!!!!!!!!!!! update")
+                            checkAllChangeRequest(division, dictionary)
                         }
                     }
                 }
@@ -101,7 +101,7 @@ class GeneralRequestViewModel(
             viewModelScope.launch {
                 val getRequestOtherDivision = viewModelScope.async {
                     getRequestUseCase.invoke(
-                        limit = 7,
+                        limit = 20,
                         listId = it.listID, divisionGuid = it.division.guid
                     ).getOrNull()
 
@@ -114,18 +114,50 @@ class GeneralRequestViewModel(
         }
     }
 
+    fun loadAllRequest(){
+        viewModelScope.launch {
+            val getAllDictionary = viewModelScope.async {
+                getDictionaryUseCase().getOrNull()
+
+            }
+            val allDictionaryHuman = getAllDictionary.await()
+            val getRequestsByDictionary = viewModelScope.async {
+                val division = allDictionaryHuman?.division
+                division?.first()?.guid?.let {
+                    getRequestUseCase.invoke(
+                        limit = 20,
+                        divisionGuid = it
+                    ).getOrNull()
+                }
+            }
+            divisionHuman = allDictionaryHuman?.division?.first() ?: DivisionHuman.getDefault()
+            val requestsByDictionary = getRequestsByDictionary.await()
+
+            if (allDictionaryHuman != null && requestsByDictionary != null) {
+                dictionary = allDictionaryHuman
+                listDivision.addAll(allDictionaryHuman.division)
+                listRequest.addAll(requestsByDictionary.itemsPage)
+                viewState = Content(
+                    tasks = requestsByDictionary,
+                    dictionaryHuman = allDictionaryHuman,
+                    selectDivision = listDivision.first()
+                )
+            }
+        }
+    }
+
     private fun refresh(division: DivisionHuman, listRequestHuman: ListRequestHuman) {
         viewModelScope.launch {
             viewState = viewState.changeRefreshingStatus(true)
-
             val result = getChangeRequestUseCase.invoke(
-                limit = 5,
+                limit = 20,
                 listId = listRequestHuman.listId,
-                divisionGuid = division.guid
+                divisionGuid = division.guid,
+                onlycheck = false
             )
             when (result) {
                 is DataStatus.Success -> {
-                    viewState = viewState.refreshContentState(listRequest)
+                    viewState = viewState.refreshContentState(result.data.itemsPage)
                 }
 
                 is DataStatus.Loading -> {
@@ -146,15 +178,32 @@ class GeneralRequestViewModel(
                 listId = listRequestHuman.listId,
                 divisionGuid = division.guid,
                 pointRef = listRequestHuman.itemsPage.last().guid,
-                pointDate = listRequestHuman.itemsPage.last().date
-            )
+                pointDate = listRequestHuman.itemsPage.last().date,
+                onlycheck = false
+            ).getOrNull()
             if (partOfList != null)
-                viewState = viewState.refreshContentState(listRequest).also {
-                }
+                viewState = viewState.refreshContentState(partOfList.itemsPage)
+            viewState = viewState.changeUpdateListStatus(false)
+            loadAllRequest()
         }
     }
 
-    private fun loadNextRequest(division: DivisionHuman, listRequestHuman: ListRequestHuman) {
+    private fun checkAllChangeRequest(division: DivisionHuman, listRequestHuman: ListRequestHuman) {
+        viewModelScope.launch {
+            val partOfList = getChangeRequestUseCase.invoke(
+                limit = 5,
+                listId = listRequestHuman.listId,
+                divisionGuid = division.guid,
+                pointRef = listRequestHuman.itemsPage.last().guid,
+                pointDate = listRequestHuman.itemsPage.last().date,
+                onlycheck = true
+            )
+            if (partOfList.getOrNull()?.found == true)
+                viewState = viewState.changeUpdateListStatus(true)
+        }
+    }
+
+    private fun loadNextRequestPagination(division: DivisionHuman, listRequestHuman: ListRequestHuman) {
         viewModelScope.launch {
             val partOfList = getRequestUseCase.invoke(
                 limit = 5,
@@ -177,15 +226,24 @@ class GeneralRequestViewModel(
             Empty -> this
         }
 
+    private fun GeneralRequestState.changeUpdateListStatus(isUpdateList: Boolean): GeneralRequestState =
+        when (this) {
+            is Content -> {
+                copy(isUpdateList = isUpdateList)
+            }
+
+            Empty -> this
+        }
+
     private fun GeneralRequestState.refreshContentState(
         addableList: List<RequestHuman>,
-        isRefreshing: Boolean = false
+        isRefreshing: Boolean = false,
     ): GeneralRequestState =
         when (this) {
             is Content -> {
                 copy(
                     tasks = tasks.copy(itemsPage = tasks.itemsPage + addableList),
-                    isRefreshing = isRefreshing
+                    isRefreshing = isRefreshing,
                 )
             }
 

@@ -3,7 +3,6 @@ package com.arni.domain.repository
 import com.arni.data.base.DataStatus
 import com.arni.remote.Api
 import com.arni.remote.model.response.CheckedResponse
-import com.arni.remote.model.response.ListRequestResponse
 
 class RequestChangeRepositoryRemote(private val api: Api) : RequestRepository {
     suspend fun getCheckRequest(

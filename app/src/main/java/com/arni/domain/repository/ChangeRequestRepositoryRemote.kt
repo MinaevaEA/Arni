@@ -9,8 +9,10 @@ class ChangeRequestRepositoryRemote(private val api: Api) : RequestRepository {
         limit: Int,
         listId: String?,
         divisionitem: String,
+        onlycheck: Boolean,
         pointRef: String?,
         pointDate: String?
     ): DataStatus<ListRequestResponse> =
-        handleRequest { api.getAllChangeRequest(limit, listId, divisionitem, pointRef, pointDate) }
+        handleRequest {
+            api.getAllChangeRequest(limit, listId, divisionitem, onlycheck = onlycheck, pointRef, pointDate) }
 }

@@ -9,6 +9,7 @@ data class DivisionDomain(
     val role: String? = "",
     val executors: List<ExecutorDomain>? = listOf(),
     val department: List<DepartamentDomain>? = listOf(),
+    val dispatcher: List<DispatcherDomain>?
 )
 
 fun DivisionDomain.toHuman() = DivisionHuman(
@@ -16,7 +17,8 @@ fun DivisionDomain.toHuman() = DivisionHuman(
     name = name,
     role = role ?: "",
     executors = executors?.toHuman() ?: listOf(),
-    department = department?.toHuman() ?: listOf()
+    department = department?.toHuman() ?: listOf(),
+    dispatcher = dispatcher?.toHuman() ?: listOf()
 )
 
 fun List<DivisionDomain>.toHuman() = map { it.toHuman() }

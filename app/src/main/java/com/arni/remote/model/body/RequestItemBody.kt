@@ -12,6 +12,7 @@ import com.arni.presentation.model.human.UrgencyHuman
 
 data class RequestItemBody(
     val guid: String,
+    val markdelete: Boolean,
     val statusRequest: RequestStatusHuman,
     val date: String,
     val number: String,
@@ -22,9 +23,7 @@ data class RequestItemBody(
     val urgency: UrgencyHuman,
     val executors: List<ExecutorHuman>,
     val patients: List<PatientHuman>,
-    val nameDispatcher: String? = null,
     val statusPatient: StatusPatientHuman,
-    val description: String? = null,
 // val photos: List<String>,
     val division: DivisionHuman,
     val dispatcher: DispatcherHuman,

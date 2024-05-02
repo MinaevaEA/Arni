@@ -14,6 +14,7 @@
     <string name="error_server">Ошибка сервера</string>
     <string name="error_unauthorized">Ошибка авторизации</string>
     <string name="error_undefined">Неизвестная ошибка</string>
+    <string name="update">Успешно</string>
     <string name="server_date_format" translatable="false">yyyy-MM-dd\'T\'HH:mm:ss</string>
 
     //detail screen

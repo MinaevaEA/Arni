@@ -24,7 +24,7 @@ fun DictionaryResponse.toDomain() = DictionaryDomain(
     initiator = initiator?.toDomain() ?: InitiatorDomain("",""),
     statusItem = statusItem?.toDomain() ?: listOf(),
     urgency = urgency?.toDomain() ?: listOf(),
-    statusPatient = statusPatient?.toDomain() ?: listOf()
+    statusPatient = statusPatient?.toDomain() ?: listOf(),
 )
 
 

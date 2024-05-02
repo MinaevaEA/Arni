@@ -52,7 +52,7 @@ class MainScreen : AndroidScreen() {
                         backgroundColor = ArniTheme.colors.neutral_0
                     ) {
                         TabNavigationItem(GeneralTab())
-                        TabNavigationItem(ChatTab())
+                       // TabNavigationItem(ChatTab())
                         TabNavigationItem(ProfileTab())
                     }
                 }

@@ -12,7 +12,7 @@ data class DataWrapper<T>(
 )
 
 fun <K : Any> DataWrapper<K>.toDataStatus(): DataStatus<K> {
-    return if (this.success == true && this.data != null) {
+    return (if (this.success == true && this.data != null) {
         DataStatus.Success(this.data)
     } else {
         DataStatus.Error(
@@ -27,7 +27,7 @@ fun <K : Any> DataWrapper<K>.toDataStatus(): DataStatus<K> {
                 else -> IOException(this.message)
             }
         )
-    }
+    })
 }
 
 data class CompletableData(

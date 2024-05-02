@@ -16,7 +16,7 @@ data class DictionaryHuman(
             initiator = InitiatorHuman("",""),
             statusItem = listOf(),
             urgency = listOf(),
-            statusPatient = listOf()
+            statusPatient = listOf(),
         )
     }
 }
