@@ -10,6 +10,7 @@ import com.arni.events.EventType
 import com.arni.presentation.base.BaseViewModel
 import com.arni.presentation.model.human.DictionaryHuman
 import com.arni.presentation.model.human.DivisionHuman
+import com.arni.presentation.model.human.ListRequestHuman
 import com.arni.presentation.model.human.PatientHuman
 import com.arni.presentation.model.human.RequestHuman
 import com.arni.presentation.ui.screen.request.create.ui.PickFileOption
@@ -24,13 +25,13 @@ class DetailRequestViewModel(
     val listId: String,
     val item: RequestHuman,
     dictionary: DictionaryHuman,
-    divisionHuman: DivisionHuman,
+    val divisionHuman: DivisionHuman,
     val getRequestChangeDetailUseCase: GetRequestChangeDetailUseCase,
     val getRequestEditUseCase: GetRequestEditUseCase
 ) : BaseViewModel<DetailRequestState, DetailRequestEvent, DetailRequestAction>(
     DetailRequestState(item = item, dictionary = dictionary, divisionHuman = divisionHuman, listId = listId)
 ) {
-
+    var currentDivision: DivisionHuman = item.division
     var dateRequestCurrent = LocalDate.now()
     var dateBeginCurrent = LocalDate.now()
     var dateEndCurrent = LocalDate.now()
@@ -113,6 +114,7 @@ class DetailRequestViewModel(
 
             is DetailRequestEvent.onClickSelectDispatchers ->
                 action = DetailRequestAction.openDispatcherScreen(act.listDispatcherHuman)
+
             is DetailRequestEvent.onClickSelectExecutor ->
                 action = DetailRequestAction.openExecutorScreen(act.listExecutor)
 
@@ -149,16 +151,18 @@ class DetailRequestViewModel(
                     viewState = viewState.copy(enabled = enabled)
                     checkEnabledButton()
                 }
-                //TODO доработать сообщение об ошибке
+
                 else {
+                    publishEvent(EventType.UpdaleList(currentDivision, listId))
                     showErrorToast(Exception("Обновите список"))
                     action = DetailRequestAction.returnScreenList
                 }
             }
         } else {
             viewModelScope.launch {
-                val resultChange = getRequestEditUseCase.invoke(listId = listId, item.guid, item).getOrNull()//result.await()
+                val resultChange = getRequestEditUseCase.invoke(listId = listId, item.guid, item).getOrNull()
                 if (resultChange?.anotheritemver == false) {
+                    publishEvent(EventType.UpdaleList(currentDivision, listId))
                     viewState = viewState.copy(enabled = enabled)
                     action = DetailRequestAction.returnScreenList
                     showErrorToast(Exception("Заявка изменена"))
@@ -350,6 +354,7 @@ class DetailRequestViewModel(
                     dispatcher = viewState.item.dispatcher.copy(name = "")
                 )
             )
+            currentDivision = it.division
         }
     }
 }

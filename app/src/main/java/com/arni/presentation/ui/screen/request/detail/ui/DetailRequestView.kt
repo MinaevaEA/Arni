@@ -210,6 +210,11 @@ fun DetailRequestView(
                         onCheckedChange = { selected ->
                             eventConsumer(DetailRequestEvent.isDelete(selected))
                         })
+                    TextFieldInput(
+                        label = stringResource(id = R.string.number),
+                        text = state.item.number,
+                        enabled = false,
+                    )
                     val currentFormat = SimpleDateFormat("yyyy-MM-dd\'T\'HH:mm:ss")
                     val date = currentFormat.parse(state.item.date)
                     val targetFormatDate = SimpleDateFormat("dd.MM.yyyy")

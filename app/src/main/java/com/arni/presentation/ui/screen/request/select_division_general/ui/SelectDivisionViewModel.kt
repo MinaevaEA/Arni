@@ -28,7 +28,7 @@ class SelectDivisionViewModel(
 
     private fun selectCause(divisionHuman: DivisionHuman, listID: String) {
         viewModelScope.launch {
-            Events.publish(EventType.OnDivisionGeneral(divisionHuman, listID))
+            Events.publish(EventType.OnSelectDivisionGeneral(divisionHuman, listID))
         }
         action = SelectDivisionAction.OnExist
     }

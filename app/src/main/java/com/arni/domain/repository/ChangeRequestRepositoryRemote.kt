@@ -5,7 +5,7 @@ import com.arni.remote.Api
 import com.arni.remote.model.response.ListRequestResponse
 
 class ChangeRequestRepositoryRemote(private val api: Api) : RequestRepository {
-    suspend fun getAllChangeRequest(
+    suspend fun getUp(
         limit: Int,
         listId: String?,
         divisionitem: String,
@@ -14,5 +14,5 @@ class ChangeRequestRepositoryRemote(private val api: Api) : RequestRepository {
         pointDate: String?
     ): DataStatus<ListRequestResponse> =
         handleRequest {
-            api.getAllChangeRequest(limit, listId, divisionitem, onlycheck = onlycheck, pointRef, pointDate) }
+            api.getUp(limit, listId, divisionitem, onlycheck = onlycheck, pointRef, pointDate) }
 }

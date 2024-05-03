@@ -1,5 +1,6 @@
 package com.arni.presentation.ui.screen.request.general.ui
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.viewModelScope
 import com.arni.data.base.DataStatus
 import com.arni.data.base.getOrNull
@@ -16,10 +17,11 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@SuppressLint("SuspiciousIndentation")
 class GeneralRequestViewModel(
     private val getRequestUseCase: GetRequestUseCase,
     private val getDictionaryUseCase: GetDictionaryUseCase,
-    private val getChangeRequestUseCase: GetChangeRequestUseCase
+    private val getUpListUseCase: GetChangeRequestUseCase,
 ) : BaseViewModel<GeneralRequestState, GeneralRequestEvent, GeneralRequestAction>(Empty) {
 
     override fun obtainEvent(event: GeneralRequestEvent) {
@@ -30,7 +32,7 @@ class GeneralRequestViewModel(
                     event.item,
                     event.human,
                     dictionary,
-                    divisionHuman
+                    currentDivision
                 )
 
             is GeneralRequestEvent.onClickDivision -> action =
@@ -38,10 +40,10 @@ class GeneralRequestViewModel(
 
             is GeneralRequestEvent.OnClickAddRequest -> action = GeneralRequestAction.OpenScreenAddRequest(
                 event.listId,
-                dictionary, divisionHuman
+                dictionary, currentDivision
             )
 
-            is GeneralRequestEvent.onClickUpdateList -> loadAllChangeRequest(event.division, event.listRequestHuman)
+            is GeneralRequestEvent.onClickUpdateList -> loadAllNewRequests(event.division, event.listRequestHuman)
             is GeneralRequestEvent.OnBackBtnClick -> action = GeneralRequestAction.ExitScreen
             is GeneralRequestEvent.OnClickFilter -> action = GeneralRequestAction.OpenScreenFilter
             is GeneralRequestEvent.OnClearSearchEvent -> clearSearchText()
@@ -55,93 +57,88 @@ class GeneralRequestViewModel(
     private var listDivision: MutableList<DivisionHuman> = mutableListOf()
     private var listRequest: MutableList<RequestHuman> = mutableListOf()
     private var dictionary: DictionaryHuman = DictionaryHuman.getDefault()
-    private var divisionHuman: DivisionHuman = DivisionHuman.getDefault()
+    private var currentDivision: DivisionHuman = DivisionHuman.getDefault()
 
     init {
         viewModelScope.launch {
             val getAllDictionary = viewModelScope.async {
                 getDictionaryUseCase().getOrNull()
-
             }
-            val allDictionaryHuman = getAllDictionary.await()
+            val allDictionary = getAllDictionary.await()
+            currentDivision = allDictionary?.division?.first() ?: DivisionHuman.getDefault()
             val getRequestsByDictionary = viewModelScope.async {
-                val division = allDictionaryHuman?.division
-                division?.first()?.guid?.let {
+                currentDivision.guid.let {
                     getRequestUseCase.invoke(
                         limit = 20,
                         divisionGuid = it
                     ).getOrNull()
                 }
             }
-            divisionHuman = allDictionaryHuman?.division?.first() ?: DivisionHuman.getDefault()
             val requestsByDictionary = getRequestsByDictionary.await()
 
-            if (allDictionaryHuman != null && requestsByDictionary != null) {
-                dictionary = allDictionaryHuman
-                listDivision.addAll(allDictionaryHuman.division)
+            if (allDictionary != null && requestsByDictionary != null) {
+                dictionary = allDictionary
+                listDivision.addAll(allDictionary.division)
                 listRequest.addAll(requestsByDictionary.itemsPage)
                 viewState = Content(
                     tasks = requestsByDictionary,
-                    dictionaryHuman = allDictionaryHuman,
+                    dictionaryHuman = allDictionary,
                     selectDivision = listDivision.first()
                 )
             }
-            launch {
-                while (true) {
-                    delay(50000)
-                    allDictionaryHuman?.division?.first()?.let { division ->
-                        requestsByDictionary?.let { dictionary ->
-                            checkAllChangeRequest(division, dictionary)
-                        }
+        }
+        subscribeEvent<EventType.UpdaleList>
+        {
+            viewModelScope.launch {
+                viewState = viewState.changeRefreshingStatus(true)
+                val result = getUpListUseCase.invoke(
+                    limit = 20,
+                    listId = it.listID,
+                    divisionGuid = it.divisionHuman.guid,
+                    onlycheck = false
+                )
+                when (result) {
+                    is DataStatus.Success -> {
+                        viewState = viewState.refreshContentState(result.data.itemsPage)
+                    }
+
+                    is DataStatus.Loading -> {
+                        // viewState = viewState.refreshContentState(listRequest)
+                    }
+
+                    is DataStatus.Error -> {
+                        //println("!!!!!!Error: ${result.ex.message}")
                     }
                 }
             }
         }
-        subscribeEvent<EventType.OnDivisionGeneral> {
+        /*  viewModelScope.launch {
+              launch {
+                  while (true) {
+                      delay(50000)
+                      currentDivision.let { division ->
+                          requestsByDictionary?.let { dictionary ->
+                              checkAllChangeRequests(division, dictionary)
+                          }
+                      }
+                  }
+              }
+          }*/
+        //когда меняем подразделение в тулбаре
+        subscribeEvent<EventType.OnSelectDivisionGeneral>
+        {
             viewModelScope.launch {
                 val getRequestOtherDivision = viewModelScope.async {
                     getRequestUseCase.invoke(
                         limit = 20,
-                        listId = it.listID, divisionGuid = it.division.guid
+                        divisionGuid = it.division.guid
                     ).getOrNull()
 
                 }
                 val requestsOtherDivision = getRequestOtherDivision.await()
-                divisionHuman = it.division
+                currentDivision = it.division
                 if (requestsOtherDivision != null)
                     viewState = Content(tasks = requestsOtherDivision, selectDivision = it.division)
-            }
-        }
-    }
-
-    fun loadAllRequest(){
-        viewModelScope.launch {
-            val getAllDictionary = viewModelScope.async {
-                getDictionaryUseCase().getOrNull()
-
-            }
-            val allDictionaryHuman = getAllDictionary.await()
-            val getRequestsByDictionary = viewModelScope.async {
-                val division = allDictionaryHuman?.division
-                division?.first()?.guid?.let {
-                    getRequestUseCase.invoke(
-                        limit = 20,
-                        divisionGuid = it
-                    ).getOrNull()
-                }
-            }
-            divisionHuman = allDictionaryHuman?.division?.first() ?: DivisionHuman.getDefault()
-            val requestsByDictionary = getRequestsByDictionary.await()
-
-            if (allDictionaryHuman != null && requestsByDictionary != null) {
-                dictionary = allDictionaryHuman
-                listDivision.addAll(allDictionaryHuman.division)
-                listRequest.addAll(requestsByDictionary.itemsPage)
-                viewState = Content(
-                    tasks = requestsByDictionary,
-                    dictionaryHuman = allDictionaryHuman,
-                    selectDivision = listDivision.first()
-                )
             }
         }
     }
@@ -149,7 +146,7 @@ class GeneralRequestViewModel(
     private fun refresh(division: DivisionHuman, listRequestHuman: ListRequestHuman) {
         viewModelScope.launch {
             viewState = viewState.changeRefreshingStatus(true)
-            val result = getChangeRequestUseCase.invoke(
+            val result = getUpListUseCase.invoke(
                 limit = 20,
                 listId = listRequestHuman.listId,
                 divisionGuid = division.guid,
@@ -161,7 +158,7 @@ class GeneralRequestViewModel(
                 }
 
                 is DataStatus.Loading -> {
-                    viewState = viewState.refreshContentState(listRequest)
+                    // viewState = viewState.refreshContentState(listRequest)
                 }
 
                 is DataStatus.Error -> {
@@ -171,9 +168,9 @@ class GeneralRequestViewModel(
         }
     }
 
-    private fun loadAllChangeRequest(division: DivisionHuman, listRequestHuman: ListRequestHuman) {
+    private fun loadAllNewRequests(division: DivisionHuman, listRequestHuman: ListRequestHuman) {
         viewModelScope.launch {
-            val partOfList = getChangeRequestUseCase.invoke(
+            val partOfList = getUpListUseCase.invoke(
                 limit = 5,
                 listId = listRequestHuman.listId,
                 divisionGuid = division.guid,
@@ -183,14 +180,13 @@ class GeneralRequestViewModel(
             ).getOrNull()
             if (partOfList != null)
                 viewState = viewState.refreshContentState(partOfList.itemsPage)
-            viewState = viewState.changeUpdateListStatus(false)
-            loadAllRequest()
+            viewState = viewState.changeStatusUpdateList(false)
         }
     }
 
-    private fun checkAllChangeRequest(division: DivisionHuman, listRequestHuman: ListRequestHuman) {
+    private fun checkAllChangeRequests(division: DivisionHuman, listRequestHuman: ListRequestHuman) {
         viewModelScope.launch {
-            val partOfList = getChangeRequestUseCase.invoke(
+            val partOfList = getUpListUseCase.invoke(
                 limit = 5,
                 listId = listRequestHuman.listId,
                 divisionGuid = division.guid,
@@ -199,7 +195,7 @@ class GeneralRequestViewModel(
                 onlycheck = true
             )
             if (partOfList.getOrNull()?.found == true)
-                viewState = viewState.changeUpdateListStatus(true)
+                viewState = viewState.changeStatusUpdateList(true)
         }
     }
 
@@ -226,7 +222,7 @@ class GeneralRequestViewModel(
             Empty -> this
         }
 
-    private fun GeneralRequestState.changeUpdateListStatus(isUpdateList: Boolean): GeneralRequestState =
+    private fun GeneralRequestState.changeStatusUpdateList(isUpdateList: Boolean): GeneralRequestState =
         when (this) {
             is Content -> {
                 copy(isUpdateList = isUpdateList)

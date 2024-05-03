@@ -174,6 +174,7 @@ private fun DrawContent(
                         isStatus = item.statusRequest.name ?: "",
                         Urgency = item.urgency?.name ?: "",
                         isStatusDelete = item.markdelete,
+                        number = item.number,
                         onClick = {
                             eventConsumer(
                                 GeneralRequestEvent.onClickItem(

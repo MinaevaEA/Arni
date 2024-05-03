@@ -63,7 +63,6 @@ class ChatTab : Tab {
             GeneralRequestScreen()
         )
     }
-
 }
 
 

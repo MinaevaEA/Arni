@@ -35,7 +35,8 @@ fun ItemRequest(
     isStatus: String,
     isStatusDelete: Boolean,
     Urgency: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    number: String
 ) {
     Column(
         modifier = Modifier
@@ -57,6 +58,7 @@ fun ItemRequest(
         ) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
+                    Text(modifier = Modifier.padding(top = 4.dp, bottom = 4.dp, end = 10.dp), text = number)
                     Column(
                         modifier = Modifier
                             .padding(end = 2.dp)
@@ -190,9 +192,9 @@ private fun ItemEventPreview() {
                 .width(900.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            ItemRequest("Отделение 1", "Отделение 2", "Иванов Иван", "", false, "П") {}
-            ItemRequest("Отделение 1", "Отделение 2", "Иванов Иван", "", true, "Э") {}
-            ItemRequest("Отделение 1", "Отделение 2", null, "", false, "П") {}
+            ItemRequest("Отделение 1", "Отделение 2", "Иванов Иван", "", false, "П", number = "1233", onClick = {})
+            ItemRequest("Отделение 1", "Отделение 2", "Иванов Иван", "", true, "Э", number = "1233", onClick = {})
+            ItemRequest("Отделение 1", "Отделение 2", null, "", false, "П", number = "1233", onClick = {})
         }
     }
 }

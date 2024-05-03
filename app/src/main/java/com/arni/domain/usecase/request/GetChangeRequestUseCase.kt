@@ -4,12 +4,8 @@ import com.arni.data.base.DataStatus
 import com.arni.data.base.mapTo
 import com.arni.domain.model.toHuman
 import com.arni.domain.repository.ChangeRequestRepositoryRemote
-import com.arni.domain.repository.RequestRepositoryRemote
 import com.arni.presentation.model.human.ListRequestHuman
 import com.arni.remote.model.response.toDomain
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import timber.log.Timber
 
 class GetChangeRequestUseCase(private val repository: ChangeRequestRepositoryRemote) {
     suspend operator fun invoke(
@@ -17,7 +13,7 @@ class GetChangeRequestUseCase(private val repository: ChangeRequestRepositoryRem
         pointDate: String? = null, onlycheck: Boolean
     ): DataStatus<ListRequestHuman> {
         return when (val requestResponse =
-            repository.getAllChangeRequest(limit, listId, divisionGuid, onlycheck, pointRef, pointDate)) {
+            repository.getUp(limit, listId, divisionGuid, onlycheck, pointRef, pointDate)) {
             is DataStatus.Success -> {
                 requestResponse.mapTo { it.toDomain().toHuman() }
             }

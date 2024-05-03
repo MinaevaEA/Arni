@@ -1,12 +1,9 @@
 package com.arni.remote
 
-import com.arni.remote.model.request.EditItemRequest
-import com.arni.remote.model.body.RequestItemBody
 import com.arni.remote.model.request.ContainerItemRequest
 import com.arni.remote.model.response.CheckedResponse
 import com.arni.remote.model.response.DataWrapper
 import com.arni.remote.model.response.DictionaryResponse
-import com.arni.remote.model.response.EditRequestResponse
 import com.arni.remote.model.response.ListRequestResponse
 import com.arni.remote.model.response.TokenResponse
 import retrofit2.http.Body
@@ -14,7 +11,6 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface Api {
@@ -37,7 +33,7 @@ interface Api {
         @Query("pointdate") pointdate: String?
     ): DataWrapper<ListRequestResponse>
     @GET("getup")
-    suspend fun getAllChangeRequest(
+    suspend fun getUp(
         @Query("limit") number: Int,
         @Query("listid") listId: String? ,
         // @Query("directionup") directionup: Int = 0,

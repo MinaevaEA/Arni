@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import cafe.adriel.voyager.androidx.AndroidScreen
+import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.arni.presentation.ext.LocalGlobalNavigator
 import com.arni.presentation.ui.screen.filter.FilterScreen
@@ -19,7 +19,7 @@ import com.arni.presentation.ui.screen.request.select_division_general.SelectDiv
 import org.koin.androidx.compose.koinViewModel
 import pro.midev.mec.presentation.ui.style.ArniTheme
 
-class GeneralRequestScreen : AndroidScreen() {
+class GeneralRequestScreen : Screen {
 
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
@@ -31,7 +31,7 @@ class GeneralRequestScreen : AndroidScreen() {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 private fun GeneralCheckingScreen(
-    viewModel: GeneralRequestViewModel
+    viewModel: GeneralRequestViewModel,
 ) {
     val navigator = LocalGlobalNavigator.current
     val bottomSheetNavigator = LocalBottomSheetNavigator.current

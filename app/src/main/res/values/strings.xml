@@ -34,6 +34,7 @@
     <string name="name_patient_order">ФИО пациента*</string>
     <string name="status_patient">Статус пациента*</string>
     <string name="comment_order">Примечание</string>
+    <string name="number">Номер заявки</string>
     <string name="name_inicial">Имя инициатора</string>
     <string name="photo">Фото</string>
 

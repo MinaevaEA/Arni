@@ -4,6 +4,8 @@ import com.arni.presentation.model.human.DepartmentHuman
 import com.arni.presentation.model.human.DispatcherHuman
 import com.arni.presentation.model.human.DivisionHuman
 import com.arni.presentation.model.human.ExecutorHuman
+import com.arni.presentation.model.human.ListRequestHuman
+import com.arni.presentation.model.human.RequestHuman
 import com.arni.presentation.model.human.RequestStatusHuman
 import com.arni.presentation.model.human.StatusPatientHuman
 import com.arni.presentation.model.human.UrgencyHuman
@@ -39,7 +41,7 @@ interface BaseEventType {
 }
 
 sealed interface EventType : BaseEventType {
-
+    data class UpdaleList(val divisionHuman: DivisionHuman, val listID: String) : EventType
     data class ChangeVisibilityBottomMenu(val isVisible: Boolean) : EventType
     data class ShowErrorToast(val ex: Exception) : EventType
     data class OnTimeRequestPicked(val time: LocalTime) : EventType
@@ -56,7 +58,7 @@ sealed interface EventType : BaseEventType {
     data class OnStatusPatient(val statusPatient: StatusPatientHuman) : EventType
     data class OnUrgently(val urgently: UrgencyHuman) : EventType
     data class OnDispatcher(val dispatcher: DispatcherHuman) : EventType
-    class OnDivisionGeneral(val division: DivisionHuman, val listID: String) : EventType
+    class OnSelectDivisionGeneral(val division: DivisionHuman, val listID: String) : EventType
     class OnListID(val listID: String) : EventType
     class OnDivision(val division: DivisionHuman) : EventType
     class OnDepatmentFrom(val depatmentFrom: DepartmentHuman) : EventType
