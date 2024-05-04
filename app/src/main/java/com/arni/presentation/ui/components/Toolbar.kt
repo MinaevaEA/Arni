@@ -113,7 +113,7 @@ fun SelectorToolbarMainScreen(
                         Text(
                             text = title,
                             style = ArniTheme.typography.headline.medium,
-                            color = ArniTheme.colors.black_100
+                            color = ArniTheme.colors.black_100,
                         )
                         Icon(
                             modifier = Modifier.padding(start = 7.dp),
@@ -214,7 +214,7 @@ fun ToolbarMainScreen(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Box {
+        Box(modifier = Modifier.weight(1f)) {
             CompositionLocalProvider(
                 LocalContentAlpha provides ContentAlpha.high,
                 content = title
