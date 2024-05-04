@@ -86,7 +86,7 @@ class GeneralRequestViewModel(
                     selectDivision = listDivision.first()
                 )
             }
-        /*    launch {
+            launch {
                 while (true) {
                     delay(50000)
                     currentDivision.let { division ->
@@ -95,7 +95,7 @@ class GeneralRequestViewModel(
                         }
                     }
                 }
-            }*/
+            }
         }
         subscribeEvent<EventType.UpdaleList>
         {
