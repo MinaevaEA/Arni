@@ -86,6 +86,16 @@ class GeneralRequestViewModel(
                     selectDivision = listDivision.first()
                 )
             }
+        /*    launch {
+                while (true) {
+                    delay(50000)
+                    currentDivision.let { division ->
+                        requestsByDictionary?.let { dictionary ->
+                            checkAllChangeRequests(division, dictionary)
+                        }
+                    }
+                }
+            }*/
         }
         subscribeEvent<EventType.UpdaleList>
         {
@@ -99,11 +109,12 @@ class GeneralRequestViewModel(
                 )
                 when (result) {
                     is DataStatus.Success -> {
-                        viewState = viewState.refreshContentState(result.data.itemsPage)
+                        viewState = viewState.refreshContentState(listRequest)
+                        loadAllRequest()
                     }
 
                     is DataStatus.Loading -> {
-                        // viewState = viewState.refreshContentState(listRequest)
+                        viewState = viewState.refreshContentState(listRequest)
                     }
 
                     is DataStatus.Error -> {
@@ -112,18 +123,6 @@ class GeneralRequestViewModel(
                 }
             }
         }
-        /*  viewModelScope.launch {
-              launch {
-                  while (true) {
-                      delay(50000)
-                      currentDivision.let { division ->
-                          requestsByDictionary?.let { dictionary ->
-                              checkAllChangeRequests(division, dictionary)
-                          }
-                      }
-                  }
-              }
-          }*/
         //когда меняем подразделение в тулбаре
         subscribeEvent<EventType.OnSelectDivisionGeneral>
         {
@@ -155,6 +154,7 @@ class GeneralRequestViewModel(
             when (result) {
                 is DataStatus.Success -> {
                     viewState = viewState.refreshContentState(result.data.itemsPage)
+                    loadAllRequest()
                 }
 
                 is DataStatus.Loading -> {
@@ -164,6 +164,36 @@ class GeneralRequestViewModel(
                 is DataStatus.Error -> {
                     //println("!!!!!!Error: ${result.ex.message}")
                 }
+            }
+        }
+    }
+
+    fun loadAllRequest() {
+        viewModelScope.launch {
+            val getAllDictionary = viewModelScope.async {
+                getDictionaryUseCase().getOrNull()
+
+            }
+            val allDictionaryHuman = getAllDictionary.await()
+            val getRequestsByDictionary = viewModelScope.async {
+                currentDivision?.guid?.let {
+                    getRequestUseCase.invoke(
+                        limit = 20,
+                        divisionGuid = it
+                    ).getOrNull()
+                }
+            }
+            val requestsByDictionary = getRequestsByDictionary.await()
+
+            if (allDictionaryHuman != null && requestsByDictionary != null) {
+                dictionary = allDictionaryHuman
+                listDivision.addAll(allDictionaryHuman.division)
+                listRequest.addAll(requestsByDictionary.itemsPage)
+                viewState = Content(
+                    tasks = requestsByDictionary,
+                    dictionaryHuman = allDictionaryHuman,
+                    selectDivision = currentDivision
+                )
             }
         }
     }

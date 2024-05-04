@@ -44,8 +44,6 @@ class CreateRequestViewModel(
     var timeRequestCurrent = LocalTime.of(0, 0, 1)
     var timeBeginCurrent = LocalTime.of(0, 0, 1)
     var timeEndCurrent = LocalTime.of(0, 0, 1)
-    private val allRequestStatus: MutableList<RequestStatusHuman> = mutableListOf()
-    private val allStatusPatient: MutableList<StatusPatientHuman> = mutableListOf()
     @RequiresApi(Build.VERSION_CODES.O)
     override fun obtainEvent(event: CreateRequestEvent) {
         when (event) {
@@ -150,6 +148,7 @@ class CreateRequestViewModel(
     fun addRequest(item: CreateRequestHuman){
         viewModelScope.launch {
             getRequestAddDetailUseCase.invoke(listId = listId, item = item).getOrNull()
+            publishEvent(EventType.UpdaleList(listID = listId, divisionHuman = item.division))
         }
         action = CreateRequestAction.returnGeneralScreen
         viewState = viewState.copy(item = CreateRequestHuman.getDefault())
