@@ -22,7 +22,7 @@ interface Api {
     @GET("getitems")
     suspend fun getAllRequest(
         @Query("limit") number: Int,
-        @Query("listGUID") listId: String? ,
+        @Query("listid") listId: String? ,
        // @Query("directionup") directionup: Int = 0,
         @Query("divisionitem") divisionitem: String ,
       //  @Query("statusitem") statusitem: String = "020d8b77-9e38-416a-924b-9378eeaeb371",

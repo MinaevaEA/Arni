@@ -110,7 +110,7 @@ class GeneralRequestViewModel(
                 when (result) {
                     is DataStatus.Success -> {
                         viewState = viewState.refreshContentState(listRequest)
-                        loadAllRequest()
+                        loadAllRequest(it.listID)
                     }
 
                     is DataStatus.Loading -> {
@@ -130,7 +130,8 @@ class GeneralRequestViewModel(
                 val getRequestOtherDivision = viewModelScope.async {
                     getRequestUseCase.invoke(
                         limit = 20,
-                        divisionGuid = it.division.guid
+                        divisionGuid = it.division.guid,
+                        listId = it.listID
                     ).getOrNull()
 
                 }
@@ -154,7 +155,7 @@ class GeneralRequestViewModel(
             when (result) {
                 is DataStatus.Success -> {
                     viewState = viewState.refreshContentState(result.data.itemsPage)
-                    loadAllRequest()
+                    loadAllRequest(listRequestHuman.listId)
                 }
 
                 is DataStatus.Loading -> {
@@ -168,7 +169,7 @@ class GeneralRequestViewModel(
         }
     }
 
-    fun loadAllRequest() {
+    fun loadAllRequest(listId: String) {
         viewModelScope.launch {
             val getAllDictionary = viewModelScope.async {
                 getDictionaryUseCase().getOrNull()
@@ -179,7 +180,8 @@ class GeneralRequestViewModel(
                 currentDivision?.guid?.let {
                     getRequestUseCase.invoke(
                         limit = 20,
-                        divisionGuid = it
+                        divisionGuid = it,
+                        listId = listId
                     ).getOrNull()
                 }
             }

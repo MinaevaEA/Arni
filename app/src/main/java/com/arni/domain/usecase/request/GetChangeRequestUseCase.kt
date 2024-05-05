@@ -9,7 +9,7 @@ import com.arni.remote.model.response.toDomain
 
 class GetChangeRequestUseCase(private val repository: ChangeRequestRepositoryRemote) {
     suspend operator fun invoke(
-        limit: Int, listId: String? = null, divisionGuid: String, pointRef: String? = null,
+        limit: Int, listId: String? = "", divisionGuid: String, pointRef: String? = null,
         pointDate: String? = null, onlycheck: Boolean
     ): DataStatus<ListRequestHuman> {
         return when (val requestResponse =
